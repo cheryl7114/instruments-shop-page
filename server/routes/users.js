@@ -1,47 +1,85 @@
 const router = require(`express`).Router()
-const bcrypt = require("bcryptjs");
-
-const usersModel = require(`../models/users.js`)
+const usersModel = require(`../models/users`)
+const bcrypt = require('bcryptjs')
 
 
 // IMPORTANT
 // Obviously, in a production release, you should never have the code below, as it allows a user to delete a database collection
-// The code below is for development testing purposes only 
-router.post(`/users/reset_user_collection`, (req, res) => {
-    usersModel.deleteMany({}, (error, data) => {
-        if (data) {
-            res.json(data)
-        } else {
-            res.json({ errorMessage: `Failed to delete "user" collection for testing purposes` })
+// The code below is for development testing purposes only
+router.post(`/users/reset_user_collection`, (req,res) =>
+{
+    usersModel.deleteMany({}, (error, data) =>
+    {
+        if(data)
+        {
+            const adminPassword = `123!"£qweQWE`
+
+            usersModel.create({name:"Administrator",email:"admin@admin.com",password:adminPassword,accessLevel:parseInt(process.env.ACCESS_LEVEL_ADMIN)}, (createError, createData) =>
+            {
+                if(createData)
+                {
+                    res.json(createData)
+                }
+                else
+                {
+                    res.json({errorMessage:`Failed to create Admin user for testing purposes`})
+                }
+            })
+        }
+        else
+        {
+            res.json({errorMessage:`User is not logged in`})
         }
     })
 })
 
-router.post("users/register", async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
+router.post(`/users/register/:name/:email/:password`, (req, res) => {
+    // If a user with this email does not already exist, then create new user
+    usersModel.findOne({ email: req.params.email }, (uniqueError, uniqueData) => {
+        if (uniqueData) {
+            res.json({ errorMessage: `User already exists` })
+        } else {
+            bcrypt.hash(req.params.password, parseInt(process.env.PASSWORD_HASH_SALT_ROUNDS), (err, hash) => {
+                if (err) {
+                    res.json({ errorMessage: `Error hashing password` })
+                } else {
+                    usersModel.create({ name: req.params.name, email: req.params.email, password: hash }, (error, data) => {
+                        if (data) {
+                            res.json({ name: data.name, accessLevel: data.accessLevel })
+                        } else {
+                            res.json({ errorMessage: `User was not registered` })
+                        }
+                    })
+                }
+            })
+        }
+    })
+})
 
-        // Check if user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) return res.status(400).json({ message: "User already exists" });
 
-        // Hash password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        // Create new user
-        const newUser = new User({
-            name,
-            email,
-            password: hashedPassword // Store hashed password
-        });
-
-        await newUser.save();
-        res.status(201).json({ message: "User registered successfully!" });
-    } catch (error) {
-        res.status(500).json({ message: "Error registering user" });
-    }
-});
+// router.post(`/users/register/:name/:email/:password`, (req, res) =>
+// {
+//     // If a user with this email does not already exist, then create new user
+//     usersModel.findOne({email: req.params.email}, (uniqueError, uniqueData) =>
+//     {
+//         if (uniqueData)
+//         {
+//             res.json({errorMessage: `User already exists`})
+//         } else
+//         {
+//             usersModel.create({name: req.params.name, email: req.params.email, password: req.params.password}, (error, data) =>
+//             {
+//                 if (data)
+//                 {
+//                     res.json({name: data.name, accessLevel: data.accessLevel})
+//                 } else
+//                 {
+//                     res.json({errorMessage: `User was not registered`})
+//                 }
+//             })
+//         }
+//     })
+// })
 
 
 module.exports = router
