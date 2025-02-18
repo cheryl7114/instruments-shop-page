@@ -2,13 +2,13 @@ import React, {Component} from "react"
 import {BrowserRouter, Switch, Route} from "react-router-dom"
 import "./css/App.css"
 
-// import Register from "./components/Register"
+import Register from "./components/Register"
 import ResetDatabase from "./components/ResetDatabase"
 import Login from "./components/Login"
 import Logout from "./components/Logout"
 import AddProduct from "./components/AddProduct"
-// import EditCar from "./components/EditCar"
-// import DeleteCar from "./components/DeleteCar"
+import EditProduct from "./components/EditProduct"
+import DeleteProduct from "./components/DeleteProduct"
 import DisplayAllProducts from "./components/DisplayAllProducts"
 import LoggedInRoute from "./components/LoggedInRoute"
 
@@ -28,14 +28,14 @@ export default class App extends Component
         return (
             <BrowserRouter>
                 <Switch>
-                    {/*<Route exact path="/Register" component={Register} />*/}
+                    <Route exact path="/Register" component={Register} />
                     <Route exact path="/ResetDatabase" component={ResetDatabase} />
                     <Route exact path="/" component={DisplayAllProducts} />
                     <Route exact path="/Login" component={Login} />
                     <LoggedInRoute exact path="/Logout" component={Logout} />
                     <LoggedInRoute exact path="/AddProduct" component={AddProduct} />
-                    {/*<LoggedInRoute exact path="/EditCar/:id" component={EditCar} />*/}
-                    {/*<LoggedInRoute exact path="/DeleteCar/:id" component={DeleteCar} />*/}
+                    <LoggedInRoute exact path="/EditProduct/:id" component={EditProduct} />
+                    <LoggedInRoute exact path="/DeleteProduct/:id" component={DeleteProduct} />
                     <Route exact path="/DisplayAllProducts" component={DisplayAllProducts}/>
                     <Route path="*" component={DisplayAllProducts}/>
                 </Switch>

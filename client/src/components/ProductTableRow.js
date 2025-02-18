@@ -18,11 +18,10 @@ export default class ProductTableRow extends Component
                 <td>{this.props.product.price}</td>
                 <td>
                     <img
-                        src={this.props.product.image}
+                        src={this.props.product.images[0]}
                         alt={this.props.product.name}
                         width="100"
                         height="80"
-                        // style={{ objectFit: "cover", borderRadius: "5px" }}
                     />
                 </td>
                 <td>
