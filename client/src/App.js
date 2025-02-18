@@ -4,12 +4,13 @@ import "./css/App.css"
 
 import Navbar from "./components/Navbar"
 // import Register from "./components/Register"
+import Register from "./components/Register"
 import ResetDatabase from "./components/ResetDatabase"
 import Login from "./components/Login"
 import Logout from "./components/Logout"
 import AddProduct from "./components/AddProduct"
-// import EditCar from "./components/EditCar"
-// import DeleteCar from "./components/DeleteCar"
+import EditProduct from "./components/EditProduct"
+import DeleteProduct from "./components/DeleteProduct"
 import DisplayAllProducts from "./components/DisplayAllProducts"
 import LoggedInRoute from "./components/LoggedInRoute"
 
@@ -26,6 +27,7 @@ export default class App extends Component {
     render() {
         return (
             <BrowserRouter>
+<<<<<<< HEAD
                 <div>
                     <Navbar />
                     <Switch>
@@ -41,6 +43,20 @@ export default class App extends Component {
                         <Route path="*" component={DisplayAllProducts} />
                     </Switch>
                 </div>
+=======
+                <Switch>
+                    <Route exact path="/Register" component={Register} />
+                    <Route exact path="/ResetDatabase" component={ResetDatabase} />
+                    <Route exact path="/" component={DisplayAllProducts} />
+                    <Route exact path="/Login" component={Login} />
+                    <LoggedInRoute exact path="/Logout" component={Logout} />
+                    <LoggedInRoute exact path="/AddProduct" component={AddProduct} />
+                    <LoggedInRoute exact path="/EditProduct/:id" component={EditProduct} />
+                    <LoggedInRoute exact path="/DeleteProduct/:id" component={DeleteProduct} />
+                    <Route exact path="/DisplayAllProducts" component={DisplayAllProducts}/>
+                    <Route path="*" component={DisplayAllProducts}/>
+                </Switch>
+>>>>>>> 61eee81d119c50080f5fca3cfc4b279ea3c5ba85
             </BrowserRouter>
         )
     }

@@ -1,31 +1,51 @@
 import React, {Component} from "react"
 import {Redirect, Link} from "react-router-dom"
-
 import axios from "axios"
 
 import LinkInClass from "../components/LinkInClass"
 
-import {ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../config/global_constants"
+import {ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../config/global_constants"
 
-export default class AddProduct extends Component {
+export default class EditProduct extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            name: "",
-            brand: "",
-            colour: "",
-            category: "",
-            stock: "",
-            price: "",
+            name: ``,
+            brand: ``,
+            colour: ``,
+            category: ``,
+            stock: ``,
+            price: ``,
             images: [],
-            redirectToDisplayAllProducts:localStorage.accessLevel < ACCESS_LEVEL_ADMIN
+            redirectToDisplayAllProducts:localStorage.accessLevel < ACCESS_LEVEL_NORMAL_USER
         }
     }
 
-
     componentDidMount() {
         this.inputToFocus.focus()
+
+        axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, {headers:{"authorization":localStorage.token}})
+            .then(res => {
+                if(res.data) {
+                    if (res.data.errorMessage) {
+                        console.log(res.data.errorMessage)
+                    } else {
+                        this.setState({
+                            name: res.data.name,
+                            brand: res.data.brand,
+                            colour: res.data.colour,
+                            category: res.data.category,
+                            stock: res.data.stock,
+                            price: res.data.price,
+                            images: res.data.images
+                        })
+                    }
+                } else
+                {
+                    console.log(`Record not found`)
+                }
+            })
     }
 
 
@@ -48,25 +68,24 @@ export default class AddProduct extends Component {
                 category: this.state.category,
                 stock: this.state.stock,
                 price: this.state.price,
-                images: this.state.images,
-                wasSubmittedAtLeastOnce: false
+                images: this.state.images
             }
 
-            axios.post(`${SERVER_HOST}/products`, productObject, {headers:{"authorization":localStorage.token}})
+            axios.put(`${SERVER_HOST}/products/${this.props.match.params.id}`, productObject, {headers:{"authorization":localStorage.token}})
                 .then(res => {
                     if(res.data) {
                         if (res.data.errorMessage) {
                             console.log(res.data.errorMessage)
                         } else {
-                            console.log("Record added")
+                            console.log(`Record updated`)
                             this.setState({redirectToDisplayAllProducts:true})
                         }
                     } else {
-                        console.log("Record not added")
+                        console.log(`Record not updated`)
                     }
                 })
-            }
         }
+    }
 
     validateName() {
         const pattern = /^[A-Za-z0-9 ]+$/ // allows letters, numbers, and spaces
@@ -110,11 +129,12 @@ export default class AddProduct extends Component {
         }
     }
 
-
     render() {
         return (
             <div className="form-container">
+
                 {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts"/> : null}
+
                 <form>
                     <div>
                         <label htmlFor="name">Name</label>
@@ -235,7 +255,8 @@ export default class AddProduct extends Component {
                         </div>
                     )}
 
-                    <LinkInClass value="Add" className="green-button" onClick={this.handleSubmit}/>
+
+                    <LinkInClass value="Update" className="green-button" onClick={this.handleSubmit}/>
                     <Link className="red-button" to={"/DisplayAllProducts"}>Cancel</Link>
                 </form>
             </div>
