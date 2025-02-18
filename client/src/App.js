@@ -7,7 +7,7 @@ import ResetDatabase from "./components/ResetDatabase"
 import Login from "./components/Login"
 import Logout from "./components/Logout"
 import AddProduct from "./components/AddProduct"
-// import EditCar from "./components/EditCar"
+import EditProduct from "./components/EditProduct"
 // import DeleteCar from "./components/DeleteCar"
 import DisplayAllProducts from "./components/DisplayAllProducts"
 import LoggedInRoute from "./components/LoggedInRoute"
@@ -34,7 +34,7 @@ export default class App extends Component
                     <Route exact path="/Login" component={Login} />
                     <LoggedInRoute exact path="/Logout" component={Logout} />
                     <LoggedInRoute exact path="/AddProduct" component={AddProduct} />
-                    {/*<LoggedInRoute exact path="/EditCar/:id" component={EditCar} />*/}
+                    <LoggedInRoute exact path="/EditProduct/:id" component={EditProduct} />
                     {/*<LoggedInRoute exact path="/DeleteCar/:id" component={DeleteCar} />*/}
                     <Route exact path="/DisplayAllProducts" component={DisplayAllProducts}/>
                     <Route path="*" component={DisplayAllProducts}/>

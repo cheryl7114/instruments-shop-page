@@ -1,30 +1,51 @@
 import React, {Component} from "react"
 import {Redirect, Link} from "react-router-dom"
-
 import axios from "axios"
 
 import LinkInClass from "../components/LinkInClass"
 
-import {ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../config/global_constants"
+import {ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../config/global_constants"
 
-export default class AddProduct extends Component {
+export default class EditProduct extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            name: "",
-            brand: "",
-            colour: "",
-            category: "",
-            stock: "",
-            price: "",
-            redirectToDisplayAllProducts:localStorage.accessLevel < ACCESS_LEVEL_ADMIN
+            name: ``,
+            brand: ``,
+            colour: ``,
+            category: ``,
+            stock: ``,
+            price: ``,
+            images: [],
+            redirectToDisplayAllProducts:localStorage.accessLevel < ACCESS_LEVEL_NORMAL_USER
         }
     }
 
-
     componentDidMount() {
         this.inputToFocus.focus()
+
+        axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, {headers:{"authorization":localStorage.token}})
+            .then(res => {
+                if(res.data) {
+                    if (res.data.errorMessage) {
+                        console.log(res.data.errorMessage)
+                    } else {
+                        this.setState({
+                            name: res.data.name,
+                            brand: res.data.brand,
+                            colour: res.data.colour,
+                            category: res.data.category,
+                            stock: res.data.year,
+                            price: res.data.price,
+                            images: res.data.images
+                        })
+                    }
+                } else
+                {
+                    console.log(`Record not found`)
+                }
+            })
     }
 
 
@@ -47,24 +68,23 @@ export default class AddProduct extends Component {
                 category: this.state.category,
                 stock: this.state.stock,
                 price: this.state.price,
-                wasSubmittedAtLeastOnce: false
-            }
-
-            axios.post(`${SERVER_HOST}/products`, productObject, {headers:{"authorization":localStorage.token}})
-                .then(res => {
-                    if(res.data) {
-                        if (res.data.errorMessage) {
-                            console.log(res.data.errorMessage)
-                        } else {
-                            console.log("Record added")
-                            this.setState({redirectToDisplayAllProducts:true})
-                        }
-                    } else {
-                        console.log("Record not added")
-                    }
-                })
             }
         }
+
+        axios.put(`${SERVER_HOST}/products/${this.props.match.params.id}`, productObject, {headers:{"authorization":localStorage.token}})
+            .then(res => {
+                if(res.data) {
+                    if (res.data.errorMessage) {
+                        console.log(res.data.errorMessage)
+                    } else {
+                        console.log(`Record updated`)
+                        this.setState({redirectToDisplayAllProducts:true})
+                    }
+                } else {
+                    console.log(`Record not updated`)
+                }
+            })
+    }
 
     validateName() {
         const pattern = /^[A-Za-z0-9 ]+$/ // allows letters, numbers, and spaces
@@ -108,11 +128,37 @@ export default class AddProduct extends Component {
         }
     }
 
-
-    render() {
+    render()
+    {
         return (
             <div className="form-container">
+
                 {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts"/> : null}
+
+                <Form>
+                    <Form.Group controlId="model">
+                        <Form.Label>Model</Form.Label>
+                        <Form.Control ref = {(input) => { this.inputToFocus = input }} type="text" name="model" value={this.state.model} onChange={this.handleChange} />
+                    </Form.Group>
+
+                    <Form.Group controlId="colour">
+                        <Form.Label>Colour</Form.Label>
+                        <Form.Control type="text" name="colour" value={this.state.colour} onChange={this.handleChange} />
+                    </Form.Group>
+
+                    <Form.Group controlId="year">
+                        <Form.Label>Year</Form.Label>
+                        <Form.Control type="text" name="year" value={this.state.year} onChange={this.handleChange} />
+                    </Form.Group>
+
+                    <Form.Group controlId="price">
+                        <Form.Label>Price</Form.Label>
+                        <Form.Control type="text" name="price" value={this.state.price} onChange={this.handleChange} />
+                    </Form.Group>
+
+                    <LinkInClass value="Update" className="green-button" onClick={this.handleSubmit}/>
+                    <Link className="red-button" to={"/DisplayAllProducts"}>Cancel</Link>
+                </Form>
                 <form>
                     <div>
                         <label htmlFor="name">Name</label>
