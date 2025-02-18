@@ -1,10 +1,12 @@
 import React, {Component} from "react"
 import {Link} from "react-router-dom"
 
+import {ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN} from "../config/global_constants"
 
-export default class CarTableRow extends Component 
-{    
-    render() 
+
+export default class CarTableRow extends Component
+{
+    render()
     {
         return (
             <tr>
@@ -13,8 +15,9 @@ export default class CarTableRow extends Component
                 <td>{this.props.car.year}</td>
                 <td>{this.props.car.price}</td>
                 <td>
-                    <Link className="green-button" to={"/EditCar/" + this.props.car._id}>Edit</Link>                    
-                    <Link className="red-button" to={"/DeleteCar/" + this.props.car._id}>Delete</Link>   
+                    {localStorage.accessLevel > ACCESS_LEVEL_GUEST ? <Link className="green-button" to={"/EditCar/" + this.props.car._id}>Edit</Link> : null}
+
+                    {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ? <Link className="red-button" to={"/DeleteCar/" + this.props.car._id}>Delete</Link> : null}
                 </td>
             </tr>
         )
