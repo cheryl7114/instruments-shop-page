@@ -18,6 +18,7 @@ export default class AddProduct extends Component {
             category: "",
             stock: "",
             price: "",
+            images: [],
             redirectToDisplayAllProducts:localStorage.accessLevel < ACCESS_LEVEL_ADMIN
         }
     }
@@ -47,6 +48,7 @@ export default class AddProduct extends Component {
                 category: this.state.category,
                 stock: this.state.stock,
                 price: this.state.price,
+                images: this.state.images,
                 wasSubmittedAtLeastOnce: false
             }
 
@@ -183,6 +185,55 @@ export default class AddProduct extends Component {
                             step="0.01"
                         />
                     </div>
+
+                    <div>
+                        <label htmlFor="photoUrl">Photo URL</label>
+                        <input
+                            type="text"
+                            id="photoUrl"
+                            name="photoUrl"
+                            value={this.state.photoUrl || ""}
+                            onChange={(e) => this.setState({ photoUrl: e.target.value })}
+                        />
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (this.state.photoUrl) {
+                                    this.setState((prevState) => ({
+                                        images: [...prevState.images, prevState.photoUrl],
+                                        photoUrl: "" // Clear input after adding
+                                    }))
+                                }
+                            }}
+                        > Add Photo
+                        </button>
+                    </div>
+
+                    {/* image preview */}
+                    {this.state.images.length > 0 && (
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "10px" }}>
+                            {this.state.images.map((url, index) => (
+                                <div key={index} style={{ position: "relative" }}>
+                                    <img
+                                        src={url}
+                                        alt={`Product Preview ${index + 1}`}
+                                        style={{ width: "150px", height: "auto" }}
+                                    />
+                                    <button
+                                        type="button"
+                                        style={{ position: "absolute", top: 0, right: 0, background: "red", color: "white" }}
+                                        onClick={() => {
+                                            this.setState((prevState) => ({
+                                                images: prevState.images.filter((_, i) => i !== index)
+                                            }));
+                                        }}
+                                    >
+                                        X
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
 
                     <LinkInClass value="Add" className="green-button" onClick={this.handleSubmit}/>
                     <Link className="red-button" to={"/DisplayAllProducts"}>Cancel</Link>

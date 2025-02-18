@@ -7,7 +7,7 @@ let productsSchema = new mongoose.Schema({
         category: {type: String},
         stock: {type: Number},
         price: {type: Number},
-        images: {type: [String], default: ["https://virtualpiano.net/wp-content/uploads/2020/08/Virtual-Guitar-Online-Virtual-Piano.png", "https://instrumentsgallery.in/wp-content/uploads/2023/03/Blue-neon-Lyrical-Front.jpg"]}
+        images: {type: [String], default: ["https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg"]},
     },{
         collection: `products`
     })

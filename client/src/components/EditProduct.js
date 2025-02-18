@@ -36,7 +36,7 @@ export default class EditProduct extends Component {
                             brand: res.data.brand,
                             colour: res.data.colour,
                             category: res.data.category,
-                            stock: res.data.year,
+                            stock: res.data.stock,
                             price: res.data.price,
                             images: res.data.images
                         })
@@ -68,22 +68,23 @@ export default class EditProduct extends Component {
                 category: this.state.category,
                 stock: this.state.stock,
                 price: this.state.price,
+                images: this.state.images
             }
-        }
 
-        axios.put(`${SERVER_HOST}/products/${this.props.match.params.id}`, productObject, {headers:{"authorization":localStorage.token}})
-            .then(res => {
-                if(res.data) {
-                    if (res.data.errorMessage) {
-                        console.log(res.data.errorMessage)
+            axios.put(`${SERVER_HOST}/products/${this.props.match.params.id}`, productObject, {headers:{"authorization":localStorage.token}})
+                .then(res => {
+                    if(res.data) {
+                        if (res.data.errorMessage) {
+                            console.log(res.data.errorMessage)
+                        } else {
+                            console.log(`Record updated`)
+                            this.setState({redirectToDisplayAllProducts:true})
+                        }
                     } else {
-                        console.log(`Record updated`)
-                        this.setState({redirectToDisplayAllProducts:true})
+                        console.log(`Record not updated`)
                     }
-                } else {
-                    console.log(`Record not updated`)
-                }
-            })
+                })
+        }
     }
 
     validateName() {
@@ -128,37 +129,12 @@ export default class EditProduct extends Component {
         }
     }
 
-    render()
-    {
+    render() {
         return (
             <div className="form-container">
 
                 {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts"/> : null}
 
-                <Form>
-                    <Form.Group controlId="model">
-                        <Form.Label>Model</Form.Label>
-                        <Form.Control ref = {(input) => { this.inputToFocus = input }} type="text" name="model" value={this.state.model} onChange={this.handleChange} />
-                    </Form.Group>
-
-                    <Form.Group controlId="colour">
-                        <Form.Label>Colour</Form.Label>
-                        <Form.Control type="text" name="colour" value={this.state.colour} onChange={this.handleChange} />
-                    </Form.Group>
-
-                    <Form.Group controlId="year">
-                        <Form.Label>Year</Form.Label>
-                        <Form.Control type="text" name="year" value={this.state.year} onChange={this.handleChange} />
-                    </Form.Group>
-
-                    <Form.Group controlId="price">
-                        <Form.Label>Price</Form.Label>
-                        <Form.Control type="text" name="price" value={this.state.price} onChange={this.handleChange} />
-                    </Form.Group>
-
-                    <LinkInClass value="Update" className="green-button" onClick={this.handleSubmit}/>
-                    <Link className="red-button" to={"/DisplayAllProducts"}>Cancel</Link>
-                </Form>
                 <form>
                     <div>
                         <label htmlFor="name">Name</label>
@@ -230,7 +206,57 @@ export default class EditProduct extends Component {
                         />
                     </div>
 
-                    <LinkInClass value="Add" className="green-button" onClick={this.handleSubmit}/>
+                    <div>
+                        <label htmlFor="photoUrl">Photo URL</label>
+                        <input
+                            type="text"
+                            id="photoUrl"
+                            name="photoUrl"
+                            value={this.state.photoUrl || ""}
+                            onChange={(e) => this.setState({ photoUrl: e.target.value })}
+                        />
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (this.state.photoUrl) {
+                                    this.setState((prevState) => ({
+                                        images: [...prevState.images, prevState.photoUrl],
+                                        photoUrl: "" // Clear input after adding
+                                    }))
+                                }
+                            }}
+                        > Add Photo
+                        </button>
+                    </div>
+
+                    {/* image preview */}
+                    {this.state.images.length > 0 && (
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "10px" }}>
+                            {this.state.images.map((url, index) => (
+                                <div key={index} style={{ position: "relative" }}>
+                                    <img
+                                        src={url}
+                                        alt={`Product Preview ${index + 1}`}
+                                        style={{ width: "150px", height: "auto" }}
+                                    />
+                                    <button
+                                        type="button"
+                                        style={{ position: "absolute", top: 0, right: 0, background: "red", color: "white" }}
+                                        onClick={() => {
+                                            this.setState((prevState) => ({
+                                                images: prevState.images.filter((_, i) => i !== index)
+                                            }));
+                                        }}
+                                    >
+                                        X
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+
+                    <LinkInClass value="Update" className="green-button" onClick={this.handleSubmit}/>
                     <Link className="red-button" to={"/DisplayAllProducts"}>Cancel</Link>
                 </form>
             </div>
