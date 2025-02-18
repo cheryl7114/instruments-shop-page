@@ -5,11 +5,11 @@ import axios from "axios"
 
 import LinkInClass from "../components/LinkInClass"
 
-import {SERVER_HOST} from "../config/global_constants"
+import {ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../config/global_constants"
 
-export default class EditCar extends Component 
+export default class EditCar extends Component
 {
-    constructor(props) 
+    constructor(props)
     {
         super(props)
 
@@ -18,48 +18,48 @@ export default class EditCar extends Component
             colour: ``,
             year: ``,
             price: ``,
-            redirectToDisplayAllCars:false
+            redirectToDisplayAllCars:localStorage.accessLevel < ACCESS_LEVEL_NORMAL_USER
         }
     }
 
-    componentDidMount() 
-    {      
+    componentDidMount()
+    {
         this.inputToFocus.focus()
-  
-        axios.get(`${SERVER_HOST}/cars/${this.props.match.params.id}`)
-        .then(res => 
-        {     
-            if(res.data)
+
+        axios.get(`${SERVER_HOST}/cars/${this.props.match.params.id}`, {headers:{"authorization":localStorage.token}})
+            .then(res =>
             {
-                if (res.data.errorMessage)
+                if(res.data)
                 {
-                    console.log(res.data.errorMessage)    
+                    if (res.data.errorMessage)
+                    {
+                        console.log(res.data.errorMessage)
+                    }
+                    else
+                    {
+                        this.setState({
+                            model: res.data.model,
+                            colour: res.data.colour,
+                            year: res.data.year,
+                            price: res.data.price
+                        })
+                    }
                 }
                 else
-                { 
-                    this.setState({
-                        model: res.data.model,
-                        colour: res.data.colour,
-                        year: res.data.year,
-                        price: res.data.price
-                    })
+                {
+                    console.log(`Record not found`)
                 }
-            }
-            else
-            {
-                console.log(`Record not found`)
-            }
-        })
+            })
     }
 
 
-    handleChange = (e) => 
+    handleChange = (e) =>
     {
         this.setState({[e.target.name]: e.target.value})
     }
 
 
-    handleSubmit = (e) => 
+    handleSubmit = (e) =>
     {
         e.preventDefault()
 
@@ -70,36 +70,36 @@ export default class EditCar extends Component
             price: this.state.price
         }
 
-        axios.put(`${SERVER_HOST}/cars/${this.props.match.params.id}`, carObject)
-        .then(res => 
-        {             
-            if(res.data)
+        axios.put(`${SERVER_HOST}/cars/${this.props.match.params.id}`, carObject, {headers:{"authorization":localStorage.token}})
+            .then(res =>
             {
-                if (res.data.errorMessage)
+                if(res.data)
                 {
-                    console.log(res.data.errorMessage)    
+                    if (res.data.errorMessage)
+                    {
+                        console.log(res.data.errorMessage)
+                    }
+                    else
+                    {
+                        console.log(`Record updated`)
+                        this.setState({redirectToDisplayAllCars:true})
+                    }
                 }
                 else
-                {      
-                    console.log(`Record updated`)
-                    this.setState({redirectToDisplayAllCars:true})
+                {
+                    console.log(`Record not updated`)
                 }
-            }
-            else
-            {
-                console.log(`Record not updated`)
-            }
-        })
+            })
     }
 
-    
-    render() 
-    {  
+
+    render()
+    {
         return (
             <div className="form-container">
-    
-                {this.state.redirectToDisplayAllCars ? <Redirect to="/DisplayAllCars"/> : null}  
-                        
+
+                {this.state.redirectToDisplayAllCars ? <Redirect to="/DisplayAllCars"/> : null}
+
                 <Form>
                     <Form.Group controlId="model">
                         <Form.Label>Model</Form.Label>
@@ -115,14 +115,14 @@ export default class EditCar extends Component
                         <Form.Label>Year</Form.Label>
                         <Form.Control type="text" name="year" value={this.state.year} onChange={this.handleChange} />
                     </Form.Group>
-        
+
                     <Form.Group controlId="price">
                         <Form.Label>Price</Form.Label>
                         <Form.Control type="text" name="price" value={this.state.price} onChange={this.handleChange} />
                     </Form.Group>
-  
-                    <LinkInClass value="Update" className="green-button" onClick={this.handleSubmit}/>  
-    
+
+                    <LinkInClass value="Update" className="green-button" onClick={this.handleSubmit}/>
+
                     <Link className="red-button" to={"/DisplayAllCars"}>Cancel</Link>
                 </Form>
             </div>
