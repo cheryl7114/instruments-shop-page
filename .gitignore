@@ -37,3 +37,4 @@ dump.rdb
 coverage/
 .cache/
 *.swp
+client/node_modules/.cache/

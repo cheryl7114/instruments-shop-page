@@ -27,23 +27,8 @@ export default class App extends Component {
     render() {
         return (
             <BrowserRouter>
-<<<<<<< HEAD
-                <div>
-                    <Navbar />
-                    <Switch>
-                        {/*<Route exact path="/Register" component={Register} />*/}
-                        <Route exact path="/ResetDatabase" component={ResetDatabase} />
-                        <Route exact path="/" component={DisplayAllProducts} />
-                        <Route exact path="/Login" component={Login} />
-                        <LoggedInRoute exact path="/Logout" component={Logout} />
-                        <LoggedInRoute exact path="/AddProduct" component={AddProduct} />
-                        {/*<LoggedInRoute exact path="/EditCar/:id" component={EditCar} />*/}
-                        {/*<LoggedInRoute exact path="/DeleteCar/:id" component={DeleteCar} />*/}
-                        <Route exact path="/DisplayAllProducts" component={DisplayAllProducts} />
-                        <Route path="*" component={DisplayAllProducts} />
-                    </Switch>
-                </div>
-=======
+            <div>
+                <Navbar />
                 <Switch>
                     <Route exact path="/Register" component={Register} />
                     <Route exact path="/ResetDatabase" component={ResetDatabase} />
@@ -56,7 +41,7 @@ export default class App extends Component {
                     <Route exact path="/DisplayAllProducts" component={DisplayAllProducts}/>
                     <Route path="*" component={DisplayAllProducts}/>
                 </Switch>
->>>>>>> 61eee81d119c50080f5fca3cfc4b279ea3c5ba85
+                </div>
             </BrowserRouter>
         )
     }
