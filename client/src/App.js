@@ -3,7 +3,6 @@ import { BrowserRouter, Switch, Route } from "react-router-dom"
 import "./css/App.css"
 
 import Navbar from "./components/Navbar"
-// import Register from "./components/Register"
 import Register from "./components/Register"
 import ResetDatabase from "./components/ResetDatabase"
 import Login from "./components/Login"
