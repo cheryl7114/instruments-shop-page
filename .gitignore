@@ -1,0 +1,40 @@
+# Node modules (backend & frontend)
+server/node_modules/
+client/node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+debug.log
+logs/
+
+# Build files
+dist/
+build/
+client/build/
+
+# Editor & OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Dependency lock files (if using one, keep the correct one)
+package-lock.json
+
+# GitHub Codespaces & VS Code settings
+.settings/
+*.code-workspace
+
+# Database files
+*.sqlite
+*.sqlite3
+dump.rdb
+
+# Miscellaneous
+coverage/
+.cache/
+*.swp
+client/node_modules/.cache/
