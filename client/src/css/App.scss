@@ -150,11 +150,18 @@ input [type="button"]
   justify-content: space-between;
   align-items: center;
   background-color: #222;
-  padding: 15px 30px;
+  padding: 12px 24px;
   color: white;
 }
 
+.most-left-side {
+  display: flex;
+  align-items: center;
+}
+
 .logo {
+  display: flex;
+  align-items: center;
   font-size: 1.5rem;
   font-weight: bold;
 }
@@ -162,7 +169,9 @@ input [type="button"]
 .nav-links {
   list-style: none;
   display: flex;
+  align-items: left;
   gap: 20px;
+  margin-left: 40px;
 }
 
 .nav-links li {
@@ -173,15 +182,50 @@ input [type="button"]
   color: white;
   text-decoration: none;
   font-size: 1rem;
+  letter-spacing: 0.2rem;
 }
 
 .nav-links a:hover {
+  text-decoration: underline;
   color: #f4a261;
+  text-underline-offset: 6px;
 }
 
-.cart-icon {
+.most-right-side {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 16px;
+  padding: 5px 10px;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  padding: 4px;
+  border-radius: 16px;
+}
+
+.search-bar input::placeholder {
+  color: #888;
+}
+
+.search-bar .search-icon {
+  color: #888;
+  font-size: 1.5rem;
+  margin-right: 5px;
+}
+
+.user-icon, .cart-icon {
   font-size: 1.5rem;
   cursor: pointer;
+  color: white;
 }
 
 /* Responsive Design */
@@ -194,5 +238,13 @@ input [type="button"]
   .nav-links {
     flex-direction: column;
     gap: 10px;
+  }
+
+  .icons {
+    margin-top: 10px;
+  }
+
+  .logo {
+    display: none;
   }
 }
