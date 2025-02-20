@@ -83,14 +83,14 @@ export default class Login extends Component
                 /><br/><br/>
 
                 <div>
-                    <p>Do not have an acc? <Link className="blue-button" to={"/Register"}>Registers</Link></p>
+                    <p>Don't have an account? <Link className="blue-button" to={"/Register"}>Register</Link></p>
                 </div>
 
                 <LinkInClass value="Login" className="green-button" onClick={this.handleSubmit}/>
                 <Link className="close-button" to={"/DisplayAllCars"}>
                     <svg id="close" viewBox="0 0 18 24" width="20" height="20">
                         <title>close</title>
-                        <path d="m17 4-8 8 8 8M1 4l8 8-8 8" fill="none" stroke="currentColor" stroke-miterlimit="10" strokeWidth="2"></path>
+                        <path d="m17 4-8 8 8 8M1 4l8 8-8 8" fill="none" stroke="currentColor" strokeMiterlimit="10" strokeWidth="2"></path>
                     </svg>
                 </Link>
             </form>
