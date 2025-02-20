@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { CiUser } from "react-icons/ci";
 import { CiShoppingCart } from "react-icons/ci";
 import { CiSearch } from "react-icons/ci";
@@ -9,16 +10,16 @@ export default class Navbar extends React.Component {
       <nav className="navbar">
         <div className="most-left-side">
           <div className="logo">
-            <a href="../components/DisplayAllProducts.js">
+          <Link to="/DisplayAllProducts">
               <img src="/logo.png" alt="Logo" width="50" height="60" />
-            </a>
+            </Link>
           </div>
           <ul className="nav-links">
-            <li><a href="#">Guitar</a></li>
-            <li><a href="#">Piano</a></li>
-            <li><a href="#">Drums</a></li>
-            <li><a href="#">Violin</a></li>
-            <li><a href="#">Shop All</a></li>
+          <li><Link to="#">Guitar</Link></li>
+            <li><Link to="#">Piano</Link></li>
+            <li><Link to="#">Drums</Link></li>
+            <li><Link to="#">Violin</Link></li>
+            <li><Link to="#">Shop All</Link></li>
           </ul>
         </div>
         <div className="most-right-side">
@@ -27,7 +28,9 @@ export default class Navbar extends React.Component {
             <input type="text" placeholder="Search..." />
           </div>
 
-          <CiUser className="user-icon" />
+          <Link to="/Login">
+            <CiUser className="user-icon" />
+          </Link>
           <CiShoppingCart className="cart-icon" />
         </div>
       </nav>

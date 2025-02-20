@@ -1,40 +1,32 @@
-import React, {Component} from "react"
-import {Redirect, Link} from "react-router-dom"
+import React, { Component } from "react"
+import { Redirect, Link } from "react-router-dom"
 import axios from "axios"
 
 import LinkInClass from "../components/LinkInClass"
-import {SERVER_HOST} from "../config/global_constants"
+import { SERVER_HOST } from "../config/global_constants"
 
-
-export default class Login extends Component
-{
-    constructor(props)
-    {
+export default class Login extends Component {
+    constructor(props) {
         super(props)
 
         this.state = {
-            email:"",
-            password:"",
-            isLoggedIn:false
+            email: "",
+            password: "",
+            isLoggedIn: false
         }
     }
 
 
-    handleChange = (e) =>
-    {
-        this.setState({[e.target.name]: e.target.value})
+    handleChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value })
     }
 
 
-    handleSubmit = (e) =>
-    {
+    handleSubmit = (e) => {
         axios.post(`${SERVER_HOST}/users/login/${this.state.email}/${this.state.password}`)
-            .then(res =>
-            {
-                if(res.data)
-                {
-                    if (res.data.errorMessage)
-                    {
+            .then(res => {
+                if (res.data) {
+                    if (res.data.errorMessage) {
                         console.log(res.data.errorMessage)
                     }
                     else // user successfully logged in
@@ -45,55 +37,50 @@ export default class Login extends Component
                         localStorage.accessLevel = res.data.accessLevel
                         localStorage.token = res.data.token
 
-                        this.setState({isLoggedIn:true})
+                        this.setState({ isLoggedIn: true })
                     }
                 }
-                else
-                {
+                else {
                     console.log("Login failed")
                 }
             })
     }
 
 
-    render()
-    {
+    render() {
         return (
-            <form className="form-container" noValidate = {true} id = "loginOrRegistrationForm">
-                <h2>Login</h2>
+            <div className="login-container">
+                <form className="login-page" noValidate={true} id="loginOrRegistrationForm">
+                    <h1>Login</h1>
 
-                {this.state.isLoggedIn ? <Redirect to="/DisplayAllCars"/> : null}
+                    {this.state.isLoggedIn ? <Redirect to="/DisplayAllProducts" /> : null}
 
-                <input
-                    type = "email"
-                    name = "email"
-                    placeholder = "Email"
-                    autoComplete="email"
-                    value={this.state.email}
-                    onChange={this.handleChange}
-                /><br/>
+                    <div className="input-container">
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                            autoComplete="email"
+                            value={this.state.email}
+                            onChange={this.handleChange}
+                        />
+                    </div>
 
-                <input
-                    type = "password"
-                    name = "password"
-                    placeholder = "Password"
-                    autoComplete="password"
-                    value={this.state.password}
-                    onChange={this.handleChange}
-                /><br/><br/>
+                    <div className="input-container">
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            autoComplete="password"
+                            value={this.state.password}
+                            onChange={this.handleChange}
+                        />
+                    </div>
+                    <LinkInClass value="Sign in" className="sign-in-button" onClick={this.handleSubmit} />
+                    <Link className="create-account-button" to={"/Register"}>Create account</Link>
+                </form>
+            </div>
 
-                <div>
-                    <p>Do not have an acc? <Link className="blue-button" to={"/Register"}>Registers</Link></p>
-                </div>
-
-                <LinkInClass value="Login" className="green-button" onClick={this.handleSubmit}/>
-                <Link className="close-button" to={"/DisplayAllCars"}>
-                    <svg id="close" viewBox="0 0 18 24" width="20" height="20">
-                        <title>close</title>
-                        <path d="m17 4-8 8 8 8M1 4l8 8-8 8" fill="none" stroke="currentColor" stroke-miterlimit="10" strokeWidth="2"></path>
-                    </svg>
-                </Link>
-            </form>
         )
     }
 }

@@ -1,3 +1,9 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -26,60 +32,6 @@
 
 .logout {
   margin-bottom: 30px;
-}
-
-/* link buttons */
-.green-button,
-.red-button,
-.blue-button {
-  padding: 7px 10px;
-  font-size: 0.875rem;
-  line-height: normal;
-  border-radius: 0.2rem;
-  color: #fff;
-  background-color: #28a745;
-  border-color: #28a745;
-  margin-right: 10px;
-  position: relative;
-  top: 1px;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.green-button {
-  background-color: #28a745;
-}
-
-.red-button {
-  background-color: #dc3545;
-}
-
-.blue-button {
-  background-color: #3545dc;
-}
-
-.green-button:hover,
-.red-button:hover,
-.blue-button:hover {
-  text-decoration: none;
-  color: #fff;
-}
-
-.green-button:hover {
-  background-color: #107020;
-}
-
-.red-button:hover {
-  background-color: #a01020;
-}
-
-.blue-button:hover {
-  background-color: #1020a0;
-}
-
-/* end of link buttons */
-input [type=button] {
-  color: pink;
 }
 
 /* table of cars */
@@ -203,6 +155,83 @@ input [type=button] {
   font-size: 1.5rem;
   cursor: pointer;
   color: white;
+}
+
+/* Login page */
+.login-container, .register-container {
+  display: flex;
+  height: 800px;
+}
+
+.login-page, .register-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  padding: 64px;
+  border: thin solid rgb(147, 145, 145);
+  border-radius: 20px;
+  max-width: 400px;
+  margin: auto;
+  box-shadow: 2px 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+.login-container h1, .register-container h1 {
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 24px;
+  letter-spacing: 0.1rem;
+}
+
+.login-container input, .register-container input {
+  width: 100%;
+  padding: 8px 54px 8px 18px;
+  margin-bottom: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.login-container input:focus,
+.register-container input:focus {
+  border-color: #d08243;
+  outline: none;
+}
+
+.login-container .create-account-button,
+.register-container .cancel-account-button {
+  display: block;
+  margin: 10px 0;
+  color: #d08243;
+  text-decoration: none;
+}
+
+.login-container .create-account-button:hover,
+.register-container .cancel-account-button:hover {
+  text-decoration: underline;
+}
+
+.login-container .sign-in-button,
+.register-container .register-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #d08243;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.sign-in-button:hover, .register-button:hover {
+  opacity: 0.8;
+}
+
+.login-container .close-button {
+  display: none; /* Hide the close button if not needed */
 }
 
 /* Responsive Design */

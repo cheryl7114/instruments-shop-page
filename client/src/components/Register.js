@@ -1,45 +1,38 @@
-import React, {Component} from "react"
-import {Redirect, Link} from "react-router-dom"
+import React, { Component } from "react"
+import { Redirect, Link } from "react-router-dom"
 import axios from "axios"
 
 import LinkInClass from "../components/LinkInClass"
 
-import {SERVER_HOST} from "../config/global_constants"
+import { SERVER_HOST } from "../config/global_constants"
 
 
-export default class Register extends Component
-{
-    constructor(props)
-    {
+export default class Register extends Component {
+    constructor(props) {
         super(props)
 
         this.state = {
-            name:"",
-            email:"",
-            password:"",
-            confirmPassword:"",
-            isRegistered:false
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            isRegistered: false
         }
     }
 
 
-    handleChange = (e) =>
-    {
-        this.setState({[e.target.name]: e.target.value})
+    handleChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value })
     }
 
 
-    handleSubmit = (e) =>
-    {
+    handleSubmit = (e) => {
         e.preventDefault()
 
         axios.post(`${SERVER_HOST}/users/register/${this.state.name}/${this.state.email}/${this.state.password}`)
-            .then(res =>
-            {
-                if(res.data)
-                {
-                    if (res.data.errorMessage)
-                    {
+            .then(res => {
+                if (res.data) {
+                    if (res.data.errorMessage) {
                         console.log(res.data.errorMessage)
                     }
                     else // user successfully registered
@@ -50,67 +43,72 @@ export default class Register extends Component
                         localStorage.accessLevel = res.data.accessLevel
                         localStorage.token = res.data.token
 
-                        this.setState({isRegistered:true})
+                        this.setState({ isRegistered: true })
                     }
                 }
-                else
-                {
+                else {
                     console.log("Registration failed")
                 }
             })
     }
 
 
-    render()
-    {
+    render() {
         return (
-            <form className="form-container" noValidate = {true} id = "loginOrRegistrationForm">
+            <div className="register-container">
+                <form className="register-page" noValidate={true} id="loginOrRegistrationForm">
 
-                {this.state.isRegistered ? <Redirect to="/DisplayAllCars"/> : null}
+                    {this.state.isRegistered ? <Redirect to="/DisplayAllProducts" /> : null}
 
-                <h2>New User Registration</h2>
+                    <h1>Create account</h1>
+                    <div className="input-container">
+                        <input
+                            name="name"
+                            type="text"
+                            placeholder="Name"
+                            autoComplete="name"
+                            value={this.state.name}
+                            onChange={this.handleChange}
+                            ref={(input) => { this.inputToFocus = input }}
+                        />
+                    </div>
+                    <div className="input-container">
+                        <input
+                            name="email"
+                            type="email"
+                            placeholder="Email"
+                            autoComplete="email"
+                            value={this.state.email}
+                            onChange={this.handleChange}
+                        />
+                    </div>
 
-                <input
-                    name = "name"
-                    type = "text"
-                    placeholder = "Name"
-                    autoComplete="name"
-                    value = {this.state.name}
-                    onChange = {this.handleChange}
-                    ref = {(input) => { this.inputToFocus = input }}
-                /><br/>
+                    <div className="input-container">
+                        <input
+                            name="password"
+                            type="password"
+                            placeholder="Password"
+                            autoComplete="password"
+                            title="Password must be at least ten-digits long and contains at least one lowercase letter, one uppercase letter, one digit and one of the following characters (£!#€$%^&*)"
+                            value={this.state.password}
+                            onChange={this.handleChange}
+                        />
+                    </div>
+                    <div className="input-container">
+                        <input
+                            name="confirmPassword"
+                            type="password"
+                            placeholder="Confirm password"
+                            autoComplete="confirmPassword"
+                            value={this.state.confirmPassword}
+                            onChange={this.handleChange}
+                        />
+                    </div>
 
-                <input
-                    name = "email"
-                    type = "email"
-                    placeholder = "Email"
-                    autoComplete="email"
-                    value = {this.state.email}
-                    onChange = {this.handleChange}
-                /><br/>
-
-                <input
-                    name = "password"
-                    type = "password"
-                    placeholder = "Password"
-                    autoComplete="password"
-                    title = "Password must be at least ten-digits long and contains at least one lowercase letter, one uppercase letter, one digit and one of the following characters (£!#€$%^&*)"
-                    value = {this.state.password}
-                    onChange = {this.handleChange}
-                /><br/>
-
-                <input
-                    name = "confirmPassword"
-                    type = "password"
-                    placeholder = "Confirm password"
-                    autoComplete="confirmPassword"
-                    value = {this.state.confirmPassword}
-                    onChange = {this.handleChange}
-                /><br/><br/>
-
-                <LinkInClass value="Register New User" className="green-button" onClick={this.handleSubmit} />
-                <Link className="red-button" to={"/DisplayAllCars"}>Cancel</Link>
-            </form>
+                    <LinkInClass value="Register" className="register-button" onClick={this.handleSubmit} />
+                    <Link className="cancel-account-button" to={"/DisplayAllCars"}>Cancel</Link>
+                </form>
+            </div>
         )
     }
 }
