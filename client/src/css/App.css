@@ -16,9 +16,7 @@
 }
 
 .form-container {
-  position: relative;
   border: thin solid #aaaaaa;
-  margin: 50px;
   padding: 20px;
   margin-left: auto;
   margin-right: auto;
@@ -34,12 +32,12 @@
 .green-button,
 .red-button,
 .blue-button {
-  padding:10px;
+  padding: 7px 10px;
   font-size: 0.875rem;
   line-height: normal;
   border-radius: 0.2rem;
-  background-color: none;
-  color: #222;
+  color: #fff;
+  background-color: #28a745;
   margin-right: 10px;
   position: relative;
   top: 1px;
@@ -47,56 +45,55 @@
   cursor: pointer;
 }
 
-/* .green-button {
+.green-button {
   background-color: #28a745;
-} */
+}
 
 .red-button {
   background-color: #dc3545;
-  color: #fff;
 }
 
-/* .blue-button {
+.blue-button {
   background-color: #3545dc;
-} */
+}
 
 .green-button:hover,
 .red-button:hover,
 .blue-button:hover {
   text-decoration: none;
-  color: #aaa;
+  color: #fff;
 }
 
-/* .green-button:hover {
+.green-button:hover {
   background-color: #107020;
-} */
+}
 
 .red-button:hover {
   background-color: #a01020;
 }
 
-/* .blue-button:hover {
+.blue-button:hover {
   background-color: #1020a0;
-} */
-
-.close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    text-decoration: none;
-    color: #222;
-}
-
-.close-button svg {
-    width: 20px;
-    height: 20px;
-    transition: transform 0.2s ease-in-out;
 }
 
 /* end of link buttons */
 input [type=button] {
   color: pink;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.product-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* table of cars */
@@ -138,13 +135,15 @@ input [type=button] {
 .navbar {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   background-color: #222;
-  padding: 12px 45px;
-  color: #fff;
+  padding: 15px 30px;
+  color: white;
 }
 
 .logo {
-
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .nav-links {
@@ -158,13 +157,13 @@ input [type=button] {
 }
 
 .nav-links a {
-  color: #fff;
+  color: white;
   text-decoration: none;
   font-size: 1rem;
 }
 
 .nav-links a:hover {
-  color: #aaa;
+  color: #f4a261;
 }
 
 .cart-icon {
@@ -182,37 +181,6 @@ input [type=button] {
     flex-direction: column;
     gap: 10px;
   }
-}/*# sourceMappingURL=App.css.map */
-
-/*product grid*/
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-  padding: 20px;
 }
 
-.product-card {
-  background: #fff;
-  border-radius: 10px;
-  padding: 15px;
-  text-align: center;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.product-image {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.product-card h3 {
-  margin: 10px 0 5px;
-  font-size: 16px;
-}
-
-.product-card p {
-  color: #555;
-  font-size: 14px;
-}
+/*# sourceMappingURL=App.css.map */
