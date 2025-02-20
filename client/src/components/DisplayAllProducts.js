@@ -3,7 +3,7 @@ import {Link} from "react-router-dom"
 
 import axios from "axios"
 
-import ProductTable from "./ProductTable"
+import ProductGrid from "./ProductGrid"
 import Logout from "./Logout"
 
 import {ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../config/global_constants"
@@ -48,13 +48,22 @@ export default class DisplayAllProducts extends Component {
                     </div>
                     :
                     <div>
-                        <Link className="green-button" to={"/Login"}>Login</Link>
-                        <Link className="blue-button" to={"/Register"}>Register</Link>
+                    
+                        <Link className="green-button" to={"/Login"}>
+                            <svg id="profile" viewBox="0 0 20 24" width="20" height="20">
+                            <title>Login or Signup</title>
+                            <g fill="none" stroke="currentColor" stroke-miterlimit="10" strokeWidth="2">
+                                <path d="M19 20.5 15.63 16H4.38L1 20.5"></path>
+                                <circle cx="10" cy="8.5" r="4.5"></circle>
+                            </g>
+                            </svg>
+                        </Link>
+                        {/* <Link className="blue-button" to={"/Register"}>Register</Link> */}
                         <Link className="red-button" to={"/ResetDatabase"}>Reset Database</Link>  <br/><br/><br/></div>
                 }
 
-                <div className="table-container">
-                    <ProductTable products={this.state.products} />
+                <div className="product-grid">
+                    <ProductGrid products={this.state.products} />
 
                     {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?
                         <div className="add-new-product">
