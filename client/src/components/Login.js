@@ -77,10 +77,11 @@ export default class Login extends Component {
                         />
                     </div>
                     <LinkInClass value="Sign in" className="sign-in-button" onClick={this.handleSubmit} />
-                    <Link className="create-account-button" to={"/Register"}>Create account</Link>
+                     <div>
+                        <p>Don't have an account? <Link className="create-account-button" to={"/Register"}>Register</Link>
+                     </div>
                 </form>
             </div>
-
         )
     }
 }
