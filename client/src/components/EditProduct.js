@@ -41,18 +41,15 @@ export default class EditProduct extends Component {
                             images: res.data.images
                         })
                     }
-                } else
-                {
+                } else {
                     console.log(`Record not found`)
                 }
             })
     }
 
-
     handleChange = (e) => {
         this.setState({[e.target.name]: e.target.value})
     }
-
 
     handleSubmit = (e) => {
         e.preventDefault()
