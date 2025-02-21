@@ -1,3 +1,10 @@
+$navbar-color: #222;
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -113,9 +120,6 @@ input [type="button"]
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-
-
-
 /* table of cars */
 .table-container table
 {
@@ -162,12 +166,19 @@ input [type="button"]
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #222;
-  padding: 15px 30px;
+  background-color: $navbar-color;
+  padding: 12px 24px;
   color: white;
 }
 
+.most-left-side {
+  display: flex;
+  align-items: center;
+}
+
 .logo {
+  display: flex;
+  align-items: center;
   font-size: 1.5rem;
   font-weight: bold;
 }
@@ -175,7 +186,9 @@ input [type="button"]
 .nav-links {
   list-style: none;
   display: flex;
+  align-items: left;
   gap: 20px;
+  margin-left: 40px;
 }
 
 .nav-links li {
@@ -186,15 +199,128 @@ input [type="button"]
   color: white;
   text-decoration: none;
   font-size: 1rem;
+  letter-spacing: 0.2rem;
 }
 
 .nav-links a:hover {
+  text-decoration: underline;
   color: #f4a261;
+  text-underline-offset: 6px;
 }
 
-.cart-icon {
+.most-right-side {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 16px;
+  padding: 5px 10px;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  padding: 4px;
+  border-radius: 16px;
+}
+
+.search-bar input::placeholder {
+  color: #888;
+}
+
+.search-bar .search-icon {
+  color: #888;
+  font-size: 1.5rem;
+  margin-right: 5px;
+}
+
+.user-icon, .cart-icon {
   font-size: 1.5rem;
   cursor: pointer;
+  color: white;
+}
+
+/* Login page */
+
+.login-container, .register-container {
+  display: flex;
+  height: 800px;
+}
+
+.login-page, .register-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  padding: 64px;
+  border: thin solid rgb(147, 145, 145);
+  border-radius: 20px;
+  max-width: 400px;
+  margin: auto;
+  box-shadow: 2px 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+.login-container h1, .register-container h1 {
+  font-weight: 600;
+  color: $navbar-color;
+  margin-bottom: 24px;
+  letter-spacing: 0.1rem;
+}
+
+.login-container input, .register-container input {
+  width: 100%;
+  padding: 8px 54px 8px 18px;
+  margin-bottom: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.login-container input:focus, 
+.register-container input:focus {
+  border-color: #d08243;
+  outline: none;
+}
+
+.login-container .create-account-button, 
+.register-container .cancel-account-button {
+  display: block;
+  margin: 10px 0;
+  color: #d08243;
+  text-decoration: none;
+}
+
+.login-container .create-account-button:hover,
+.register-container .cancel-account-button:hover {
+  text-decoration: underline;
+}
+
+.login-container .sign-in-button, 
+.register-container .register-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #d08243;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.sign-in-button:hover, .register-button:hover {
+  opacity: 0.8;
+}
+
+.login-container .close-button {
+  display: none; /* Hide the close button if not needed */
 }
 
 /* Responsive Design */
@@ -207,5 +333,13 @@ input [type="button"]
   .nav-links {
     flex-direction: column;
     gap: 10px;
+  }
+
+  .icons {
+    margin-top: 10px;
+  }
+
+  .logo {
+    display: none;
   }
 }
