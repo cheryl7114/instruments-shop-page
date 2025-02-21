@@ -78,7 +78,7 @@ export default class Login extends Component {
                     </div>
                     <LinkInClass value="Sign in" className="sign-in-button" onClick={this.handleSubmit} />
                      <div>
-                        <p>Don't have an account? <Link className="create-account-button" to={"/Register"}>Register</Link>
+                         <p>Don't have an account? <Link className="create-account-button" to={"/Register"}>Register</Link></p>
                      </div>
                 </form>
             </div>

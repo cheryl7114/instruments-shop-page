@@ -155,8 +155,8 @@ input [type=button] {
 .logo {
   display: flex;
   align-items: center;
-  padding: 15px 30px;
-  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .nav-links {
@@ -203,10 +203,6 @@ input [type=button] {
   outline: none;
   padding: 4px;
   border-radius: 16px;
-}
-
-.search-bar input::-moz-placeholder {
-  color: #888;
 }
 
 .search-bar input::placeholder {
@@ -318,4 +314,6 @@ input [type=button] {
   .logo {
     display: none;
   }
-}/*# sourceMappingURL=App.css.map */
+}
+
+/*# sourceMappingURL=App.css.map */
