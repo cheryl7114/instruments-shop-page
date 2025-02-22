@@ -113,7 +113,7 @@ export default class AddProduct extends Component {
 
     render() {
         return (
-            <div className="form-container">
+            <div className="body-container">
                 {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts"/> : null}
                 <form>
                     <div>
