@@ -11,6 +11,7 @@ import AddProduct from "./components/AddProduct"
 import EditProduct from "./components/EditProduct"
 import DeleteProduct from "./components/DeleteProduct"
 import DisplayAllProducts from "./components/DisplayAllProducts"
+import ProductDetails from "./components/ProductDetails"
 import LoggedInRoute from "./components/LoggedInRoute"
 
 import { ACCESS_LEVEL_GUEST } from "./config/global_constants"
@@ -29,6 +30,7 @@ export default class App extends Component {
             <div>
                 <Navbar />
                 <Switch>
+                    <Route exact path="/ProductDetails/:id" component={ProductDetails} />
                     <Route exact path="/Register" component={Register} />
                     <Route exact path="/ResetDatabase" component={ResetDatabase} />
                     <Route exact path="/" component={DisplayAllProducts} />

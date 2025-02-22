@@ -41,14 +41,14 @@ export default class DisplayAllProducts extends Component {
     render()
     {
         return (
-            <div className="form-container">
+            <div className="body-container">
                 {localStorage.accessLevel > ACCESS_LEVEL_GUEST ?
                     <div className="logout">
                         <Logout/>
                     </div>
                     :
                     <div>
-                    
+
                         <Link className="green-button" to={"/Login"}>
                             <svg id="profile" viewBox="0 0 20 24" width="20" height="20">
                             <title>Login or Signup</title>
@@ -58,7 +58,6 @@ export default class DisplayAllProducts extends Component {
                             </g>
                             </svg>
                         </Link>
-                        {/* <Link className="blue-button" to={"/Register"}>Register</Link> */}
                         <Link className="red-button" to={"/ResetDatabase"}>Reset Database</Link>  <br/><br/><br/></div>
                 }
 

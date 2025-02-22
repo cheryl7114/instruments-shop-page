@@ -41,18 +41,15 @@ export default class EditProduct extends Component {
                             images: res.data.images
                         })
                     }
-                } else
-                {
+                } else {
                     console.log(`Record not found`)
                 }
             })
     }
 
-
     handleChange = (e) => {
         this.setState({[e.target.name]: e.target.value})
     }
-
 
     handleSubmit = (e) => {
         e.preventDefault()
@@ -133,7 +130,7 @@ export default class EditProduct extends Component {
 
     render() {
         return (
-            <div className="form-container">
+            <div className="body-container">
 
                 {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts"/> : null}
 
@@ -258,8 +255,6 @@ export default class EditProduct extends Component {
                             ))
                         }
                     </div>
-
-
 
                     <LinkInClass value="Update" className="green-button" onClick={this.handleSubmit}/>
                     <Link className="red-button" to={"/DisplayAllProducts"}>Cancel</Link>

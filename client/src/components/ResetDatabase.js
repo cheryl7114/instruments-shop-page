@@ -56,7 +56,7 @@ export default class ResetDatabase extends Component
     render()
     {
         return (
-            <form className="form-container" noValidate = {true} id = "loginOrRegistrationForm">
+            <form className="body-container" noValidate = {true} id = "loginOrRegistrationForm">
 
                 {this.state.isReset ? <Redirect to="/DisplayAllCars"/> : null}
 
