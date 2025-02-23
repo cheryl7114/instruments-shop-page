@@ -32,6 +32,7 @@ html, body {
   top: 1px;
   text-decoration: none;
   cursor: pointer;
+  text-align: center;
 }
 .green-button:hover,
 .red-button:hover,
@@ -73,7 +74,7 @@ html, body {
   border-radius: 10px;
   padding: 15px;
   text-align: center;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .product-details-container {
@@ -103,6 +104,21 @@ html, body {
   flex: 1;
   width: 40%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.product-info h3 {
+  font-size: x-large;
+  margin-bottom: 40px;
+  color: #d08243;
+}
+.product-info .details {
+  color: #8a8989;
+}
+.product-info #price-text {
+  font-size: large;
+  color: #8a8989;
 }
 
 .navbar {

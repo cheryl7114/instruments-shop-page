@@ -16,20 +16,26 @@ export default class Register extends Component {
             email: "",
             password: "",
             confirmPassword: "",
+            selectedFile:null,
             isRegistered: false
         }
     }
-
 
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value })
     }
 
+    handleFileChange = (e) => {
+        this.setState({selectedFile: e.target.files[0]})
+    }
 
     handleSubmit = (e) => {
         e.preventDefault()
 
-        axios.post(`${SERVER_HOST}/users/register/${this.state.name}/${this.state.email}/${this.state.password}`)
+        let formData = new FormData()
+        formData.append("profilePhoto", this.state.selectedFile)
+
+        axios.post(`${SERVER_HOST}/users/register/${this.state.name}/${this.state.email}/${this.state.password}`, formData, {headers: {"Content-type": "multipart/form-data"}})
             .then(res => {
                 if (res.data) {
                     if (res.data.errorMessage) {
@@ -41,6 +47,7 @@ export default class Register extends Component {
 
                         localStorage.name = res.data.name
                         localStorage.accessLevel = res.data.accessLevel
+                        localStorage.profilePhoto = res.data.profilePhoto
                         localStorage.token = res.data.token
 
                         this.setState({ isRegistered: true })
@@ -102,6 +109,13 @@ export default class Register extends Component {
                             autoComplete="confirmPassword"
                             value={this.state.confirmPassword}
                             onChange={this.handleChange}
+                        />
+                    </div>
+
+                    <div className="input-container">
+                        <input
+                            type = "file"
+                            onChange = {this.handleFileChange}
                         />
                     </div>
 

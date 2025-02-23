@@ -22,7 +22,7 @@ export default class Login extends Component {
     }
 
 
-    handleSubmit = (e) => {
+    handleSubmit = () => {
         axios.post(`${SERVER_HOST}/users/login/${this.state.email}/${this.state.password}`)
             .then(res => {
                 if (res.data) {
@@ -35,6 +35,7 @@ export default class Login extends Component {
 
                         localStorage.name = res.data.name
                         localStorage.accessLevel = res.data.accessLevel
+                        localStorage.profilePhoto = res.data.profilePhoto
                         localStorage.token = res.data.token
 
                         this.setState({ isLoggedIn: true })

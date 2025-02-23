@@ -1,6 +1,7 @@
 $navbar-color: #222;
 $light-gray: #f7f7f7;
-
+$product-details-colour: #8a8989;
+$orange: #d08243;
 * {
   box-sizing: border-box;
   margin: 0;
@@ -40,7 +41,7 @@ html, body {
   top: 1px;
   text-decoration: none;
   cursor: pointer;
-
+  text-align: center;
   &:hover {
     text-decoration: none;
     color: #fff;
@@ -84,7 +85,7 @@ html, body {
   border-radius: 10px;
   padding: 15px;
   text-align: center;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 // Product full details page
@@ -118,7 +119,25 @@ html, body {
   flex: 1; // takes up remaining space
   width: 40%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   //border: thin solid black;
+
+  h3 {
+    font-size: x-large;
+    margin-bottom: 40px;
+    color: $orange;
+  }
+
+  .details {
+    color: $product-details-colour;
+  }
+
+  #price-text {
+    font-size: large;
+    color: $product-details-colour;
+  }
 }
 
 // Navbar
@@ -225,7 +244,7 @@ html, body {
     font-size: 1rem;
 
     &:focus {
-      border-color: #d08243;
+      border-color: $orange;
       outline: none;
     }
   }
@@ -233,7 +252,7 @@ html, body {
   .create-account-button {
     display: block;
     margin: 10px 0;
-    color: #d08243;
+    color: $orange;
     text-decoration: none;
 
     &:hover {
@@ -244,7 +263,7 @@ html, body {
   .sign-in-button {
     width: 100%;
     padding: 10px;
-    background-color: #d08243;
+    background-color: $orange;
     color: white;
     border: none;
     border-radius: 4px;
