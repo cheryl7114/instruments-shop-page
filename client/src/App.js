@@ -12,6 +12,7 @@ import EditProduct from "./components/EditProduct"
 import DeleteProduct from "./components/DeleteProduct"
 import DisplayAllProducts from "./components/DisplayAllProducts"
 import ProductDetails from "./components/ProductDetails"
+import UserProfile from "./components/UserProfile"
 import LoggedInRoute from "./components/LoggedInRoute"
 
 import { ACCESS_LEVEL_GUEST } from "./config/global_constants"
@@ -22,7 +23,6 @@ if (typeof localStorage.accessLevel === "undefined") {
     localStorage.token = null
     localStorage.profilePhoto = null
 }
-
 
 export default class App extends Component {
     render() {
@@ -40,6 +40,7 @@ export default class App extends Component {
                     <LoggedInRoute exact path="/AddProduct" component={AddProduct} />
                     <LoggedInRoute exact path="/EditProduct/:id" component={EditProduct} />
                     <LoggedInRoute exact path="/DeleteProduct/:id" component={DeleteProduct} />
+                    <LoggedInRoute exact path="/UserProfile" component={UserProfile} />
                     <Route exact path="/DisplayAllProducts" component={DisplayAllProducts}/>
                     <Route path="*" component={DisplayAllProducts}/>
                 </Switch>

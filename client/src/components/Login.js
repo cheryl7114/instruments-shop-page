@@ -16,11 +16,9 @@ export default class Login extends Component {
         }
     }
 
-
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value })
     }
-
 
     handleSubmit = () => {
         axios.post(`${SERVER_HOST}/users/login/${this.state.email}/${this.state.password}`)
@@ -28,25 +26,34 @@ export default class Login extends Component {
                 if (res.data) {
                     if (res.data.errorMessage) {
                         console.log(res.data.errorMessage)
-                    }
-                    else // user successfully logged in
-                    {
+                    } else {
                         console.log("User logged in")
 
-                        localStorage.name = res.data.name
-                        localStorage.accessLevel = res.data.accessLevel
-                        localStorage.profilePhoto = res.data.profilePhoto
-                        localStorage.token = res.data.token
+                        localStorage.setItem("name", res.data.name)
+                        localStorage.setItem("accessLevel", res.data.accessLevel)
+                        localStorage.setItem("token", res.data.token)
 
-                        this.setState({ isLoggedIn: true })
+                        // update profile photo correctly
+                        if (res.data.profilePhoto) {
+                            localStorage.setItem("profilePhoto", res.data.profilePhoto)
+                        } else {
+                            localStorage.removeItem("profilePhoto")
+                        }
+
+                        // update state (so React processes redirection)
+                        this.setState({ isLoggedIn: true }, () => {
+                            // delay the refresh to allow redirection to happen
+                            setTimeout(() => {
+                                window.location.reload()
+                            }, 100)
+                        })
                     }
-                }
-                else {
+                } else {
                     console.log("Login failed")
                 }
             })
+            .catch(error => console.log("Error logging in:", error))
     }
-
 
     render() {
         return (

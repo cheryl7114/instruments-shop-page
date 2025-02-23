@@ -29,7 +29,7 @@ router.post(`/users/reset_user_collection`, (req,res) =>
                 {
                     if(createData)
                     {
-                        emptyFolder(process.env.UPLOADED_FILES_FOLDER, false, (res) =>
+                        emptyFolder(process.env.UPLOADED_FILES_FOLDER, false, (result) =>
                         {
                             res.json(createData)
                         })

@@ -44,11 +44,6 @@ export default class DisplayAllProducts extends Component {
             <div className="body-container">
                 {localStorage.accessLevel > ACCESS_LEVEL_GUEST ?
                     <div className="logout">
-                        {
-                            localStorage.profilePhoto !== "null"
-                                ? <img id="profilePhoto" src={`data:;base64,${localStorage.profilePhoto}`} alt=""/>
-                                : null
-                        }
                         <Logout/>
                     </div>
                     :
