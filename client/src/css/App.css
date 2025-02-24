@@ -81,6 +81,7 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
+  border: thin solid black;
 }
 
 .product-details {
@@ -111,7 +112,7 @@ html, body {
 .product-info h3 {
   font-size: x-large;
   margin-bottom: 40px;
-  color: #d08243;
+  color: #ea954f;
 }
 .product-info .details {
   color: #8a8989;
@@ -119,6 +120,60 @@ html, body {
 .product-info #price-text {
   font-size: large;
   color: #8a8989;
+}
+
+.sidebar-container {
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.sidebar-with-content {
+  display: flex;
+  margin-top: 40px;
+}
+
+.sidebar {
+  width: 30%;
+  max-width: 200px;
+  background: #ea954f;
+  padding: 15px;
+  border-radius: 8px;
+}
+.sidebar h2 {
+  padding: 10px;
+}
+.sidebar hr {
+  border: thin solid #ddd;
+}
+.sidebar p {
+  margin: 10px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+.sidebar p:hover {
+  background: #ddd;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 50px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+}
+.content p {
+  font-size: 18px;
+  margin-bottom: 3%;
+}
+.content .profile-photo {
+  width: 150px;
+  height: 150px;
+  display: block;
+  margin-bottom: 50px;
+  object-fit: cover;
+  border: 2px solid #ccc;
 }
 
 .navbar {
@@ -217,13 +272,13 @@ html, body {
   font-size: 1rem;
 }
 .login-container input:focus, .register-container input:focus {
-  border-color: #d08243;
+  border-color: #ea954f;
   outline: none;
 }
 .login-container .create-account-button, .register-container .create-account-button {
   display: block;
   margin: 10px 0;
-  color: #d08243;
+  color: #ea954f;
   text-decoration: none;
 }
 .login-container .create-account-button:hover, .register-container .create-account-button:hover {
@@ -232,7 +287,7 @@ html, body {
 .login-container .sign-in-button, .register-container .sign-in-button {
   width: 100%;
   padding: 10px;
-  background-color: #d08243;
+  background-color: #ea954f;
   color: white;
   border: none;
   border-radius: 4px;

@@ -80,7 +80,7 @@ router.post(`/users/register/:name/:email/:password`, upload.single("profilePhot
 
                             fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${req.file.filename}`, 'base64', (err, fileData) =>
                             {
-                                res.json({name: data.name, accessLevel:data.accessLevel, profilePhoto:fileData, token:token})
+                                res.json({userId: data._id, name: data.name, email: data.email, accessLevel:data.accessLevel, profilePhoto:fileData, token:token})
                             })
                         }
                         else
@@ -111,11 +111,11 @@ router.post(`/users/login/:email/:password`, (req,res) =>
                     {
                         if(fileData)
                         {
-                            res.json({name: data.name, accessLevel:data.accessLevel, profilePhoto:fileData, token:token})
+                            res.json({userId: data._id, name: data.name, email: data.email, accessLevel:data.accessLevel, profilePhoto:fileData, token:token})
                         }
                         else
                         {
-                            res.json({name: data.name, accessLevel:data.accessLevel, profilePhoto:null, token:token})
+                            res.json({userId: data._id, name: data.name, email: data.email, accessLevel:data.accessLevel, profilePhoto:null, token:token})
                         }
                     })
                 }
@@ -130,6 +130,65 @@ router.post(`/users/login/:email/:password`, (req,res) =>
             console.log("not found in db")
             res.json({errorMessage:`User is not logged in`})
         }
+    })
+})
+
+
+// read all users
+router.get(`/users`, (req, res) => {
+    jwt.verify(req.headers.authorization, JWT_PRIVATE_KEY, { algorithm: "HS256" }, (err, decodedToken) => {
+        if (err) {
+            return res.json({ errorMessage: `User is not logged in` })
+        }
+
+        usersModel.find({}, "name email accessLevel", (error, data) => {
+            if (error || !data) {
+                return res.json({ errorMessage: `Could not retrieve users` })
+            }
+            res.json(data)
+        })
+    })
+})
+
+
+// find one user by ID
+router.get(`/users/:id`, (req, res) => {
+    console.log("Route reached")
+    console.log("User ID from URL:", req.params.id)
+
+    jwt.verify(req.headers.authorization, JWT_PRIVATE_KEY, { algorithm: "HS256" }, (err, decodedToken) => {
+        if (err) {
+            return res.json({errorMessage: `User is not logged in` })
+        }
+
+        usersModel.findById(req.params.id, "name email password accessLevel profilePhotoFilename", (error, data) => {
+            // if (error || !data) {
+            //     // return res.json({errorMessage: `User not found` })
+            // }
+
+            if (error) {
+                console.error("Error while querying user:", error);
+                return res.json({ errorMessage: 'Error querying user' });
+            }
+
+            if (!data) {
+                console.log('User not found for ID:', req.params.id);
+                return res.json({ errorMessage: 'User not found' });
+            }
+
+            if (data.profilePhotoFilename) {
+                fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${data.profilePhotoFilename}`, "base64", (err, fileData) => {
+                    if (err) {
+                        return res.json({name: data.name, email: data.email, password: data.password, accessLevel: data.accessLevel, profilePhoto: null})
+                    }
+
+                    res.json({name: data.name, email: data.email, password: data.password, accessLevel: data.accessLevel, profilePhoto: fileData
+                    })
+                })
+            } else {
+                res.json({name: data.name, email: data.email, password: data.password, accessLevel: data.accessLevel, profilePhoto: null})
+            }
+        })
     })
 })
 

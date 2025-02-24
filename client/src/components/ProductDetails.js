@@ -43,8 +43,6 @@ export default class ProductDetails extends Component {
                             <img
                                 src={product.images && product.images.length > 0 ? product.images[0] : "https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg"}
                                 alt={product.name}
-                                width="150"
-                                height="120"
                             />
                         </div>
                         <div className="product-info">

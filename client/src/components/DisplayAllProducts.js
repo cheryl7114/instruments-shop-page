@@ -8,7 +8,6 @@ import Logout from "./Logout"
 
 import {ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../config/global_constants"
 
-
 export default class DisplayAllProducts extends Component {
     constructor(props) {
         super(props)

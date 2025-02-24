@@ -1,7 +1,7 @@
 $navbar-color: #222;
 $light-gray: #f7f7f7;
 $product-details-colour: #8a8989;
-$orange: #d08243;
+$orange: #ea954f;
 * {
   box-sizing: border-box;
   margin: 0;
@@ -93,10 +93,10 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
+  border: thin solid black;
 }
 
 .product-details {
-  //border: thin solid black;
   display: flex;
   //max-width: 80%; // Prevents it from getting too wide
 }
@@ -137,6 +137,67 @@ html, body {
   #price-text {
     font-size: large;
     color: $product-details-colour;
+  }
+}
+
+//User Profile
+.sidebar-container {
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.sidebar-with-content {
+  display: flex;
+  margin-top: 40px;
+}
+
+.sidebar {
+  width: 30%;
+  max-width: 200px;
+  background: $orange;
+  padding: 15px;
+  border-radius: 8px;
+
+  h2 {
+    padding: 10px;
+  }
+
+  hr {
+    border: thin solid #ddd;
+  }
+
+  p {
+    margin: 10px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background: #ddd;
+    }
+  }
+}
+
+.content {
+  flex-grow: 1;
+  padding: 50px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+
+  p {
+    font-size: 18px;
+    margin-bottom: 3%;
+  }
+
+  .profile-photo {
+    width: 150px;
+    height: 150px;
+    display: block;
+    margin-bottom: 50px;
+    object-fit: cover; // ensure image is contained within the grid
+    border: 2px solid #ccc;
   }
 }
 

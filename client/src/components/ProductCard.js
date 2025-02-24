@@ -3,7 +3,7 @@ import {Link} from "react-router-dom"
 
 import {ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN} from "../config/global_constants"
 
-export default class ProductTableRow extends Component {
+export default class ProductCard extends Component {
     render() {
         return (
             <div className="product-card">

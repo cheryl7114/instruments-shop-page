@@ -46,11 +46,25 @@ export default class Register extends Component {
                         console.log("User registered and logged in")
 
                         localStorage.name = res.data.name
+                        localStorage.userId = res.data.user._id
                         localStorage.accessLevel = res.data.accessLevel
-                        localStorage.profilePhoto = res.data.profilePhoto
                         localStorage.token = res.data.token
 
-                        this.setState({ isRegistered: true })
+                        // update profile photo correctly
+                        if (res.data.profilePhoto) {
+                            localStorage.profilePhoto = res.data.profilePhoto
+                        } else {
+                            localStorage.removeItem("profilePhoto")
+                        }
+
+                        // update state (so react processes redirection)
+                        // without this the page cant be redirected to displayAllProducts (will stay at login)
+                        this.setState({ isRegistered: true }, () => {
+                            // delay the refresh to allow redirection to happen
+                            setTimeout(() => {
+                                window.location.reload()
+                            }, 100)
+                        })
                     }
                 }
                 else {

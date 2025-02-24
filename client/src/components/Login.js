@@ -29,18 +29,20 @@ export default class Login extends Component {
                     } else {
                         console.log("User logged in")
 
-                        localStorage.setItem("name", res.data.name)
-                        localStorage.setItem("accessLevel", res.data.accessLevel)
-                        localStorage.setItem("token", res.data.token)
+                        localStorage.name = res.data.name
+                        localStorage.userId = res.data.userId;
+                        localStorage.accessLevel = res.data.accessLevel
+                        localStorage.token = res.data.token
 
                         // update profile photo correctly
                         if (res.data.profilePhoto) {
-                            localStorage.setItem("profilePhoto", res.data.profilePhoto)
+                            localStorage.profilePhoto = res.data.profilePhoto
                         } else {
                             localStorage.removeItem("profilePhoto")
                         }
 
-                        // update state (so React processes redirection)
+                        // update state (so react processes redirection)
+                        // without this the page cant be redirected to displayAllProducts (will stay at login)
                         this.setState({ isLoggedIn: true }, () => {
                             // delay the refresh to allow redirection to happen
                             setTimeout(() => {
