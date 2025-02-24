@@ -43,17 +43,15 @@ export default class ProductDetails extends Component {
                             <img
                                 src={product.images && product.images.length > 0 ? product.images[0] : "https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg"}
                                 alt={product.name}
-                                width="150"
-                                height="120"
                             />
                         </div>
                         <div className="product-info">
                             <h2>{product.name}</h2>
-                            <p><strong>Brand:</strong> {product.brand}</p>
-                            <p><strong>Colour:</strong> {product.colour}</p>
-                            <p><strong>Category:</strong> {product.category}</p>
-                            <p><strong>Stock:</strong> {product.stock}</p>
-                            <p>€{product.price}</p>
+                            <p className="details">{product.category}</p>
+                            {/*<p>{product.brand}</p>*/}
+                            <p className="details"><strong>Colour:</strong> {product.colour}</p>
+                            <p className="details"><i>{product.stock} units left</i></p>
+                            <h3><span id="price-text"><b>Price: </b></span>€{product.price}</h3>
 
                             {localStorage.accessLevel > ACCESS_LEVEL_GUEST ? <Link className="green-button" to={"/EditProduct/" + product._id}>Edit</Link> : null}
                             {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ? <Link className="red-button" to={"/DeleteProduct/" + product._id}>Delete</Link> : null}

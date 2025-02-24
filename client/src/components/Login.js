@@ -16,36 +16,46 @@ export default class Login extends Component {
         }
     }
 
-
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-
-    handleSubmit = (e) => {
+    handleSubmit = () => {
         axios.post(`${SERVER_HOST}/users/login/${this.state.email}/${this.state.password}`)
             .then(res => {
                 if (res.data) {
                     if (res.data.errorMessage) {
                         console.log(res.data.errorMessage)
-                    }
-                    else // user successfully logged in
-                    {
+                    } else {
                         console.log("User logged in")
 
                         localStorage.name = res.data.name
+                        localStorage.userId = res.data.userId;
                         localStorage.accessLevel = res.data.accessLevel
                         localStorage.token = res.data.token
 
-                        this.setState({ isLoggedIn: true })
+                        // update profile photo correctly
+                        if (res.data.profilePhoto) {
+                            localStorage.profilePhoto = res.data.profilePhoto
+                        } else {
+                            localStorage.removeItem("profilePhoto")
+                        }
+
+                        // update state (so react processes redirection)
+                        // without this the page cant be redirected to displayAllProducts (will stay at login)
+                        this.setState({ isLoggedIn: true }, () => {
+                            // delay the refresh to allow redirection to happen
+                            setTimeout(() => {
+                                window.location.reload()
+                            }, 100)
+                        })
                     }
-                }
-                else {
+                } else {
                     console.log("Login failed")
                 }
             })
+            .catch(error => console.log("Error logging in:", error))
     }
-
 
     render() {
         return (

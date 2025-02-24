@@ -32,6 +32,7 @@ html, body {
   top: 1px;
   text-decoration: none;
   cursor: pointer;
+  text-align: center;
 }
 .green-button:hover,
 .red-button:hover,
@@ -73,13 +74,14 @@ html, body {
   border-radius: 10px;
   padding: 15px;
   text-align: center;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .product-details-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  border: thin solid black;
 }
 
 .product-details {
@@ -103,6 +105,83 @@ html, body {
   flex: 1;
   width: 40%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.product-info h3 {
+  font-size: x-large;
+  margin-bottom: 40px;
+  color: #ea954f;
+}
+.product-info .details {
+  color: #8a8989;
+}
+.product-info #price-text {
+  font-size: large;
+  color: #8a8989;
+}
+
+.sidebar-container {
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.sidebar-with-content {
+  display: flex;
+  margin-top: 40px;
+}
+
+.sidebar {
+  width: 30%;
+  max-width: 200px;
+  background: #ea954f;
+  padding: 15px;
+  border-radius: 8px;
+}
+.sidebar h2 {
+  padding: 10px;
+}
+.sidebar hr {
+  border: thin solid #ddd;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.sidebar .sidebar-choices {
+  display: block;
+  margin: 10px 0;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: background 0.3s ease, color 0.3s ease;
+  text-decoration: none;
+  color: black;
+  font-size: 16px;
+}
+.sidebar .sidebar-choices:hover {
+  background: #ddd;
+}
+.sidebar .sidebar-choices:active {
+  background: #ccc;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 50px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+}
+.content p {
+  font-size: 18px;
+  margin-bottom: 3%;
+}
+.content .profile-photo {
+  width: 150px;
+  height: 150px;
+  display: block;
+  margin-bottom: 50px;
+  object-fit: cover;
+  border: 2px solid #ccc;
 }
 
 .navbar {
@@ -174,6 +253,13 @@ html, body {
   cursor: pointer;
   color: white;
 }
+.navbar .profile-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
 
 .login-container, .register-container {
   display: flex;
@@ -194,13 +280,13 @@ html, body {
   font-size: 1rem;
 }
 .login-container input:focus, .register-container input:focus {
-  border-color: #d08243;
+  border-color: #ea954f;
   outline: none;
 }
 .login-container .create-account-button, .register-container .create-account-button {
   display: block;
   margin: 10px 0;
-  color: #d08243;
+  color: #ea954f;
   text-decoration: none;
 }
 .login-container .create-account-button:hover, .register-container .create-account-button:hover {
@@ -209,7 +295,7 @@ html, body {
 .login-container .sign-in-button, .register-container .sign-in-button {
   width: 100%;
   padding: 10px;
-  background-color: #d08243;
+  background-color: #ea954f;
   color: white;
   border: none;
   border-radius: 4px;

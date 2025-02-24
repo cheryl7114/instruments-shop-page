@@ -6,6 +6,8 @@ import { CiSearch } from "react-icons/ci";
 
 export default class Navbar extends React.Component {
   render() {
+    const profilePhoto = localStorage.profilePhoto !== "null" ? localStorage.profilePhoto : null;
+
     return (
       <nav className="navbar">
         <div className="most-left-side">
@@ -27,11 +29,15 @@ export default class Navbar extends React.Component {
             <CiSearch className="search-icon" />
             <input type="text" placeholder="Search..." />
           </div>
-
-          <Link to="/Login">
-            <CiUser className="user-icon" />
-          </Link>
           <CiShoppingCart className="cart-icon" />
+
+          <Link to={`/UserProfile/${localStorage.userId}`}>
+            {profilePhoto ? (
+                <img className="profile-photo" src={`data:image/png;base64,${profilePhoto}`} alt="Profile" />
+            ) : (
+                <CiUser className="user-icon" />
+            )}
+          </Link>
         </div>
       </nav>
     )

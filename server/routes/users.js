@@ -8,6 +8,10 @@ const jwt = require('jsonwebtoken')
 const fs = require('fs')
 const JWT_PRIVATE_KEY = fs.readFileSync(process.env.JWT_PRIVATE_KEY_FILENAME, 'utf8')
 
+const multer  = require('multer')
+const upload = multer({dest: `${process.env.UPLOADED_FILES_FOLDER}`})
+
+const emptyFolder = require('empty-folder')
 
 // IMPORTANT
 // Obviously, in a production release, you should never have the code below, as it allows a user to delete a database collection
@@ -25,7 +29,10 @@ router.post(`/users/reset_user_collection`, (req,res) =>
                 {
                     if(createData)
                     {
-                        res.json(createData)
+                        emptyFolder(process.env.UPLOADED_FILES_FOLDER, false, (result) =>
+                        {
+                            res.json(createData)
+                        })
                     }
                     else
                     {
@@ -42,35 +49,49 @@ router.post(`/users/reset_user_collection`, (req,res) =>
 })
 
 
-router.post(`/users/register/:name/:email/:password`, (req,res) =>
+router.post(`/users/register/:name/:email/:password`, upload.single("profilePhoto"), (req,res) =>
 {
-    // If a user with this email does not already exist, then create new user
-    usersModel.findOne({email:req.params.email}, (uniqueError, uniqueData) =>
+    if(!req.file)
     {
-        if(uniqueData)
+        res.json({errorMessage:`No file was selected to be uploaded`})
+    }
+    else if(req.file.mimetype !== "image/png" && req.file.mimetype !== "image/jpg" && req.file.mimetype !== "image/jpeg")
+    {
+        fs.unlink(`${process.env.UPLOADED_FILES_FOLDER}/${req.file.filename}`, (error) => {res.json({errorMessage:`Only .png, .jpg and .jpeg format accepted`})})
+    }
+    else // uploaded file is valid
+    {
+        // If a user with this email does not already exist, then create new user
+        usersModel.findOne({email:req.params.email}, (uniqueError, uniqueData) =>
         {
-            res.json({errorMessage:`User already exists`})
-        }
-        else
-        {
-            bcrypt.hash(req.params.password, parseInt(process.env.PASSWORD_HASH_SALT_ROUNDS), (err, hash) =>
+            if(uniqueData)
             {
-                usersModel.create({name:req.params.name,email:req.params.email,password:hash}, (error, data) =>
+                res.json({errorMessage:`User already exists`})
+            }
+            else
+            {
+                bcrypt.hash(req.params.password, parseInt(process.env.PASSWORD_HASH_SALT_ROUNDS), (err, hash) =>
                 {
-                    if(data)
+                    usersModel.create({name:req.params.name, email:req.params.email, password:hash, profilePhotoFilename:req.file.filename}, (error, data) =>
                     {
-                        const token = jwt.sign({email: data.email, accessLevel:data.accessLevel}, JWT_PRIVATE_KEY, {algorithm: 'HS256', expiresIn:process.env.JWT_EXPIRY})
+                        if(data)
+                        {
+                            const token = jwt.sign({email: data.email, accessLevel:data.accessLevel}, JWT_PRIVATE_KEY, {algorithm: 'HS256', expiresIn:process.env.JWT_EXPIRY})
 
-                        res.json({name: data.name, accessLevel:data.accessLevel, token:token})
-                    }
-                    else
-                    {
-                        res.json({errorMessage:`User was not registered`})
-                    }
+                            fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${req.file.filename}`, 'base64', (err, fileData) =>
+                            {
+                                res.json({userId: data._id, name: data.name, email: data.email, accessLevel:data.accessLevel, profilePhoto:fileData, token:token})
+                            })
+                        }
+                        else
+                        {
+                            res.json({errorMessage:`User was not registered`})
+                        }
+                    })
                 })
-            })
-        }
-    })
+            }
+        })
+    }
 })
 
 
@@ -86,7 +107,17 @@ router.post(`/users/login/:email/:password`, (req,res) =>
                 {
                     const token = jwt.sign({email: data.email, accessLevel:data.accessLevel}, JWT_PRIVATE_KEY, {algorithm: 'HS256', expiresIn:process.env.JWT_EXPIRY})
 
-                    res.json({name: data.name, accessLevel:data.accessLevel, token:token})
+                    fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${data.profilePhotoFilename}`, 'base64', (err, fileData) =>
+                    {
+                        if(fileData)
+                        {
+                            res.json({userId: data._id, name: data.name, email: data.email, accessLevel:data.accessLevel, profilePhoto:fileData, token:token})
+                        }
+                        else
+                        {
+                            res.json({userId: data._id, name: data.name, email: data.email, accessLevel:data.accessLevel, profilePhoto:null, token:token})
+                        }
+                    })
                 }
                 else
                 {
@@ -103,8 +134,66 @@ router.post(`/users/login/:email/:password`, (req,res) =>
 })
 
 
-router.post(`/users/logout`, (req,res) =>
-{
+// read all users
+router.get(`/users`, (req, res) => {
+    jwt.verify(req.headers.authorization, JWT_PRIVATE_KEY, { algorithm: "HS256" }, (err, decodedToken) => {
+        if (err) {
+            return res.json({ errorMessage: `User is not logged in` })
+        }
+
+        usersModel.find({}, "name email accessLevel", (error, data) => {
+            if (error || !data) {
+                return res.json({ errorMessage: `Could not retrieve users` })
+            }
+            res.json(data)
+        })
+    })
+})
+
+
+// find one user by ID
+router.get(`/users/:id`, (req, res) => {
+    console.log("Route reached")
+    console.log("User ID from URL:", req.params.id)
+
+    jwt.verify(req.headers.authorization, JWT_PRIVATE_KEY, { algorithm: "HS256" }, (err, decodedToken) => {
+        if (err) {
+            return res.json({errorMessage: `User is not logged in` })
+        }
+
+        usersModel.findById(req.params.id, "name email password accessLevel profilePhotoFilename", (error, data) => {
+            // if (error || !data) {
+            //     // return res.json({errorMessage: `User not found` })
+            // }
+
+            if (error) {
+                console.error("Error while querying user:", error);
+                return res.json({ errorMessage: 'Error querying user' });
+            }
+
+            if (!data) {
+                console.log('User not found for ID:', req.params.id);
+                return res.json({ errorMessage: 'User not found' });
+            }
+
+            if (data.profilePhotoFilename) {
+                fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${data.profilePhotoFilename}`, "base64", (err, fileData) => {
+                    if (err) {
+                        return res.json({name: data.name, email: data.email, password: data.password, accessLevel: data.accessLevel, profilePhoto: null})
+                    }
+
+                    res.json({name: data.name, email: data.email, password: data.password, accessLevel: data.accessLevel, profilePhoto: fileData
+                    })
+                })
+            } else {
+                res.json({name: data.name, email: data.email, password: data.password, accessLevel: data.accessLevel, profilePhoto: null})
+            }
+        })
+    })
+})
+
+
+router.post(`/users/logout`, (req,res) => {
     res.json({})
 })
 
