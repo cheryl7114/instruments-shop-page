@@ -235,8 +235,7 @@ export default class AddProduct extends Component {
                         </div>
                     )}
 
-                    <button onClick={this.handleSubmit}>Add</button>
-                    {/* <LinkInClass value="Add" className="green-button" onClick={this.handleSubmit}/> */}
+                    <LinkInClass value="Add" className="green-button" onClick={this.handleSubmit}/>
                     <Link className="red-button" to={"/DisplayAllProducts"}>Cancel</Link>
                 </form>
             </div>
