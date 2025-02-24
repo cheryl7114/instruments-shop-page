@@ -144,16 +144,24 @@ html, body {
 }
 .sidebar hr {
   border: thin solid #ddd;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
-.sidebar p {
-  margin: 10px;
-  cursor: pointer;
-  padding: 8px;
+.sidebar .sidebar-choices {
+  display: block;
+  margin: 10px 0;
+  padding: 8px 12px;
   border-radius: 5px;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease;
+  text-decoration: none;
+  color: black;
+  font-size: 16px;
 }
-.sidebar p:hover {
+.sidebar .sidebar-choices:hover {
   background: #ddd;
+}
+.sidebar .sidebar-choices:active {
+  background: #ccc;
 }
 
 .content {
