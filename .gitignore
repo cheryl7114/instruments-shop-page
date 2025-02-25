@@ -22,10 +22,8 @@ Thumbs.db
 .idea/
 
 # Dependency lock files (if using one, keep the correct one)
-server/package-lock.json
-client/package-lock.json
-server/package.json
-client/package.json
+**/package-lock.json
+**/package-lock.json
 
 # GitHub Codespaces & VS Code settings
 .settings/
