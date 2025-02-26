@@ -22,7 +22,8 @@ Thumbs.db
 .idea/
 
 # Dependency lock files (if using one, keep the correct one)
-package-lock.json
+**/package-lock.json
+**/package-lock.json
 
 # GitHub Codespaces & VS Code settings
 .settings/
@@ -38,3 +39,5 @@ coverage/
 .cache/
 *.swp
 client/node_modules/.cache/
+
+server/uploads/

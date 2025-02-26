@@ -8,7 +8,6 @@ import Logout from "./Logout"
 
 import {ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../config/global_constants"
 
-
 export default class DisplayAllProducts extends Component {
     constructor(props) {
         super(props)
@@ -41,24 +40,23 @@ export default class DisplayAllProducts extends Component {
     render()
     {
         return (
-            <div className="form-container">
+            <div className="body-container">
                 {localStorage.accessLevel > ACCESS_LEVEL_GUEST ?
                     <div className="logout">
                         <Logout/>
                     </div>
                     :
                     <div>
-                    
+
                         <Link className="green-button" to={"/Login"}>
                             <svg id="profile" viewBox="0 0 20 24" width="20" height="20">
                             <title>Login or Signup</title>
-                            <g fill="none" stroke="currentColor" stroke-miterlimit="10" strokeWidth="2">
+                            <g fill="none" stroke="currentColor" strokeMiterlimit="10" strokeWidth="2">
                                 <path d="M19 20.5 15.63 16H4.38L1 20.5"></path>
                                 <circle cx="10" cy="8.5" r="4.5"></circle>
                             </g>
                             </svg>
                         </Link>
-                        {/* <Link className="blue-button" to={"/Register"}>Register</Link> */}
                         <Link className="red-button" to={"/ResetDatabase"}>Reset Database</Link>  <br/><br/><br/></div>
                 }
 

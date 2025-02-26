@@ -41,18 +41,15 @@ export default class EditProduct extends Component {
                             images: res.data.images
                         })
                     }
-                } else
-                {
+                } else {
                     console.log(`Record not found`)
                 }
             })
     }
 
-
     handleChange = (e) => {
         this.setState({[e.target.name]: e.target.value})
     }
-
 
     handleSubmit = (e) => {
         e.preventDefault()
@@ -68,7 +65,9 @@ export default class EditProduct extends Component {
                 category: this.state.category,
                 stock: this.state.stock,
                 price: this.state.price,
-                images: this.state.images
+                images: this.state.images.length > 0
+                    ? this.state.images
+                    : ["https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg"] // ✅ Default image if empty
             }
 
             axios.put(`${SERVER_HOST}/products/${this.props.match.params.id}`, productObject, {headers:{"authorization":localStorage.token}})
@@ -131,7 +130,7 @@ export default class EditProduct extends Component {
 
     render() {
         return (
-            <div className="form-container">
+            <div className="body-container">
 
                 {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts"/> : null}
 
@@ -230,31 +229,32 @@ export default class EditProduct extends Component {
                     </div>
 
                     {/* image preview */}
-                    {this.state.images.length > 0 && (
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "10px" }}>
-                            {this.state.images.map((url, index) => (
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "10px" }}>
+                        {(this.state.images.length > 0 ? this.state.images : ["https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg"])
+                            .map((url, index) => (
                                 <div key={index} style={{ position: "relative" }}>
                                     <img
                                         src={url}
                                         alt={`Product Preview ${index + 1}`}
                                         style={{ width: "150px", height: "auto" }}
                                     />
-                                    <button
-                                        type="button"
-                                        style={{ position: "absolute", top: 0, right: 0, background: "red", color: "white" }}
-                                        onClick={() => {
-                                            this.setState((prevState) => ({
-                                                images: prevState.images.filter((_, i) => i !== index)
-                                            }));
-                                        }}
-                                    >
-                                        X
-                                    </button>
+                                    {this.state.images.length > 0 && ( // only show delete button if there are images
+                                        <button
+                                            type="button"
+                                            style={{ position: "absolute", top: 0, right: 0, background: "red", color: "white" }}
+                                            onClick={() => {
+                                                this.setState((prevState) => ({
+                                                    images: prevState.images.filter((_, i) => i !== index)
+                                                }));
+                                            }}
+                                        >
+                                            X
+                                        </button>
+                                    )}
                                 </div>
-                            ))}
-                        </div>
-                    )}
-
+                            ))
+                        }
+                    </div>
 
                     <LinkInClass value="Update" className="green-button" onClick={this.handleSubmit}/>
                     <Link className="red-button" to={"/DisplayAllProducts"}>Cancel</Link>
