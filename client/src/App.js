@@ -15,6 +15,7 @@ import DisplayAllProducts from "./components/DisplayAllProducts"
 import ProductDetails from "./components/ProductDetails"
 import UserProfile from "./components/UserProfile"
 import LoggedInRoute from "./components/LoggedInRoute"
+import SortBy from "./components/SortBy"
 
 import { SERVER_HOST, ACCESS_LEVEL_GUEST } from "./config/global_constants"
 
@@ -81,7 +82,9 @@ export default class App extends Component {
                         <Route exact path="/ProductDetails/:id" component={ProductDetails} />
                         <Route exact path="/Register" component={Register} />
                         <Route exact path="/ResetDatabase" component={ResetDatabase} />
-                        <Route exact path="/" component={DisplayAllProducts} />
+                        {/* Home route */}
+                        <Route exact path="/" render={(props) =>
+                            <DisplayAllProducts {...props} products={filteredProducts} />} />
                         <Route exact path="/Login" component={Login} />
                         <LoggedInRoute exact path="/Logout" component={Logout} />
                         <LoggedInRoute exact path="/AddProduct" component={AddProduct} />
@@ -93,6 +96,7 @@ export default class App extends Component {
                             <DisplayAllProducts {...props} products={filteredProducts} />} />
                         <Route path="*" render={(props) =>
                             <DisplayAllProducts {...props} products={filteredProducts} />} />
+                        <Route exact path="/SortBy" component={SortBy} />
                     </Switch>
                 </div>
             </BrowserRouter>

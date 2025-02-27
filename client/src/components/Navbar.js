@@ -39,13 +39,15 @@ export default class Navbar extends React.Component {
           </div>
           <CiShoppingCart className="cart-icon" />
 
-          <Link to={`/UserProfile/${localStorage.userId}`}>
-            {profilePhoto ? (
+          {profilePhoto && localStorage.userId ? (
+            <Link to={`/UserProfile/${localStorage.userId}`}>
               <img className="profile-photo" src={`data:image/png;base64,${profilePhoto}`} alt="Profile" />
-            ) : (
+            </Link>
+          ) : (
+            <Link to="/Login">
               <CiUser className="user-icon" />
-            )}
-          </Link>
+            </Link>
+          )}
         </div>
       </nav>
     )
