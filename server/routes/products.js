@@ -26,15 +26,15 @@ const checkAdminAccess = (req, res, next) => {
     }
 }
 
-// read all records
+// get all products 
 const getAllProducts = (req, res) => {
-    //user does not have to be logged in to see product details
+    // user does not have to be logged in to see product details
     productsModel.find((error, data) => {
         res.json(data)
     })
 }
 
-router.get(`/products/image/:filename`, (req, res) =>
+const getProductImage = (req, res) =>
 {
     fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${req.params.filename}`, 'base64', (err, fileData) =>
     {
@@ -47,11 +47,14 @@ router.get(`/products/image/:filename`, (req, res) =>
             res.json({image:null})
         }
     })
-})
+}
 
-// Read one record
+// get product by id
 const getProduct = (req, res) => {
     productsModel.findById(req.params.id, (error, data) => {
+        if (error || !data) {
+            return res.json({ errorMessage: `Product not found` })
+        }
         res.json(data)
     })
 }
@@ -81,50 +84,24 @@ const createProduct =  (req, res) => {
     })
 }
 
-
-
-// Add new record
-// const createProduct = (req, res) => {
-//     // Use the new product details to create a new product document
-//     productsModel.create(req.body, (error, data) => {
-//         res.json(data)
-//     })
-// }
-
-
-// Update one record
+// Update product
 const updateProduct = (req, res) => {
     // Use the new product details to update an existing product document
     productsModel.findByIdAndUpdate(req.params.id, { $set: req.body }, (error, data) => {
         res.json(data)
     })
-}
+}           
 
-// Delete one record
-router.delete(`/products/:id`, (req, res) =>
-{
-    jwt.verify(req.headers.authorization, JWT_PRIVATE_KEY, {algorithm: "HS256"}, (err, decodedToken) => {
-        if (err) {
-            res.json({errorMessage: `User is not logged in`})
-        } else {
-            if (decodedToken.accessLevel >= process.env.ACCESS_LEVEL_ADMIN) {
-                productsModel.findByIdAndRemove(req.params.id, (error, data) => {
-                    res.json(data)
-                })
-            } else {
-                res.json({errorMessage: `User is not an administrator, so they cannot delete records`})
-            }
-        }
-    })
-})
-
-
+// delete product
 const deleteProduct = (req, res) => {
     productsModel.findByIdAndRemove(req.params.id, (error, data) => {
         res.json(data)
     })
 }
+
+// routes are ordered from most specific to least specific (important)
 router.post("/products", verifyUsersJWTPassword, checkAdminAccess, upload.array("images", parseInt(process.env.MAX_NUMBER_OF_UPLOAD_FILES_ALLOWED)), createProduct)
+router.get(`/products/image/:filename`, getProductImage)
 router.get(`/products`, getAllProducts)
 router.get(`/products/:id`, verifyUsersJWTPassword, getProduct)
 router.put(`/products/:id`, verifyUsersJWTPassword, updateProduct)
