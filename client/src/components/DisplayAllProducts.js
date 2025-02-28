@@ -8,15 +8,18 @@ import Logout from "./Logout"
 
 import { ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN, SERVER_HOST } from "../config/global_constants"
 
+import { FaSortAmountDown } from "react-icons/fa";
+import { FaSortAmountUp } from "react-icons/fa";
+
 export default class DisplayAllProducts extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            products: []
+            products: [],
+            dropDownOpen: false
         }
     }
-
 
     componentDidMount() {
         axios.get(`${SERVER_HOST}/products`)
@@ -36,8 +39,25 @@ export default class DisplayAllProducts extends Component {
             })
     }
 
+    toggleDropdown = () => {
+        this.setState(prevState => ({
+            dropDownOpen: !prevState.dropDownOpen
+        }))
+    }
+
+    handleSortChange = (sortType) => {
+        this.props.handleSortChange(sortType)
+    }
 
     render() {
+        const { dropDownOpen } = this.state
+        const getSortIndicator = (dropDownOpen) => {
+            if (dropDownOpen) {
+                return <FaSortAmountUp />
+            } else {
+                return <FaSortAmountDown />
+            }
+        }
         const productsToDisplay = this.props.products || this.state.products
         return (
             <div className="body-container">
@@ -58,12 +78,49 @@ export default class DisplayAllProducts extends Component {
                         </Link>
                         <Link className="red-button" to={"/ResetDatabase"}>Reset Database</Link>  <br /><br /><br /></div>
                 }
+                <div className="sort-container">
+                    <div className="sort-dropdown" onClick={this.toggleDropdown}>
+                        <button className="sort-button">
+                            {getSortIndicator(dropDownOpen)}
+                            Sort By
+                        </button>
+                    </div>
+                    {dropDownOpen && (
+                        <div className="sort-dropdown-content">
+                            <div
+                                className="sort-option"
+                                onClick={() => { this.handleSortChange("priceAsc"); this.toggleDropdown() }}
+                            >
+                                Price: Low to High
+                            </div>
+                            <div
+                                className="sort-option"
+                                onClick={() => { this.handleSortChange("priceDesc"); this.toggleDropdown() }}
+                            >
+                                Price: High to Low
+                            </div>
+                            <div
+                                className="sort-option"
+                                onClick={() => { this.handleSortChange("nameAsc"); this.toggleDropdown() }}
+                            >
+                                Name: A to Z
+                            </div>
+                            <div
+                                className="sort-option"
+                                onClick={() => { this.handleSortChange("nameDesc"); this.toggleDropdown() }}
+                            >
+                                Name: Z to A
+                            </div>
+                        </div>
+                    )}
+                </div>
+
                 <div className="products-container">
                     <h2>Available Products</h2>
                     {productsToDisplay.length === 0 ? (
                         <div className="no-products">No products available</div>
                     ) : (
-                        < div className="product-grid"> 
+                        < div className="product-grid">
                             <ProductGrid products={productsToDisplay} />
 
                             {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?

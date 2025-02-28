@@ -15,7 +15,6 @@ import DisplayAllProducts from "./components/DisplayAllProducts"
 import ProductDetails from "./components/ProductDetails"
 import UserProfile from "./components/UserProfile"
 import LoggedInRoute from "./components/LoggedInRoute"
-import SortBy from "./components/SortBy"
 
 import { SERVER_HOST, ACCESS_LEVEL_GUEST } from "./config/global_constants"
 
@@ -31,7 +30,8 @@ export default class App extends Component {
         super(props)
         this.state = {
             products: [],
-            searchQuery: ""
+            searchQuery: "",
+            sortType: "none"
         }
     }
     componentDidMount() {
@@ -57,20 +57,37 @@ export default class App extends Component {
         this.setState({ searchQuery: e.target.value })
     }
 
-    getFilteredProducts = () => {
-        const { searchQuery, products } = this.state;
+    handleSortChange = (sortType) => {
+        this.setState({ sortType })
+    }
 
-        if (!searchQuery || searchQuery.trim() === "") {
-            return products;
+    getFilteredAndSortedProducts = () => {
+        const { searchQuery, products, sortType } = this.state;
+
+        let result = products
+
+        // removing leading and trailing spaces and converting to lowercase
+        if (searchQuery && searchQuery.trim() !== "") {
+            const query = searchQuery.toLowerCase().trim()
+            result = products.filter(product => {
+                return product.name && product.name.toLowerCase().includes(query)
+            })
         }
 
-        return products.filter(product => {
-            // Customize these fields based on your product structure
-            return product.name && product.name.toLowerCase().includes(searchQuery.toLowerCase())
-        })
+        if (sortType === "priceAsc") {
+            return result.sort((a, b) => a.price - b.price)
+        } else if (sortType === "priceDesc") {
+            return result.sort((a, b) => b.price - a.price)
+        } else if (sortType === "nameAsc") {
+            return result.sort((a, b) => a.name.localeCompare(b.name))
+        } else if (sortType === "nameDesc") {
+            return result.sort((a, b) => b.name.localeCompare(a.name))
+        } else {
+            return result
+        }
     }
     render() {
-        const filteredProducts = this.getFilteredProducts();
+        const filteredProducts = this.getFilteredAndSortedProducts();
         return (
             <BrowserRouter>
                 <div>
@@ -84,19 +101,33 @@ export default class App extends Component {
                         <Route exact path="/ResetDatabase" component={ResetDatabase} />
                         {/* Home route */}
                         <Route exact path="/" render={(props) =>
-                            <DisplayAllProducts {...props} products={filteredProducts} />} />
+                            <DisplayAllProducts 
+                            {...props} 
+                            products={filteredProducts} 
+                            sortType={this.state.sortType}
+                            handleSortChange={this.handleSortChange}
+                            />} />
                         <Route exact path="/Login" component={Login} />
                         <LoggedInRoute exact path="/Logout" component={Logout} />
                         <LoggedInRoute exact path="/AddProduct" component={AddProduct} />
                         <LoggedInRoute exact path="/EditProduct/:id" component={EditProduct} />
                         <LoggedInRoute exact path="/DeleteProduct/:id" component={DeleteProduct} />
                         <LoggedInRoute path="/UserProfile/:id" component={UserProfile} />
-                        {/* passing filtered products to DisplayAllProducts */}
+                        {/* passing filtered and sortedproducts to DisplayAllProducts */}
                         <Route exact path="/DisplayAllProducts" render={(props) =>
-                            <DisplayAllProducts {...props} products={filteredProducts} />} />
+                            <DisplayAllProducts 
+                            {...props} 
+                            products={filteredProducts} 
+                            sortType={this.state.sortType}
+                            handleSortChange={this.handleSortChange}
+                            />} />
                         <Route path="*" render={(props) =>
-                            <DisplayAllProducts {...props} products={filteredProducts} />} />
-                        <Route exact path="/SortBy" component={SortBy} />
+                            <DisplayAllProducts 
+                            {...props} 
+                            products={filteredProducts} 
+                            sortType={this.state.sortType}
+                            handleSortChange={this.handleSortChange}
+                            />} />
                     </Switch>
                 </div>
             </BrowserRouter>

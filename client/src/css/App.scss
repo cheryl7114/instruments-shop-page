@@ -391,3 +391,59 @@ html, body {
     }
   }
 }
+
+// sorting css
+.sort-container {
+  position: relative;
+  display: inline-block;
+  margin: 15px 0;
+}
+
+.sort-dropdown {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sort-button {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 10px 15px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  color: #333;
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.sort-button:hover {
+  background-color: #f8f8f8;
+}
+
+.sort-dropdown-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 100;
+  background-color: white;
+  min-width: 200px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+.sort-option {
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.sort-option:hover {
+  background-color: #f5f5f5;
+}
+
+.sort-option:active {
+  background-color: #e8e8e8;
+}
