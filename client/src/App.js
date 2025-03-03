@@ -15,7 +15,6 @@ import DisplayAllProducts from "./components/DisplayAllProducts"
 import ProductDetails from "./components/ProductDetails"
 import UserProfile from "./components/UserProfile"
 import LoggedInRoute from "./components/LoggedInRoute"
-import SortBy from "./components/SortBy"
 
 import { SERVER_HOST, ACCESS_LEVEL_GUEST } from "./config/global_constants"
 
@@ -31,7 +30,10 @@ export default class App extends Component {
         super(props)
         this.state = {
             products: [],
-            searchQuery: ""
+            searchQuery: "",
+            sortType: "none",
+            selectedCategories: [],
+            selectedBrands: []
         }
     }
     componentDidMount() {
@@ -57,20 +59,71 @@ export default class App extends Component {
         this.setState({ searchQuery: e.target.value })
     }
 
-    getFilteredProducts = () => {
-        const { searchQuery, products } = this.state;
+    handleSortChange = (sortType) => {
+        this.setState({ sortType })
+    }
 
-        if (!searchQuery || searchQuery.trim() === "") {
-            return products;
-        }
-
-        return products.filter(product => {
-            // Customize these fields based on your product structure
-            return product.name && product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    handleCategoryFilter = (category, isChecked) => {
+        this.setState(prevState => {
+            if (isChecked) {
+                return { selectedCategories: [...prevState.selectedCategories, category] }
+            } else {
+                return { selectedCategories: prevState.selectedCategories.filter(c => c !== category) }
+            }
         })
     }
+
+    handleBrandFilter = (brand, isChecked) => {
+        this.setState(prevState => {
+            if (isChecked) {
+                return { selectedBrands: [...prevState.selectedBrands, brand] }
+            } else {
+                return { selectedBrands: prevState.selectedBrands.filter(b => b !== brand) }
+            }
+        })
+    }
+
+    getFilteredAndSortedProducts = () => {
+        const { searchQuery, products, sortType, selectedCategories, selectedBrands } = this.state;
+
+        let result = products
+
+        // apply search filter first
+        if (searchQuery && searchQuery.trim() !== "") {
+            const query = searchQuery.toLowerCase().trim()
+            result = products.filter(product => {
+                return product.name && product.name.toLowerCase().includes(query)
+            })
+        }
+
+        // apply category filter
+        if (selectedCategories.length > 0) {
+            result = result.filter(product => {
+                return selectedCategories.includes(product.category)
+            })
+        }
+
+        // apply brand filter
+        if (selectedBrands.length > 0) {
+            result = result.filter(product => {
+                return selectedBrands.includes(product.brand)
+            })
+        }
+
+        if (sortType === "priceAsc") {
+            return result.sort((a, b) => a.price - b.price)
+        } else if (sortType === "priceDesc") {
+            return result.sort((a, b) => b.price - a.price)
+        } else if (sortType === "nameAsc") {
+            return result.sort((a, b) => a.name.localeCompare(b.name))
+        } else if (sortType === "nameDesc") {
+            return result.sort((a, b) => b.name.localeCompare(a.name))
+        } else {
+            return result
+        }
+    }
     render() {
-        const filteredProducts = this.getFilteredProducts();
+        const filteredProducts = this.getFilteredAndSortedProducts();
         return (
             <BrowserRouter>
                 <div>
@@ -84,19 +137,45 @@ export default class App extends Component {
                         <Route exact path="/ResetDatabase" component={ResetDatabase} />
                         {/* Home route */}
                         <Route exact path="/" render={(props) =>
-                            <DisplayAllProducts {...props} products={filteredProducts} />} />
+                            <DisplayAllProducts
+                                {...props}
+                                products={filteredProducts}
+                                sortType={this.state.sortType}
+                                handleSortChange={this.handleSortChange}
+                                handleCategoryFilter={this.handleCategoryFilter}
+                                handleBrandFilter={this.handleBrandFilter}
+                                selectedCategories={this.state.selectedCategories}
+                                selectedBrands={this.state.selectedBrands}
+                            />} />
                         <Route exact path="/Login" component={Login} />
                         <LoggedInRoute exact path="/Logout" component={Logout} />
                         <LoggedInRoute exact path="/AddProduct" component={AddProduct} />
                         <LoggedInRoute exact path="/EditProduct/:id" component={EditProduct} />
                         <LoggedInRoute exact path="/DeleteProduct/:id" component={DeleteProduct} />
                         <LoggedInRoute path="/UserProfile/:id" component={UserProfile} />
-                        {/* passing filtered products to DisplayAllProducts */}
+                        {/* passing filtered and sortedproducts to DisplayAllProducts */}
                         <Route exact path="/DisplayAllProducts" render={(props) =>
-                            <DisplayAllProducts {...props} products={filteredProducts} />} />
+                            <DisplayAllProducts
+                                {...props}
+                                products={filteredProducts}
+                                sortType={this.state.sortType}
+                                handleSortChange={this.handleSortChange}
+                                handleCategoryFilter={this.handleCategoryFilter}
+                                handleBrandFilter={this.handleBrandFilter}
+                                selectedCategories={this.state.selectedCategories}
+                                selectedBrands={this.state.selectedBrands}
+                            />} />
                         <Route path="*" render={(props) =>
-                            <DisplayAllProducts {...props} products={filteredProducts} />} />
-                        <Route exact path="/SortBy" component={SortBy} />
+                            <DisplayAllProducts
+                                {...props}
+                                products={filteredProducts}
+                                sortType={this.state.sortType}
+                                handleSortChange={this.handleSortChange}
+                                handleCategoryFilter={this.handleCategoryFilter}
+                                handleBrandFilter={this.handleBrandFilter}
+                                selectedCategories={this.state.selectedCategories}
+                                selectedBrands={this.state.selectedBrands}
+                            />} />
                     </Switch>
                 </div>
             </BrowserRouter>
