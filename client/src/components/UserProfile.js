@@ -49,16 +49,36 @@ export default class UserProfile extends Component {
                         <div className="sidebar">
                             <h2>Hi, {user.name}!</h2>
                             <hr />
+                            {/*<Link className="sidebar-choices" to={`${match.url}/account-details`}>Account Details</Link>*/}
+                            {/*<Link className="sidebar-choices" to={`${match.url}/purchase-history`}>Purchase History</Link>*/}
+                            {/*<Link className="sidebar-choices" to={`${match.url}/my-orders`}>My Orders</Link>*/}
+                            {/*<Link className="sidebar-choices" to={`${match.url}/returns`}>Returns</Link>*/}
                             <Link className="sidebar-choices" to={`${match.url}/account-details`}>Account Details</Link>
-                            <Link className="sidebar-choices" to={`${match.url}/purchase-history`}>Purchase History</Link>
-                            <Link className="sidebar-choices" to={`${match.url}/my-orders`}>My Orders</Link>
-                            <Link className="sidebar-choices" to={`${match.url}/returns`}>Returns</Link>
+                            {localStorage.accessLevel > ACCESS_LEVEL_GUEST && localStorage.accessLevel < ACCESS_LEVEL_ADMIN ? (
+                                <>
+                                    <Link className="sidebar-choices" to={`${match.url}/purchase-history`}>Purchase History</Link>
+                                    <Link className="sidebar-choices" to={`${match.url}/my-orders`}>My Orders</Link>
+                                    <Link className="sidebar-choices" to={`${match.url}/returns`}>Returns</Link>
+                                </>
+                            ) : null}
+                            {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ? (
+                                <>
+                                    <Link className="sidebar-choices" to={`${match.url}/purchase-history`}>View Customers</Link>
+                                    <Link className="sidebar-choices" to={`${match.url}/my-orders`}>My Orders</Link>
+                                    <Link className="sidebar-choices" to={`${match.url}/returns`}>Returns</Link>
+                                </>
+                            ) : null}
                         </div>
+                        {/*{localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ? <Link className="red-button" to={"/DeleteProduct/" + product._id}>Delete</Link> : null}*/}
                         <div className="content">
                             <Switch>
-                                <Route path={`${match.url}/purchase-history`} component={PurchaseHistory} />
-                                <Route path={`${match.url}/my-orders`} component={MyOrders} />
-                                <Route path={`${match.url}/returns`} component={Returns} />
+                                {localStorage.accessLevel > ACCESS_LEVEL_GUEST && localStorage.accessLevel < ACCESS_LEVEL_ADMIN ? (
+                                    <>
+                                        <Route path={`${match.url}/purchase-history`} component={PurchaseHistory} />
+                                        <Route path={`${match.url}/my-orders`} component={MyOrders} />
+                                        <Route path={`${match.url}/returns`} component={Returns} />
+                                    </>
+                                ) : null}
                                 <Route path={`${match.url}/account-details`} render={(props) => <AccountDetails {...props} user={user} />} />
                                 <Route path={`${match.url}`} exact render={(props) => <AccountDetails {...props} user={user} />} />
                             </Switch>
