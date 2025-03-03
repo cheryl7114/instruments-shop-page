@@ -49,6 +49,14 @@ export default class DisplayAllProducts extends Component {
         this.props.handleSortChange(sortType)
     }
 
+    handleCategoryChange = (category) => (e) => {
+        this.props.handleCategoryFilter(category, e.target.checked)
+    }
+
+    handleBrandChange = (brand) => (e) => {
+        this.props.handleBrandFilter(brand, e.target.checked)
+    }
+
     render() {
         const { dropDownOpen } = this.state
         const getSortIndicator = (dropDownOpen) => {
@@ -76,64 +84,100 @@ export default class DisplayAllProducts extends Component {
                                 </g>
                             </svg>
                         </Link>
-                        <Link className="red-button" to={"/ResetDatabase"}>Reset Database</Link>  <br /><br /><br /></div>
-                }
-                <div className="sort-container">
-                    <div className="sort-dropdown" onClick={this.toggleDropdown}>
-                        <button className="sort-button">
-                            {getSortIndicator(dropDownOpen)}
-                            Sort By
-                        </button>
+                        <Link className="red-button" to={"/ResetDatabase"}>Reset Database</Link>  <br /><br /><br />
                     </div>
-                    {dropDownOpen && (
-                        <div className="sort-dropdown-content">
-                            <div
-                                className="sort-option"
-                                onClick={() => { this.handleSortChange("priceAsc"); this.toggleDropdown() }}
-                            >
-                                Price: Low to High
-                            </div>
-                            <div
-                                className="sort-option"
-                                onClick={() => { this.handleSortChange("priceDesc"); this.toggleDropdown() }}
-                            >
-                                Price: High to Low
-                            </div>
-                            <div
-                                className="sort-option"
-                                onClick={() => { this.handleSortChange("nameAsc"); this.toggleDropdown() }}
-                            >
-                                Name: A to Z
-                            </div>
-                            <div
-                                className="sort-option"
-                                onClick={() => { this.handleSortChange("nameDesc"); this.toggleDropdown() }}
-                            >
-                                Name: Z to A
+                }
+                <div className="products-page-layout">
+                    <div className="filter-container">
+                        <div className="filter-section">
+                            <h4>Categories</h4>
+                            <div className="filter-options">
+                                {['Guitar', 'Piano', 'Drums', 'Violin', 'Saxophone', 'Trumpet'].map(category => (
+                                    <label key={category} className="filter-checkbox">
+                                        <input
+                                            type="checkbox"
+                                            value={category}
+                                            checked={this.props.selectedCategories.includes(category)}
+                                            onChange={this.handleCategoryChange(category)}
+                                        />
+                                        {category}
+                                    </label>
+                                ))}
                             </div>
                         </div>
-                    )}
-                </div>
-
-                <div className="products-container">
-                    <h2>Available Products</h2>
-                    {productsToDisplay.length === 0 ? (
-                        <div className="no-products">No products available</div>
-                    ) : (
-                        < div className="product-grid">
-                            <ProductGrid products={productsToDisplay} />
-
-                            {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?
-                                <div className="add-new-product">
-                                    <Link className="blue-button" to={"/AddProduct"}>Add New Product</Link>
+                        <div className="filter-section">
+                            <h4>Brands</h4>
+                            <div className="filter-options">
+                                {['Fender', 'Yamaha', 'Roland', 'Pearl', 'Selmer'].map(brand => (
+                                    <label key={brand} className="filter-checkbox">
+                                        <input
+                                            type="checkbox"
+                                            value={brand}
+                                            checked={this.props.selectedBrands.includes(brand)}
+                                            onChange={this.handleBrandChange(brand)}
+                                        />
+                                        {brand}
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="sort-container">
+                        <div className="sort-dropdown" onClick={this.toggleDropdown}>
+                            <button className="sort-button">
+                                {getSortIndicator(dropDownOpen)}
+                                Sort By
+                            </button>
+                        </div>
+                        {dropDownOpen && (
+                            <div className="sort-dropdown-content">
+                                <div
+                                    className="sort-option"
+                                    onClick={() => { this.handleSortChange("priceAsc"); this.toggleDropdown() }}
+                                >
+                                    Price: Low to High
                                 </div>
-                                :
-                                null
-                            }
-                        </div>
-                    )}
-                </div>
+                                <div
+                                    className="sort-option"
+                                    onClick={() => { this.handleSortChange("priceDesc"); this.toggleDropdown() }}
+                                >
+                                    Price: High to Low
+                                </div>
+                                <div
+                                    className="sort-option"
+                                    onClick={() => { this.handleSortChange("nameAsc"); this.toggleDropdown() }}
+                                >
+                                    Name: A to Z
+                                </div>
+                                <div
+                                    className="sort-option"
+                                    onClick={() => { this.handleSortChange("nameDesc"); this.toggleDropdown() }}
+                                >
+                                    Name: Z to A
+                                </div>
+                            </div>
+                        )}
+                    </div>
 
+                    <div className="products-container">
+                        <h2>Available Products</h2>
+                        {productsToDisplay.length === 0 ? (
+                            <div className="no-products">No products available</div>
+                        ) : (
+                            < div className="product-grid">
+                                <ProductGrid products={productsToDisplay} />
+
+                                {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?
+                                    <div className="add-new-product">
+                                        <Link className="blue-button" to={"/AddProduct"}>Add New Product</Link>
+                                    </div>
+                                    :
+                                    null
+                                }
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div >
         )
     }

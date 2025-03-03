@@ -2,6 +2,7 @@ $navbar-color: #222;
 $light-gray: #f7f7f7;
 $product-details-colour: #8a8989;
 $orange: #ea954f;
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -9,7 +10,8 @@ $orange: #ea954f;
   line-height: 1.5;
 }
 
-html, body {
+html,
+body {
   background: $light-gray;
 }
 
@@ -42,6 +44,7 @@ html, body {
   text-decoration: none;
   cursor: pointer;
   text-align: center;
+
   &:hover {
     text-decoration: none;
     color: #fff;
@@ -286,7 +289,8 @@ html, body {
     }
   }
 
-  .user-icon, .cart-icon {
+  .user-icon,
+  .cart-icon {
     font-size: 1.5rem;
     cursor: pointer;
     color: white;
@@ -302,7 +306,8 @@ html, body {
 }
 
 // Login & Register pages
-.login-container, .register-container {
+.login-container,
+.register-container {
   display: flex;
   height: 800px;
 
@@ -327,7 +332,8 @@ html, body {
     }
   }
 
-  .create-account-link, .cancel-link {
+  .create-account-link,
+  .cancel-link {
     display: block;
     margin: 10px 0;
     color: $orange;
@@ -339,7 +345,8 @@ html, body {
     }
   }
 
-  .sign-in-button, .register-button {
+  .sign-in-button,
+  .register-button {
     width: 100%;
     padding: 10px;
     background-color: $orange;
@@ -357,7 +364,8 @@ html, body {
   }
 }
 
-.login-page, .register-page {
+.login-page,
+.register-page {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -369,6 +377,61 @@ html, body {
   max-width: 400px;
   margin: auto;
   box-shadow: 2px 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+// product page layout
+.products-page-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 0 auto;
+  max-width: 1400px;
+}
+
+.filter-container {
+  flex-basis: 15%;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
+
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.filter-section h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.filter-checkbox input {
+  margin-right: 8px;
+}
+
+.products-container {
+  flex: 1;
+  min-width: 0;
 }
 
 // Responsive Design
@@ -389,6 +452,15 @@ html, body {
     .logo {
       display: none;
     }
+  }
+
+  .products-page-layout {
+    flex-direction: column;
+  }
+
+  .filter-container {
+    flex-basis: 100%;
+    position: static;
   }
 }
 
@@ -414,7 +486,7 @@ html, body {
   color: #333;
   font-weight: 500;
   text-decoration: none;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .sort-button:hover {
@@ -428,7 +500,7 @@ html, body {
   z-index: 100;
   background-color: white;
   min-width: 200px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   overflow: hidden;
   margin-top: 5px;

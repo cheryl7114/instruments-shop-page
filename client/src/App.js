@@ -31,7 +31,9 @@ export default class App extends Component {
         this.state = {
             products: [],
             searchQuery: "",
-            sortType: "none"
+            sortType: "none",
+            selectedCategories: [],
+            selectedBrands: []
         }
     }
     componentDidMount() {
@@ -61,16 +63,50 @@ export default class App extends Component {
         this.setState({ sortType })
     }
 
+    handleCategoryFilter = (category, isChecked) => {
+        this.setState(prevState => {
+            if (isChecked) {
+                return { selectedCategories: [...prevState.selectedCategories, category] }
+            } else {
+                return { selectedCategories: prevState.selectedCategories.filter(c => c !== category) }
+            }
+        })
+    }
+
+    handleBrandFilter = (brand, isChecked) => {
+        this.setState(prevState => {
+            if (isChecked) {
+                return { selectedBrands: [...prevState.selectedBrands, brand] }
+            } else {
+                return { selectedBrands: prevState.selectedBrands.filter(b => b !== brand) }
+            }
+        })
+    }
+
     getFilteredAndSortedProducts = () => {
-        const { searchQuery, products, sortType } = this.state;
+        const { searchQuery, products, sortType, selectedCategories, selectedBrands } = this.state;
 
         let result = products
 
-        // removing leading and trailing spaces and converting to lowercase
+        // apply search filter first
         if (searchQuery && searchQuery.trim() !== "") {
             const query = searchQuery.toLowerCase().trim()
             result = products.filter(product => {
                 return product.name && product.name.toLowerCase().includes(query)
+            })
+        }
+
+        // apply category filter
+        if (selectedCategories.length > 0) {
+            result = result.filter(product => {
+                return selectedCategories.includes(product.category)
+            })
+        }
+
+        // apply brand filter
+        if (selectedBrands.length > 0) {
+            result = result.filter(product => {
+                return selectedBrands.includes(product.brand)
             })
         }
 
@@ -101,11 +137,15 @@ export default class App extends Component {
                         <Route exact path="/ResetDatabase" component={ResetDatabase} />
                         {/* Home route */}
                         <Route exact path="/" render={(props) =>
-                            <DisplayAllProducts 
-                            {...props} 
-                            products={filteredProducts} 
-                            sortType={this.state.sortType}
-                            handleSortChange={this.handleSortChange}
+                            <DisplayAllProducts
+                                {...props}
+                                products={filteredProducts}
+                                sortType={this.state.sortType}
+                                handleSortChange={this.handleSortChange}
+                                handleCategoryFilter={this.handleCategoryFilter}
+                                handleBrandFilter={this.handleBrandFilter}
+                                selectedCategories={this.state.selectedCategories}
+                                selectedBrands={this.state.selectedBrands}
                             />} />
                         <Route exact path="/Login" component={Login} />
                         <LoggedInRoute exact path="/Logout" component={Logout} />
@@ -115,18 +155,26 @@ export default class App extends Component {
                         <LoggedInRoute path="/UserProfile/:id" component={UserProfile} />
                         {/* passing filtered and sortedproducts to DisplayAllProducts */}
                         <Route exact path="/DisplayAllProducts" render={(props) =>
-                            <DisplayAllProducts 
-                            {...props} 
-                            products={filteredProducts} 
-                            sortType={this.state.sortType}
-                            handleSortChange={this.handleSortChange}
+                            <DisplayAllProducts
+                                {...props}
+                                products={filteredProducts}
+                                sortType={this.state.sortType}
+                                handleSortChange={this.handleSortChange}
+                                handleCategoryFilter={this.handleCategoryFilter}
+                                handleBrandFilter={this.handleBrandFilter}
+                                selectedCategories={this.state.selectedCategories}
+                                selectedBrands={this.state.selectedBrands}
                             />} />
                         <Route path="*" render={(props) =>
-                            <DisplayAllProducts 
-                            {...props} 
-                            products={filteredProducts} 
-                            sortType={this.state.sortType}
-                            handleSortChange={this.handleSortChange}
+                            <DisplayAllProducts
+                                {...props}
+                                products={filteredProducts}
+                                sortType={this.state.sortType}
+                                handleSortChange={this.handleSortChange}
+                                handleCategoryFilter={this.handleCategoryFilter}
+                                handleBrandFilter={this.handleBrandFilter}
+                                selectedCategories={this.state.selectedCategories}
+                                selectedBrands={this.state.selectedBrands}
                             />} />
                     </Switch>
                 </div>
