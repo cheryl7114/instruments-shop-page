@@ -1,6 +1,7 @@
 $navbar-color: #222;
 $light-gray: #f7f7f7;
 $product-details-colour: #8a8989;
+$font-color:#fff;
 $orange: #ea954f;
 * {
   box-sizing: border-box;
@@ -20,24 +21,38 @@ html, body {
   //background: #f7f7f7;
   //max-width: 700px;
   margin: 3%;
+  position: relative;
+  overflow: visible;
 }
 
+.add-new-product {
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    z-index: 9999;
+}
+
+.add-new-product svg {
+  color: $navbar-color;
+  font-size: 30px;
+}
 .logout {
   margin-bottom: 30px;
+  right: 20px;
 }
 
 // Link buttons
 .green-button,
-.red-button,
-.blue-button {
+.red-button
+ {
   padding: 7px 10px;
   font-size: 0.875rem;
   line-height: normal;
   border-radius: 0.2rem;
-  color: #fff;
-  background-color: #28a745;
+  color: $font-color;
+  background-color: $navbar-color;
   margin-right: 10px;
-  position: relative;
+//position: relative;
   top: 1px;
   text-decoration: none;
   cursor: pointer;
@@ -48,36 +63,60 @@ html, body {
   }
 }
 
-.green-button {
-  background-color: #28a745;
+// .green-button {
+//   background-color: #28a745;
+//
+//   &:hover {
+//     background-color: #107020;
+//   }
+// }
 
-  &:hover {
-    background-color: #107020;
-  }
-}
+ .red-button {
+   background-color: #dc3545;
 
-.red-button {
-  background-color: #dc3545;
-
-  &:hover {
-    background-color: #a01020;
-  }
-}
+   &:hover {
+     background-color: #a01020;
+   }
+ }
 
 .blue-button {
-  background-color: #3545dc;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: $light-gray;
+  color: white;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); // Adds a subtle shadow
 
   &:hover {
     background-color: #1020a0;
+    transform: scale(1.1);
+  }
+
+  svg {
+    color: white;
+    font-size: 30px; // Ensures the plus icon is visible
   }
 }
 
 // Product display
 .product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
+  justify-content: center; // Centers the products
+  align-items: flex-start; // Aligns products to the top
+
+  .product {
+      flex: 1 1 calc(25% - 20px); // Adjusts each product to take ~25% of the row (change as needed)
+      max-width: calc(25% - 20px); // Ensures it doesn't exceed this width
+      min-width: 200px; // Minimum width to maintain layout
+  }
+
 }
 
 .product-card {
@@ -180,7 +219,7 @@ html, body {
 
 .sidebar {
   width: 30%;
-  max-width: 200px;
+  min-width: 200px;
   background: $orange;
   padding: 15px;
   border-radius: 8px;

@@ -12,40 +12,45 @@ html, body {
 .body-container {
   padding: 20px;
   margin: 3%;
+  position: relative;
+  overflow: visible;
+}
+
+.add-new-product {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  z-index: 9999;
+}
+
+.add-new-product svg {
+  color: #222;
+  font-size: 30px;
 }
 
 .logout {
   margin-bottom: 30px;
+  right: 20px;
 }
 
 .green-button,
-.red-button,
-.blue-button {
+.red-button {
   padding: 7px 10px;
   font-size: 0.875rem;
   line-height: normal;
   border-radius: 0.2rem;
   color: #fff;
-  background-color: #28a745;
+  background-color: #222;
   margin-right: 10px;
-  position: relative;
   top: 1px;
   text-decoration: none;
   cursor: pointer;
   text-align: center;
 }
 .green-button:hover,
-.red-button:hover,
-.blue-button:hover {
+.red-button:hover {
   text-decoration: none;
   color: #fff;
-}
-
-.green-button {
-  background-color: #28a745;
-}
-.green-button:hover {
-  background-color: #107020;
 }
 
 .red-button {
@@ -56,17 +61,38 @@ html, body {
 }
 
 .blue-button {
-  background-color: #3545dc;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #f7f7f7;
+  color: white;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 .blue-button:hover {
   background-color: #1020a0;
+  transform: scale(1.1);
+}
+.blue-button svg {
+  color: white;
+  font-size: 30px;
 }
 
 .product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
+  justify-content: center;
+  align-items: flex-start;
+}
+.product-grid .product {
+  flex: 1 1 calc(25% - 20px);
+  max-width: calc(25% - 20px);
+  min-width: 200px;
 }
 
 .product-card {
@@ -153,7 +179,7 @@ html, body {
 
 .sidebar {
   width: 30%;
-  max-width: 200px;
+  min-width: 200px;
   background: #ea954f;
   padding: 15px;
   border-radius: 8px;

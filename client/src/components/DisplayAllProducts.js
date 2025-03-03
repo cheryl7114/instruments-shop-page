@@ -1,5 +1,6 @@
 import React, {Component} from "react"
 import {Link} from "react-router-dom"
+import { CiCirclePlus } from "react-icons/ci"
 
 import axios from "axios"
 
@@ -60,17 +61,20 @@ export default class DisplayAllProducts extends Component {
                         <Link className="red-button" to={"/ResetDatabase"}>Reset Database</Link>  <br/><br/><br/></div>
                 }
 
-                <div className="product-grid">
-                    <ProductGrid products={this.state.products} />
 
                     {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?
                         <div className="add-new-product">
-                            <Link className="blue-button" to={"/AddProduct"}>Add New Product</Link>
+                            <Link to={"/AddProduct"}>
+                                <CiCirclePlus size={30} />
+                            </Link>
                         </div>
-                        :
-                        null
-                    }
-                </div>
+                    : null}
+
+                    <div className="product-grid">
+                        <ProductGrid products={this.state.products} />
+                    </div>
+
+
             </div>
         )
     }
