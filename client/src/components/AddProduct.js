@@ -1,11 +1,11 @@
-import React, {Component} from "react"
-import {Redirect, Link} from "react-router-dom"
+import React, { Component } from "react"
+import { Redirect, Link } from "react-router-dom"
 
 import axios from "axios"
 
 import LinkInClass from "../components/LinkInClass"
 
-import {ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../config/global_constants"
+import { ACCESS_LEVEL_ADMIN, SERVER_HOST } from "../config/global_constants"
 
 export default class AddProduct extends Component {
     constructor(props) {
@@ -18,55 +18,65 @@ export default class AddProduct extends Component {
             category: "",
             stock: "",
             price: "",
-            images: [],
-            redirectToDisplayAllProducts:localStorage.accessLevel < ACCESS_LEVEL_ADMIN
+            selectedFiles: null,
+            redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_ADMIN
         }
     }
-
 
     componentDidMount() {
         this.inputToFocus.focus()
     }
 
-
     handleChange = (e) => {
-        this.setState({[e.target.name]: e.target.value})
+        this.setState({ [e.target.name]: e.target.value })
     }
 
+    handleFileChange = (e) => {
+        this.setState({selectedFiles: e.target.files})
+    }
 
     handleSubmit = (e) => {
         e.preventDefault()
 
+        let formData = new FormData()
         this.setState({ wasSubmittedAtLeastOnce: true })
         const formInputsState = this.validate()
 
         if (Object.keys(formInputsState).every(index => formInputsState[index])) {
-            const productObject = {
-                name: this.state.name,
-                brand: this.state.brand,
-                colour: this.state.colour,
-                category: this.state.category,
-                stock: this.state.stock,
-                price: this.state.price,
-                images: this.state.images,
-                wasSubmittedAtLeastOnce: false
+            formData.append("name", this.state.name)
+            formData.append("brand", this.state.brand)
+            formData.append("colour", this.state.colour)
+            formData.append("category", this.state.category)
+            formData.append("stock", this.state.stock)
+            formData.append("price", this.state.price)
+
+            // this.state.selectedFiles.forEach(file => {
+            //     formData.append("images", file)
+            // })
+
+            if(this.state.selectedFiles)
+            {
+                for(let i = 0; i < this.state.selectedFiles.length; i++)
+                {
+                    formData.append("images", this.state.selectedFiles[i])
+                }
             }
 
-            axios.post(`${SERVER_HOST}/products`, productObject, {headers:{"authorization":localStorage.token}})
+            axios.post(`${SERVER_HOST}/products`, formData, { headers: { "authorization": localStorage.token, "Content-type": "multipart/form-data"} })
                 .then(res => {
-                    if(res.data) {
+                    if (res.data) {
                         if (res.data.errorMessage) {
                             console.log(res.data.errorMessage)
                         } else {
-                            console.log("Record added")
-                            this.setState({redirectToDisplayAllProducts:true})
+                            console.log("Product added")
+                            this.setState({ redirectToDisplayAllProducts: true })
                         }
                     } else {
-                        console.log("Record not added")
+                        console.log("Product not added")
                     }
                 })
-            }
         }
+    }
 
     validateName() {
         const pattern = /^[A-Za-z0-9 ]+$/ // allows letters, numbers, and spaces
@@ -80,12 +90,12 @@ export default class AddProduct extends Component {
 
     validateColour() {
         const pattern = /^[A-Za-z]+$/ // only letters (red, blue, etc.)
-        return pattern.test(String(this.state.colour).trim());
+        return pattern.test(String(this.state.colour).trim())
     }
 
     validateCategory() {
         const pattern = /^[A-Za-z]+$/ // only letters (guitar, piano, etc.)
-        return pattern.test(String(this.state.category).trim());
+        return pattern.test(String(this.state.category).trim())
     }
 
     validateStock() {
@@ -93,9 +103,8 @@ export default class AddProduct extends Component {
         return Number.isInteger(stock) && stock >= 0 // no negative values
     }
 
-
     validatePrice() {
-        const price = parseInt(this.state.price);
+        const price = parseInt(this.state.price)
         return Number.isInteger(price) && price >= 0 // no negative values
     }
 
@@ -106,15 +115,14 @@ export default class AddProduct extends Component {
             colour: this.validateColour(),
             category: this.validateCategory(),
             stock: this.validateStock(),
-            price: this.validatePrice(),
+            price: this.validatePrice()
         }
     }
 
-
     render() {
         return (
-            <div className="form-container">
-                {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts"/> : null}
+            <div className="body-container">
+                {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts" /> : null}
                 <form>
                     <div>
                         <label htmlFor="name">Name</label>
@@ -124,7 +132,7 @@ export default class AddProduct extends Component {
                             name="name"
                             value={this.state.name}
                             onChange={this.handleChange}
-                            ref={(input) => { this.inputToFocus = input; }}
+                            ref={(input) => { this.inputToFocus = input }}
                         />
                     </div>
 
@@ -187,55 +195,11 @@ export default class AddProduct extends Component {
                     </div>
 
                     <div>
-                        <label htmlFor="photoUrl">Photo URL</label>
-                        <input
-                            type="text"
-                            id="photoUrl"
-                            name="photoUrl"
-                            value={this.state.photoUrl || ""}
-                            onChange={(e) => this.setState({ photoUrl: e.target.value })}
-                        />
-                        <button
-                            type="button"
-                            onClick={() => {
-                                if (this.state.photoUrl) {
-                                    this.setState((prevState) => ({
-                                        images: [...prevState.images, prevState.photoUrl],
-                                        photoUrl: "" // Clear input after adding
-                                    }))
-                                }
-                            }}
-                        > Add Photo
-                        </button>
+                        <label>Upload Images</label>
+                        <input type="file" multiple onChange={this.handleFileChange} />
                     </div>
 
-                    {/* image preview */}
-                    {this.state.images.length > 0 && (
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "10px" }}>
-                            {this.state.images.map((url, index) => (
-                                <div key={index} style={{ position: "relative" }}>
-                                    <img
-                                        src={url}
-                                        alt={`Product Preview ${index + 1}`}
-                                        style={{ width: "150px", height: "auto" }}
-                                    />
-                                    <button
-                                        type="button"
-                                        style={{ position: "absolute", top: 0, right: 0, background: "red", color: "white" }}
-                                        onClick={() => {
-                                            this.setState((prevState) => ({
-                                                images: prevState.images.filter((_, i) => i !== index)
-                                            }));
-                                        }}
-                                    >
-                                        X
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-
-                    <LinkInClass value="Add" className="green-button" onClick={this.handleSubmit}/>
+                    <LinkInClass value="Add" className="green-button" onClick={this.handleSubmit} />
                     <Link className="red-button" to={"/DisplayAllProducts"}>Cancel</Link>
                 </form>
             </div>

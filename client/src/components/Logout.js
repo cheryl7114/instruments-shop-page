@@ -6,10 +6,8 @@ import LinkInClass from "../components/LinkInClass"
 import {SERVER_HOST} from "../config/global_constants"
 
 
-export default class Logout extends Component
-{
-    constructor(props)
-    {
+export default class Logout extends Component {
+    constructor(props) {
         super(props)
 
         this.state = {
@@ -18,29 +16,24 @@ export default class Logout extends Component
     }
 
 
-    handleSubmit = (e) =>
-    {
+    handleSubmit = (e) => {
         e.preventDefault()
 
         axios.post(`${SERVER_HOST}/users/logout`)
-            .then(res =>
-            {
-                if(res.data)
-                {
-                    if (res.data.errorMessage)
-                    {
+            .then(res => {
+                if(res.data) {
+                    if (res.data.errorMessage) {
                         console.log(res.data.errorMessage)
-                    }
-                    else
-                    {
+                    } else {
                         console.log("User logged out")
-                        localStorage.clear()
 
+                        localStorage.clear();
+
+                        // reload the page to reset Navbar state so user icon is updated
+                        window.location.reload();
                         this.setState({isLoggedIn:false})
                     }
-                }
-                else
-                {
+                } else {
                     console.log("Logout failed")
                 }
             })
@@ -52,7 +45,7 @@ export default class Logout extends Component
         return (
             <div>
 
-                {!this.state.isLoggedIn ? <Redirect to="/DisplayAllCars"/> : null}
+                {!this.state.isLoggedIn ? <Redirect to="/DisplayAllProducts"/> : null}
 
                 <LinkInClass value="Log out" className="red-button" onClick={this.handleSubmit}/>
             </div>
