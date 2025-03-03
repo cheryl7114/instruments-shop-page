@@ -365,6 +365,7 @@ body {
     margin: 10px 0;
     color: $orange;
     text-decoration: none;
+    text-align: center;
 
     &:hover {
       text-decoration: underline;
@@ -519,14 +520,23 @@ body {
   }
 }
 
+.main-products-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 // sorting css
 .sort-container {
   position: relative;
-  display: inline-block;
-  margin: 15px 0;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 15px 0;
+  padding-right: 20px;
 }
 
 .sort-dropdown {
+  position: relative;
   cursor: pointer;
   user-select: none;
 }
@@ -551,11 +561,11 @@ body {
 .sort-dropdown-content {
   position: absolute;
   top: 100%;
-  left: 0;
+  right: 20px; // This aligns with the right side instead of left
   z-index: 100;
   background-color: white;
   min-width: 200px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
   border-radius: 4px;
   overflow: hidden;
   margin-top: 5px;

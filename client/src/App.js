@@ -99,14 +99,20 @@ export default class App extends Component {
         // apply category filter
         if (selectedCategories.length > 0) {
             result = result.filter(product => {
-                return selectedCategories.includes(product.category)
+                return selectedCategories.some(category =>
+                    product.category &&
+                    product.category.toLowerCase() === category.toLowerCase()
+                )
             })
         }
 
         // apply brand filter
         if (selectedBrands.length > 0) {
             result = result.filter(product => {
-                return selectedBrands.includes(product.brand)
+                return selectedBrands.some(brand =>
+                    product.brand &&
+                    product.brand.toLowerCase() === brand.toLowerCase()
+                )
             })
         }
 

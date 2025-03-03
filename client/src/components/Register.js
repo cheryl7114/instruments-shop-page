@@ -134,7 +134,7 @@ export default class Register extends Component {
                     </div>
 
                     <LinkInClass value="Register" className="sign-in-button" onClick={this.handleSubmit} />
-                    <Link className="cancel-account-button" to={"/DisplayAllCars"}>Cancel</Link>
+                    <Link className="cancel-link" to={"/DisplayAllCars"}>Cancel</Link>
                 </form>
             </div>
         )
