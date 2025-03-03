@@ -76,20 +76,25 @@ export default class AddProduct extends Component {
 
 
 
-            if(this.state.selectedFiles) {
-                for(let i = 0; i < this.state.selectedFiles.length; i++) {
+            if (this.state.selectedFiles) {
+                for (let i = 0; i < this.state.selectedFiles.length; i++) {
                     formData.append("images", this.state.selectedFiles[i])
                 }
             }
 
-            axios.post(`${SERVER_HOST}/products`, formData, { headers: { "authorization": localStorage.token, "Content-type": "multipart/form-data"} })
+            axios.post(`${SERVER_HOST}/products`, formData, { headers: { "authorization": localStorage.token, "Content-type": "multipart/form-data" } })
                 .then(res => {
                     if (res.data) {
                         if (res.data.errorMessage) {
                             console.log(res.data.errorMessage)
                         } else {
                             console.log("Product added")
-                            this.setState({ redirectToDisplayAllProducts: true })
+                            // Set state for redirection and refresh the page after a short delay
+                            this.setState({ redirectToDisplayAllProducts: true }, () => {
+                                setTimeout(() => {
+                                    window.location.reload()
+                                }, 100)
+                            })
                         }
                     } else {
                         console.log("Product not added")

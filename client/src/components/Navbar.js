@@ -41,7 +41,7 @@ export default class Navbar extends React.Component {
             />
           </div>
           <CiShoppingCart className="cart-icon" />
-          {localStorage.accessLevel || 0 > ACCESS_LEVEL_GUEST ? (
+          {localStorage.accessLevel > ACCESS_LEVEL_GUEST ? (
             <Link to={`/UserProfile/${localStorage.userId}`}>
               {profilePhoto ? (
                 <img className="profile-photo" src={`data:image/png;base64,${profilePhoto}`} alt="Profile" />
