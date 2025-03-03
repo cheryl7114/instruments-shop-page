@@ -18,6 +18,8 @@ export default class EditProduct extends Component {
             stock: ``,
             price: ``,
             images: [],
+            selectedFiles: [],
+            previewImages: [],
             redirectToDisplayAllProducts:localStorage.accessLevel < ACCESS_LEVEL_NORMAL_USER
         }
     }
@@ -27,6 +29,7 @@ export default class EditProduct extends Component {
 
         axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, {headers:{"authorization":localStorage.token}})
             .then(res => {
+                console.log("Product Data:", res.data)
                 if(res.data) {
                     if (res.data.errorMessage) {
                         console.log(res.data.errorMessage)
@@ -38,7 +41,10 @@ export default class EditProduct extends Component {
                             category: res.data.category,
                             stock: res.data.stock,
                             price: res.data.price,
-                            images: res.data.images
+                            images: res.data.images || [] // Ensure images is always an array
+                        }, () => {
+                            console.log("Images State:", this.state.images) // Debugging line
+                            this.loadImagePreviews(this.state.images)
                         })
                     }
                 } else {
@@ -47,35 +53,105 @@ export default class EditProduct extends Component {
             })
     }
 
+    loadImagePreviews = (images) => {
+        // Each image fetch request is a Promise
+        // images.map() creates an array of Promises
+        // Promise.all() waits for all of them to complete
+        // Once done, the previews are stored in this.state.previewImages
+        if (!images || images.length === 0) {
+            console.log("No images found") // Debugging
+            return
+        }
+
+        console.log("Loading previews for images:", images) // Debugging
+
+        // Extract filenames from image objects
+        const filenames = images.map(img => img.filename)
+
+        const previewPromises = filenames.map(filename =>
+            axios.get(`${SERVER_HOST}/products/image/${filename}`)
+                .then(res => {
+                    if (res.data.image) {
+                        return `data:image/png;base64,${res.data.image}`
+                    }
+                    return null
+                })
+                .catch(err => {
+                    console.error(`Error loading image ${filename}:`, err)
+                    return null
+                })
+        )
+
+        Promise.all(previewPromises).then(previews => {
+            console.log("Loaded image previews:", previews) // Debugging
+            this.setState({ previewImages: previews.filter(img => img !== null) })
+        })
+    }
+
     handleChange = (e) => {
         this.setState({[e.target.name]: e.target.value})
     }
 
     handleFileChange = (e) => {
-        this.setState({ selectedFiles: e.target.files })
+        const selectedFiles = Array.from(e.target.files)
+
+        this.setState({ selectedFiles }, () => {
+            const previews = selectedFiles.map(file => URL.createObjectURL(file))
+            this.setState({ previewImages: [...this.state.previewImages, ...previews] })
+        })
     }
 
+    handleRemoveImage = (index) => {
+        // Remove preview image from state
+        const updatedPreviews = [...this.state.previewImages]
+        updatedPreviews.splice(index, 1)
+
+        // Remove filename from images array (for existing images only)
+        const updatedImages = [...this.state.images]
+        const removedImage = updatedImages.splice(index, 1)[0]
+
+        this.setState({
+            previewImages: updatedPreviews,
+            images: updatedImages
+        }, () => {
+            axios.delete(`${SERVER_HOST}/products/image/${removedImage.filename}`, {headers: { "authorization": localStorage.token }})
+                .then(res => {
+                    console.log("Image deleted successfully:", res.data.message)
+                })
+                .catch(err => {
+                    console.error("Failed to delete image:", err)
+                })
+        })
+    }
 
     handleSubmit = (e) => {
         e.preventDefault()
 
+        let formData = new FormData()
         this.setState({ wasSubmittedAtLeastOnce: true })
         const formInputsState = this.validate()
 
         if (Object.keys(formInputsState).every(index => formInputsState[index])) {
-            const productObject = {
-                name: this.state.name,
-                brand: this.state.brand,
-                colour: this.state.colour,
-                category: this.state.category,
-                stock: this.state.stock,
-                price: this.state.price,
-                images: this.state.images.length > 0
-                    ? this.state.images
-                    : ["https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg"] // ✅ Default image if empty
+            formData.append("name", this.state.name)
+            formData.append("brand", this.state.brand)
+            formData.append("colour", this.state.colour)
+            formData.append("category", this.state.category)
+            formData.append("stock", parseInt(this.state.stock))
+            formData.append("price", parseFloat(this.state.price))
+
+            // Append existing images (as filenames)
+            this.state.images.forEach(img => {
+                formData.append("existingImages", img.filename)
+            })
+
+            // Append new images (as File objects)
+            if (this.state.selectedFiles) {
+                for (let i = 0; i < this.state.selectedFiles.length; i++) {
+                    formData.append("images", this.state.selectedFiles[i]) // Append each file separately
+                }
             }
 
-            axios.put(`${SERVER_HOST}/products/${this.props.match.params.id}`, productObject, {headers:{"authorization":localStorage.token}})
+            axios.put(`${SERVER_HOST}/products/${this.props.match.params.id}`,  formData, {headers:{"authorization":localStorage.token, "Content-Type": "multipart/form-data"}})
                 .then(res => {
                     if(res.data) {
                         if (res.data.errorMessage) {
@@ -215,32 +291,20 @@ export default class EditProduct extends Component {
                         <input type="file" multiple onChange={this.handleFileChange} />
                     </div>
 
-                    {/* image preview */}
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "10px" }}>
-                        {(this.state.images.length > 0 ? this.state.images : ["https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg"])
-                            .map((url, index) => (
-                                <div key={index} style={{ position: "relative" }}>
-                                    <img
-                                        src={url}
-                                        alt={`Product Preview ${index + 1}`}
-                                        style={{ width: "150px", height: "auto" }}
-                                    />
-                                    {this.state.images.length > 0 && ( // only show delete button if there are images
-                                        <button
-                                            type="button"
-                                            style={{ position: "absolute", top: 0, right: 0, background: "red", color: "white" }}
-                                            onClick={() => {
-                                                this.setState((prevState) => ({
-                                                    images: prevState.images.filter((_, i) => i !== index)
-                                                }));
-                                            }}
-                                        >
-                                            X
-                                        </button>
-                                    )}
-                                </div>
-                            ))
-                        }
+                    {/* Image Previews */}
+                    <div className="image-preview-container">
+                        {this.state.previewImages.map((img, index) => (
+                            <div key={index} className="image-preview-wrapper">
+                                <img src={img} alt="Preview" className="image-preview" />
+                                <button
+                                    type="button"
+                                    className="remove-image-button"
+                                    onClick={() => this.handleRemoveImage(index)}
+                                >
+                                    ❌
+                                </button>
+                            </div>
+                        ))}
                     </div>
 
                     <LinkInClass value="Update" className="green-button" onClick={this.handleSubmit}/>
