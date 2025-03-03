@@ -95,7 +95,8 @@ html, body {
   width: 100%;
   height: auto;
   max-height: 700px;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   border-radius: 10px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
@@ -180,7 +181,8 @@ html, body {
   height: 150px;
   display: block;
   margin-bottom: 50px;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   border: 2px solid #ccc;
 }
 
@@ -240,6 +242,9 @@ html, body {
   padding: 4px;
   border-radius: 16px;
 }
+.navbar .search-bar input::-moz-placeholder {
+  color: #888;
+}
 .navbar .search-bar input::placeholder {
   color: #888;
 }
@@ -257,7 +262,8 @@ html, body {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   border: 2px solid #ccc;
 }
 
@@ -283,16 +289,17 @@ html, body {
   border-color: #ea954f;
   outline: none;
 }
-.login-container .create-account-button, .register-container .create-account-button {
+.login-container .create-account-link, .login-container .cancel-link, .register-container .create-account-link, .register-container .cancel-link {
   display: block;
   margin: 10px 0;
   color: #ea954f;
   text-decoration: none;
+  text-align: center;
 }
-.login-container .create-account-button:hover, .register-container .create-account-button:hover {
+.login-container .create-account-link:hover, .login-container .cancel-link:hover, .register-container .create-account-link:hover, .register-container .cancel-link:hover {
   text-decoration: underline;
 }
-.login-container .sign-in-button, .register-container .sign-in-button {
+.login-container .sign-in-button, .login-container .register-button, .register-container .sign-in-button, .register-container .register-button {
   width: 100%;
   padding: 10px;
   background-color: #ea954f;
@@ -304,7 +311,7 @@ html, body {
   text-align: center;
   text-decoration: none;
 }
-.login-container .sign-in-button:hover, .register-container .sign-in-button:hover {
+.login-container .sign-in-button:hover, .login-container .register-button:hover, .register-container .sign-in-button:hover, .register-container .register-button:hover {
   opacity: 0.8;
 }
 
@@ -337,6 +344,4 @@ html, body {
   .navbar .logo {
     display: none;
   }
-}
-
-/*# sourceMappingURL=App.css.map */
+}/*# sourceMappingURL=App.css.map */

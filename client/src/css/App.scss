@@ -327,18 +327,19 @@ html, body {
     }
   }
 
-  .create-account-button {
+  .create-account-link, .cancel-link {
     display: block;
     margin: 10px 0;
     color: $orange;
     text-decoration: none;
+    text-align: center;
 
     &:hover {
       text-decoration: underline;
     }
   }
 
-  .sign-in-button {
+  .sign-in-button, .register-button {
     width: 100%;
     padding: 10px;
     background-color: $orange;

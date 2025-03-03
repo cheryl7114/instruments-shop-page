@@ -51,6 +51,11 @@ export default class EditProduct extends Component {
         this.setState({[e.target.name]: e.target.value})
     }
 
+    handleFileChange = (e) => {
+        this.setState({ selectedFiles: e.target.files })
+    }
+
+
     handleSubmit = (e) => {
         e.preventDefault()
 
@@ -206,26 +211,8 @@ export default class EditProduct extends Component {
                     </div>
 
                     <div>
-                        <label htmlFor="photoUrl">Photo URL</label>
-                        <input
-                            type="text"
-                            id="photoUrl"
-                            name="photoUrl"
-                            value={this.state.photoUrl || ""}
-                            onChange={(e) => this.setState({ photoUrl: e.target.value })}
-                        />
-                        <button
-                            type="button"
-                            onClick={() => {
-                                if (this.state.photoUrl) {
-                                    this.setState((prevState) => ({
-                                        images: [...prevState.images, prevState.photoUrl],
-                                        photoUrl: "" // Clear input after adding
-                                    }))
-                                }
-                            }}
-                        > Add Photo
-                        </button>
+                        <label>Upload Images</label>
+                        <input type="file" multiple onChange={this.handleFileChange} />
                     </div>
 
                     {/* image preview */}
