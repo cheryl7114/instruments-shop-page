@@ -5,11 +5,13 @@ import axios from "axios"
 
 import Logout from "./Logout"
 
-import {ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../config/global_constants"
+import {ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../config/global_constants"
 import AccountDetails from "./AccountDetails"
 import MyOrders from "./MyOrders"
 import PurchaseHistory from "./PurchaseHistory"
 import Returns from "./Returns"
+import ViewCustomers from "./ViewCustomers"
+import PurchaseRecords from "./PurchaseRecords"
 
 export default class UserProfile extends Component {
     constructor(props) {
@@ -49,38 +51,39 @@ export default class UserProfile extends Component {
                         <div className="sidebar">
                             <h2>Hi, {user.name}!</h2>
                             <hr />
-                            {/*<Link className="sidebar-choices" to={`${match.url}/account-details`}>Account Details</Link>*/}
-                            {/*<Link className="sidebar-choices" to={`${match.url}/purchase-history`}>Purchase History</Link>*/}
-                            {/*<Link className="sidebar-choices" to={`${match.url}/my-orders`}>My Orders</Link>*/}
-                            {/*<Link className="sidebar-choices" to={`${match.url}/returns`}>Returns</Link>*/}
                             <Link className="sidebar-choices" to={`${match.url}/account-details`}>Account Details</Link>
-                            {localStorage.accessLevel > ACCESS_LEVEL_GUEST && localStorage.accessLevel < ACCESS_LEVEL_ADMIN ? (
+
+                            {localStorage.accessLevel === ACCESS_LEVEL_ADMIN ? (
+                                // admin view
+                                <>
+                                    <Link className="sidebar-choices" to={`${match.url}/view-customers`}>View Customers</Link>
+                                    <Link className="sidebar-choices" to={`${match.url}/purchase-records`}>Purchase Records</Link>
+                                </>
+                            ) : (
+                                // customer view
                                 <>
                                     <Link className="sidebar-choices" to={`${match.url}/purchase-history`}>Purchase History</Link>
                                     <Link className="sidebar-choices" to={`${match.url}/my-orders`}>My Orders</Link>
                                     <Link className="sidebar-choices" to={`${match.url}/returns`}>Returns</Link>
                                 </>
-                            ) : null}
-                            {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ? (
-                                <>
-                                    <Link className="sidebar-choices" to={`${match.url}/purchase-history`}>View Customers</Link>
-                                    <Link className="sidebar-choices" to={`${match.url}/my-orders`}>My Orders</Link>
-                                    <Link className="sidebar-choices" to={`${match.url}/returns`}>Returns</Link>
-                                </>
-                            ) : null}
+                            )}
                         </div>
-                        {/*{localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ? <Link className="red-button" to={"/DeleteProduct/" + product._id}>Delete</Link> : null}*/}
                         <div className="content">
                             <Switch>
-                                {localStorage.accessLevel > ACCESS_LEVEL_GUEST && localStorage.accessLevel < ACCESS_LEVEL_ADMIN ? (
+                                <Route path={`${match.url}/account-details`} render={(props) => <AccountDetails {...props} user={user} />} />
+                                <Route path={`${match.url}`} exact render={(props) => <AccountDetails {...props} user={user} />} />
+                                {localStorage.accessLevel === ACCESS_LEVEL_ADMIN ? (
+                                    <>
+                                        <Route path={`${match.url}/view-customers`} component={ViewCustomers} />
+                                        <Route path={`${match.url}/purchase-records`} component={PurchaseRecords} />
+                                    </>
+                                ) : (
                                     <>
                                         <Route path={`${match.url}/purchase-history`} component={PurchaseHistory} />
                                         <Route path={`${match.url}/my-orders`} component={MyOrders} />
                                         <Route path={`${match.url}/returns`} component={Returns} />
                                     </>
-                                ) : null}
-                                <Route path={`${match.url}/account-details`} render={(props) => <AccountDetails {...props} user={user} />} />
-                                <Route path={`${match.url}`} exact render={(props) => <AccountDetails {...props} user={user} />} />
+                                )}
                             </Switch>
                             <Logout />
                         </div>
