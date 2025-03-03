@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { CiUser } from "react-icons/ci";
 import { CiShoppingCart } from "react-icons/ci";
 import { CiSearch } from "react-icons/ci";
+import {ACCESS_LEVEL_GUEST} from "../config/global_constants";
 
 export default class Navbar extends React.Component {
   render() {
@@ -31,13 +32,19 @@ export default class Navbar extends React.Component {
             </div>
             <CiShoppingCart className="cart-icon" />
 
-            <Link to={`/UserProfile/${localStorage.userId}`}>
-              {profilePhoto ? (
-                  <img className="profile-photo" src={`data:image/png;base64,${profilePhoto}`} alt="Profile" />
-              ) : (
+            {localStorage.accessLevel > ACCESS_LEVEL_GUEST ? (
+                <Link to={`/UserProfile/${localStorage.userId}`}>
+                  {profilePhoto ? (
+                      <img className="profile-photo" src={`data:image/png;base64,${profilePhoto}`} alt="Profile" />
+                  ) : (
+                      <CiUser className="user-icon" />
+                  )}
+                </Link>
+            ) : (
+                <Link to={"/Login"}>
                   <CiUser className="user-icon" />
-              )}
-            </Link>
+                </Link>
+            )}
           </div>
         </nav>
     )
