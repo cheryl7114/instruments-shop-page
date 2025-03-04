@@ -2,7 +2,8 @@ $navbar-color: #222;
 $light-gray: #f7f7f7;
 $product-details-colour: #8a8989;
 $font-color:#fff;
-$orange: #ea954f;
+$dark-grey:#A8A8A8;
+$orange:#f4a261;
 * {
   box-sizing: border-box;
   margin: 0;
@@ -27,7 +28,7 @@ html, body {
 
 .add-new-product {
     position: absolute;
-    top: 50px;
+    top: 20px;
     right: 50px;
     z-index: 9999;
 }
@@ -48,7 +49,7 @@ html, body {
   padding: 7px 10px;
   font-size: 0.875rem;
   line-height: normal;
-  border-radius: 0.2rem;
+  border-radius: 14px;
   color: $font-color;
   background-color: $navbar-color;
   margin-right: 10px;
@@ -72,10 +73,10 @@ html, body {
 // }
 
  .red-button {
-   background-color: #dc3545;
+   background-color: $dark-grey;
 
    &:hover {
-     background-color: #a01020;
+     background-color: darken($dark-grey, 50%);
    }
  }
 
@@ -108,14 +109,14 @@ html, body {
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
-  justify-content: center; // Centers the products
+  justify-content: start;
   align-items: flex-start; // Aligns products to the top
 
-  .product {
-      flex: 1 1 calc(25% - 20px); // Adjusts each product to take ~25% of the row (change as needed)
-      max-width: calc(25% - 20px); // Ensures it doesn't exceed this width
-      min-width: 200px; // Minimum width to maintain layout
-  }
+  //.product {
+  //    flex: 1 1 calc(25% - 20px);
+  //    max-width: calc(25% - 20px); // Ensures it doesn't exceed this width
+  //    min-width: 250px; // Minimum width to maintain layout
+  //}
 
 }
 
@@ -124,8 +125,28 @@ html, body {
   border-radius: 10px;
   padding: 15px;
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
+
+.product-card img {
+  width: 280px;
+  height: 350px;
+  display:flex;
+  object-fit:contain;
+  border-radius: 10px;
+  //shadow:
+}
+
+.product-card h4{
+  margin-top:20px;
+  margin-bottom: 5px;
+}
+
+.product-card p{
+  margin-bottom: 20px;
+}
+
+
 
 // Product full details page
 .product-details-container {
@@ -177,7 +198,7 @@ html, body {
 }
 
 .thumbnail-image:hover {
-  border: 2px solid orange;
+  border: 2px solid $dark-grey;
 }
 
 .product-info {
@@ -193,7 +214,7 @@ html, body {
   h3 {
     font-size: x-large;
     margin-bottom: 40px;
-    color: $orange;
+    color: $dark-grey;
   }
 
   .details {
@@ -210,19 +231,22 @@ html, body {
 .sidebar-container {
   padding-left: 5%;
   padding-right: 5%;
+
 }
 
 .sidebar-with-content {
   display: flex;
   margin-top: 40px;
+  color:$navbar-color;
 }
 
 .sidebar {
   width: 30%;
   min-width: 200px;
-  background: $orange;
+  background: $navbar-color;
   padding: 15px;
   border-radius: 8px;
+  color:$font-color;
 
   h2 {
     padding: 10px;
@@ -241,7 +265,7 @@ html, body {
     border-radius: 5px;
     transition: background 0.3s ease, color 0.3s ease;
     text-decoration: none; // Removes the default underline
-    color: black;
+    color: $font-color;
     font-size: 16px; // Matches paragraph styling
 
     &:hover {
@@ -315,7 +339,7 @@ html, body {
 
       &:hover {
         text-decoration: underline;
-        color: #f4a261;
+        color: $dark-grey;
         text-underline-offset: 6px;
       }
     }
@@ -388,16 +412,17 @@ html, body {
     font-size: 1rem;
 
     &:focus {
-      border-color: $orange;
+      border-color: $dark-grey;
       outline: none;
     }
   }
 
   .create-account-button {
-    display: block;
-    margin: 10px 0;
+    display: compact;
+    text-align: center;
     color: $orange;
     text-decoration: none;
+    margin-top: 10px;
 
     &:hover {
       text-decoration: underline;
@@ -407,14 +432,15 @@ html, body {
   .sign-in-button {
     width: 100%;
     padding: 10px;
-    background-color: $orange;
-    color: white;
+    background-color: $navbar-color;
+    color: $font-color;
     border: none;
     border-radius: 4px;
     font-size: 1rem;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
+    margin-bottom: 20px;
 
     &:hover {
       opacity: 0.8;
@@ -434,6 +460,10 @@ html, body {
   max-width: 400px;
   margin: auto;
   box-shadow: 2px 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+.login-container p{
+  color:$dark-grey;
 }
 
 // Image upload preview

@@ -35,8 +35,8 @@ export default class ProductCard extends Component {
                     <img
                         src={this.state.imageSrc}
                         alt={this.props.product.name}
-                        width="150"
-                        height="120"
+                        // width="150"
+                        // height="120"
                     />
 
                 </Link>

@@ -18,7 +18,7 @@ html, body {
 
 .add-new-product {
   position: absolute;
-  top: 50px;
+  top: 20px;
   right: 50px;
   z-index: 9999;
 }
@@ -38,7 +38,7 @@ html, body {
   padding: 7px 10px;
   font-size: 0.875rem;
   line-height: normal;
-  border-radius: 0.2rem;
+  border-radius: 14px;
   color: #fff;
   background-color: #222;
   margin-right: 10px;
@@ -54,10 +54,10 @@ html, body {
 }
 
 .red-button {
-  background-color: #dc3545;
+  background-color: #A8A8A8;
 }
 .red-button:hover {
-  background-color: #a01020;
+  background-color: rgb(40.5, 40.5, 40.5);
 }
 
 .blue-button {
@@ -86,13 +86,8 @@ html, body {
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
-  justify-content: center;
+  justify-content: start;
   align-items: flex-start;
-}
-.product-grid .product {
-  flex: 1 1 calc(25% - 20px);
-  max-width: calc(25% - 20px);
-  min-width: 200px;
 }
 
 .product-card {
@@ -100,7 +95,24 @@ html, body {
   border-radius: 10px;
   padding: 15px;
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-card img {
+  width: 280px;
+  height: 350px;
+  display: flex;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.product-card h4 {
+  margin-top: 20px;
+  margin-bottom: 5px;
+}
+
+.product-card p {
+  margin-bottom: 20px;
 }
 
 .product-details-container {
@@ -142,7 +154,7 @@ html, body {
 }
 
 .thumbnail-image:hover {
-  border: 2px solid orange;
+  border: 2px solid #A8A8A8;
 }
 
 .product-info {
@@ -157,7 +169,7 @@ html, body {
 .product-info h3 {
   font-size: x-large;
   margin-bottom: 40px;
-  color: #ea954f;
+  color: #A8A8A8;
 }
 .product-info .details {
   color: #8a8989;
@@ -175,14 +187,16 @@ html, body {
 .sidebar-with-content {
   display: flex;
   margin-top: 40px;
+  color: #222;
 }
 
 .sidebar {
   width: 30%;
   min-width: 200px;
-  background: #ea954f;
+  background: #222;
   padding: 15px;
   border-radius: 8px;
+  color: #fff;
 }
 .sidebar h2 {
   padding: 10px;
@@ -199,7 +213,7 @@ html, body {
   border-radius: 5px;
   transition: background 0.3s ease, color 0.3s ease;
   text-decoration: none;
-  color: black;
+  color: #fff;
   font-size: 16px;
 }
 .sidebar .sidebar-choices:hover {
@@ -264,7 +278,7 @@ html, body {
 }
 .navbar .nav-links a:hover {
   text-decoration: underline;
-  color: #f4a261;
+  color: #A8A8A8;
   text-underline-offset: 6px;
 }
 .navbar .most-right-side {
@@ -325,14 +339,15 @@ html, body {
   font-size: 1rem;
 }
 .login-container input:focus, .register-container input:focus {
-  border-color: #ea954f;
+  border-color: #A8A8A8;
   outline: none;
 }
 .login-container .create-account-button, .register-container .create-account-button {
-  display: block;
-  margin: 10px 0;
-  color: #ea954f;
+  display: compact;
+  text-align: center;
+  color: #f4a261;
   text-decoration: none;
+  margin-top: 10px;
 }
 .login-container .create-account-button:hover, .register-container .create-account-button:hover {
   text-decoration: underline;
@@ -340,14 +355,15 @@ html, body {
 .login-container .sign-in-button, .register-container .sign-in-button {
   width: 100%;
   padding: 10px;
-  background-color: #ea954f;
-  color: white;
+  background-color: #222;
+  color: #fff;
   border: none;
   border-radius: 4px;
   font-size: 1rem;
   cursor: pointer;
   text-align: center;
   text-decoration: none;
+  margin-bottom: 20px;
 }
 .login-container .sign-in-button:hover, .register-container .sign-in-button:hover {
   opacity: 0.8;
@@ -365,6 +381,10 @@ html, body {
   max-width: 400px;
   margin: auto;
   box-shadow: 2px 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+.login-container p {
+  color: #A8A8A8;
 }
 
 .image-preview-wrapper {
