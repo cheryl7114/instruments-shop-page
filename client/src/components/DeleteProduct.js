@@ -14,6 +14,7 @@ export default class DeleteProduct extends Component {
             redirectToDisplayAllProducts:false
         }
     }
+
     componentDidMount() {
         axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, { headers: { "authorization": localStorage.token } })
             .then(res => {
