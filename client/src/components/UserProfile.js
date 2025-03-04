@@ -65,7 +65,7 @@ export default class UserProfile extends Component {
                             <hr />
                             <Link className="sidebar-choices" to={`${match.url}/account-details`}>Account Details</Link>
 
-                            {localStorage.accessLevel === ACCESS_LEVEL_ADMIN ? (
+                            {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ? (
                                 // admin view
                                 <>
                                     <Link className="sidebar-choices" to={`${match.url}/view-customers`}>View Customers</Link>
@@ -84,7 +84,7 @@ export default class UserProfile extends Component {
                             <Switch>
                                 <Route path={`${match.url}/account-details`} render={(props) => <AccountDetails {...props} user={user} />} />
                                 <Route path={`${match.url}`} exact render={(props) => <AccountDetails {...props} user={user} />} />
-                                {localStorage.accessLevel === ACCESS_LEVEL_ADMIN ? (
+                                {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ? (
                                     <>
                                         <Route path={`${match.url}/view-customers`} component={ViewCustomers} />
                                         <Route path={`${match.url}/purchase-records`} component={PurchaseRecords} />
