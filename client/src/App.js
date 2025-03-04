@@ -55,7 +55,7 @@ export default class App extends Component {
     }
 
     handleSearchChange = (e) => {
-        // console.log("Search value: ", e.target.value) // test for search purposes
+        console.log("Search value: ", e.target.value) // test for search purposes
         this.setState({ searchQuery: e.target.value })
     }
 
