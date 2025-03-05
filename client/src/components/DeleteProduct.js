@@ -1,8 +1,8 @@
-import React, {Component} from "react"
-import {Redirect} from "react-router-dom"
+import React, { Component } from "react"
+import { Redirect } from "react-router-dom"
 import axios from "axios"
 
-import {SERVER_HOST} from "../config/global_constants"
+import { SERVER_HOST } from "../config/global_constants"
 
 
 export default class DeleteProduct extends Component {
@@ -10,33 +10,58 @@ export default class DeleteProduct extends Component {
         super(props)
 
         this.state = {
-            redirectToDisplayAllProducts:false
+            images: [],
+            redirectToDisplayAllProducts: false
         }
     }
 
-
     componentDidMount() {
-        axios.delete(`${SERVER_HOST}/products/${this.props.match.params.id}`, {headers:{"authorization":localStorage.token}})
+        axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, { headers: { "authorization": localStorage.token } })
             .then(res => {
-                if(res.data) {
+                if (res.data) {
                     if (res.data.errorMessage) {
                         console.log(res.data.errorMessage)
                     } else {
-                        console.log("Record deleted")
+                        const imageDeletePromises = (res.data.images || []).map(image =>
+                            axios.delete(`${SERVER_HOST}/products/image/${image.filename}`, { headers: { "authorization": localStorage.token } })
+                                .then(res => console.log("Image deleted successfully:", res.data.message))
+                                .catch(err => console.error("Failed to delete image:", err))
+                        )
+
+                        // Promise.all() waits for all of them to complete
+                        // Ensure all images are deleted before deleting the product
+                        Promise.all(imageDeletePromises)
+                            .then(() => {
+                                return axios.delete(`${SERVER_HOST}/products/${this.props.match.params.id}`, { headers: { "authorization": localStorage.token } })
+                            })
+                            .then(res => {
+                                if (res.data) {
+                                    if (res.data.errorMessage) {
+                                        console.log(res.data.errorMessage)
+                                    } else {
+                                        // Set state for redirection and refresh the page after a short delay
+                                        this.setState({ redirectToDisplayAllProducts: true }, () => {
+                                            setTimeout(() => {
+                                                window.location.reload()
+                                            }, 100)
+                                        })
+                                        console.log("Record deleted")
+                                    }
+                                } else {
+                                    console.log("Record not deleted")
+                                }
+                            })
                     }
-                    this.setState({redirectToDisplayAllProducts:true})
                 } else {
-                    console.log("Record not deleted")
+                    console.log(`Record not found`)
                 }
             })
     }
 
-
-    render()
-    {
+    render() {
         return (
             <div>
-                {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllCProducts"/> : null}
+                {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts" /> : null}
             </div>
         )
     }

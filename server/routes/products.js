@@ -26,15 +26,15 @@ const checkAdminAccess = (req, res, next) => {
     }
 }
 
-// get all products 
+// read all records
 const getAllProducts = (req, res) => {
-    // user does not have to be logged in to see product details
+    //user does not have to be logged in to see product details
     productsModel.find((error, data) => {
         res.json(data)
     })
 }
 
-const getProductImage = (req, res) =>
+router.get(`/products/image/:filename`, (req, res) =>
 {
     fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${req.params.filename}`, 'base64', (err, fileData) =>
     {
@@ -47,14 +47,11 @@ const getProductImage = (req, res) =>
             res.json({image:null})
         }
     })
-}
+})
 
-// get product by id
+// Read one record
 const getProduct = (req, res) => {
     productsModel.findById(req.params.id, (error, data) => {
-        if (error || !data) {
-            return res.json({ errorMessage: `Product not found` })
-        }
         res.json(data)
     })
 }
@@ -84,27 +81,89 @@ const createProduct =  (req, res) => {
     })
 }
 
-// Update product
-const updateProduct = (req, res) => {
-    // Use the new product details to update an existing product document
-    productsModel.findByIdAndUpdate(req.params.id, { $set: req.body }, (error, data) => {
-        res.json(data)
-    })
-}           
 
-// delete product
+
+// Add new record
+// const createProduct = (req, res) => {
+//     // Use the new product details to create a new product document
+//     productsModel.create(req.body, (error, data) => {
+//         res.json(data)
+//     })
+// }
+
+
+// Update one record
+const updateProduct = (req, res) => {
+    const { name, brand, colour, category, stock, price } = req.body
+
+    const existingImages = req.body.existingImages
+        ? Array.isArray(req.body.existingImages)
+            ? req.body.existingImages
+            : [req.body.existingImages]
+        : []
+
+    console.log("Existing Images:", existingImages)
+
+    const newImages = req.files ? req.files.map(file => file.filename) : []
+
+    const allImages = [...existingImages, ...newImages]
+        .filter(img => img)
+        .map(img => ({ filename: img }))  // Convert to objects
+
+    console.log("All Images:", allImages)  // Debugging
+
+    productsModel.findByIdAndUpdate(req.params.id, {
+        name, brand, colour, category, stock: parseInt(stock), price: parseFloat(price), images: allImages
+    }, { new: true })
+        .then(updatedProduct => res.json(updatedProduct))
+        .catch(err => {
+            console.error("MongoDB Error:", err)
+            res.status(500).json({ errorMessage: err.message })
+        })
+}
+
+// // Delete one record
+// router.delete(`/products/:id`, (req, res) =>
+// {
+//     jwt.verify(req.headers.authorization, JWT_PRIVATE_KEY, {algorithm: "HS256"}, (err, decodedToken) => {
+//         if (err) {
+//             res.json({errorMessage: `User is not logged in`})
+//         } else {
+//             if (decodedToken.accessLevel >= process.env.ACCESS_LEVEL_ADMIN) {
+//                 productsModel.findByIdAndRemove(req.params.id, (error, data) => {
+//                     res.json(data)
+//                 })
+//             } else {
+//                 res.json({errorMessage: `User is not an administrator, so they cannot delete records`})
+//             }
+//         }
+//     })
+// })
+
 const deleteProduct = (req, res) => {
     productsModel.findByIdAndRemove(req.params.id, (error, data) => {
         res.json(data)
     })
 }
 
-// routes are ordered from most specific to least specific (important)
+// Delete Image Route
+router.delete(`/products/image/:filename`, verifyUsersJWTPassword, checkAdminAccess, (req, res) => {
+    const filePath = `${process.env.UPLOADED_FILES_FOLDER}/${req.params.filename}`
+
+    fs.unlink(filePath, (err) => {
+        if (err) {
+            console.error(`Failed to delete image: ${req.params.filename}`, err)
+            return res.status(500).json({ errorMessage: `Failed to delete image` })
+        }
+        console.log(`Image deleted: ${req.params.filename}`)
+        res.json({ message: `Image deleted successfully` })
+    })
+})
+
 router.post("/products", verifyUsersJWTPassword, checkAdminAccess, upload.array("images", parseInt(process.env.MAX_NUMBER_OF_UPLOAD_FILES_ALLOWED)), createProduct)
-router.get(`/products/image/:filename`, getProductImage)
 router.get(`/products`, getAllProducts)
 router.get(`/products/:id`, verifyUsersJWTPassword, getProduct)
-router.put(`/products/:id`, verifyUsersJWTPassword, updateProduct)
+router.put(`/products/:id`, verifyUsersJWTPassword, upload.array("images", parseInt(process.env.MAX_NUMBER_OF_UPLOAD_FILES_ALLOWED)), updateProduct)
 router.delete(`/products/:id`, verifyUsersJWTPassword, checkAdminAccess, deleteProduct)
 
 module.exports = router

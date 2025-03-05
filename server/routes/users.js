@@ -84,6 +84,10 @@ const checkDuplicateUser = (req, res, next) => {
         if (uniqueData) {
             res.json({ errorMessage: `User already exists` })
         }
+        if (uniqueError) {
+            res.json({ errorMessage: `Error checking for duplicate user` })
+        }
+        return next()
     })
 }
 
@@ -178,7 +182,7 @@ router.post(`/users/reset_user_collection`, resetDatabase, addAdminUser)
 router.post(`/users/register/:name/:email/:password`, upload.single("profilePhoto"), checkFileUpload, checkFileIsImage, checkDuplicateUser, addNewUser)
 router.post(`/users/login/:email/:password`, checkUserExists, verifyUserPassword, returnUserDetails)
 router.post(`/users/logout`, userLogout)
-router.get(`/users`, readAllUsers, verifyUsersJWTPassword)
-router.get(`/users/:id`, findUserByID, verifyUsersJWTPassword)
+router.get(`/users`, verifyUsersJWTPassword, readAllUsers)
+router.get(`/users/:id`, verifyUsersJWTPassword, findUserByID)
 
 module.exports = router
