@@ -242,7 +242,11 @@ export default class AddProduct extends Component {
                     </div>
 
                     <LinkInClass value="Add" className="orange-button" onClick={this.handleSubmit} />
-                    <Link className="red-button" to={"/DisplayAllProducts"}>Cancel</Link>
+                    <div className="cancel-button">
+                        <Link to={"/DisplayAllProducts"}>
+                            <CiCircleRemove size={30} color="red" />
+                        </Link>
+                    </div>
                 </form>
             </div>
         )

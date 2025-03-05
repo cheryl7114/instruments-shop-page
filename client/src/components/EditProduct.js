@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import {Redirect, Link} from "react-router-dom"
-import { CiCircleRemove } from "react-icons/ci"
+import {CiCircleRemove} from "react-icons/ci"
 
 import axios from "axios"
 
@@ -310,7 +310,14 @@ export default class EditProduct extends Component {
                     </div>
 
                     <LinkInClass value="Done" className="orange-button" onClick={this.handleSubmit}/>
-                    <Link className="red-button" to={"/DisplayAllProducts"}>Cancel</Link>
+                    <div className="cancel-button">
+                        <Link to={"/DisplayAllProducts"}>
+                            <CiCircleRemove size={30} color="red" />
+                        </Link>
+                    </div>
+                    {/*<Link className="red-button" to={"/DisplayAllProducts"}>*/}
+                    {/*    <CiCircleRemove size={30} color="red" />*/}
+                    {/*</Link>*/}
                 </form>
             </div>
         )
