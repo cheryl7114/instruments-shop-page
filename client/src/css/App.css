@@ -15,7 +15,7 @@ body {
   height: 1px;
   width: 100%;
   border-top: 1px solid #ddd;
-  margin: 25px 0px;
+  margin: 25px 0;
 }
 
 .body-container {
@@ -494,6 +494,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-top: 20px;
 }
 
 .add-product-container input {
@@ -559,6 +560,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-top: 20px;
 }
 
 .edit-product-container input {
@@ -631,11 +633,6 @@ body {
 
 .filter-checkbox input {
   margin-right: 8px;
-}
-
-.products-container {
-  flex: 1;
-  min-width: 0;
 }
 
 .main-products-container {
@@ -730,7 +727,6 @@ body {
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 20px;
-  height: -moz-fit-content;
   height: fit-content;
   position: sticky;
   top: 20px;
@@ -862,8 +858,7 @@ body {
 .item-image img {
   width: 180px;
   height: 180px;
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 
 .item-details a {
@@ -914,5 +909,6 @@ body {
   .remove-item-icon {
     align-self: flex-end;
   }
-}/*# sourceMappingURL=App.css.map */
+}
 
+/*# sourceMappingURL=App.css.map */

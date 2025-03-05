@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { Redirect, Link } from "react-router-dom"
-import { CiCircleRemove } from "react-icons/ci"
+import {CiCircleRemove } from "react-icons/ci"
 
 import axios from "axios"
 

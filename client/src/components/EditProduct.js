@@ -315,7 +315,11 @@ export default class EditProduct extends Component {
 
                     <LinkInClass value="Done" className="orange-button" onClick={this.handleSubmit}/>
 
-                    <Link className="red-button" to={"/DisplayAllProducts"}>Cancel</Link>
+                    <div className="cancel-button">
+                        <Link to={"/DisplayAllProducts"}>
+                            <CiCircleRemove size={30} color="red" />
+                        </Link>
+                    </div>
                 </form>
             </div>
         )

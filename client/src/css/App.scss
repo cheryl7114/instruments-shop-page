@@ -20,7 +20,7 @@ body {
   height: 1px;
   width: 100%;
   border-top: 1px solid #ddd;
-  margin: 25px 0px;
+  margin: 25px 0;
 }
 
 .body-container {
@@ -564,7 +564,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-
+  margin-top: 20px;
 }
 
 .add-product-container input {
@@ -633,6 +633,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-top: 20px;
 }
 
 .edit-product-container input {
