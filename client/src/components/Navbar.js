@@ -29,7 +29,7 @@ export default class Navbar extends React.Component {
               <li><Link to="#">Violin</Link></li>
               <li><Link to="#">Saxophone</Link></li>
               <li><Link to="#">Trumpet</Link></li>
-              <li><Link to="#">Shop All</Link></li>
+              <li><Link to="/DisplayAllProducts">Shop All</Link></li>
             </ul>
           </div>
           <div className="most-right-side">

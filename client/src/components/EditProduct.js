@@ -1,5 +1,7 @@
-import React, { Component } from "react"
-import { Redirect, Link } from "react-router-dom"
+import React, {Component} from "react"
+import {Redirect, Link} from "react-router-dom"
+import { CiCircleRemove } from "react-icons/ci"
+
 import axios from "axios"
 
 import LinkInClass from "../components/LinkInClass"
@@ -215,7 +217,7 @@ export default class EditProduct extends Component {
 
     render() {
         return (
-            <div className="body-container">
+            <div className="edit-product-container">
 
                 {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts" /> : null}
 
@@ -304,14 +306,15 @@ export default class EditProduct extends Component {
                                     type="button"
                                     className="remove-image-button"
                                     onClick={() => this.handleRemoveImage(index)}
-                                >
-                                    ❌
+                                    >
+                                    <CiCircleRemove size={24} color="red" />
                                 </button>
                             </div>
                         ))}
                     </div>
 
-                    <LinkInClass value="Update" className="green-button" onClick={this.handleSubmit} />
+                    <LinkInClass value="Done" className="orange-button" onClick={this.handleSubmit}/>
+
                     <Link className="red-button" to={"/DisplayAllProducts"}>Cancel</Link>
                 </form>
             </div>
