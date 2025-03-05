@@ -15,6 +15,11 @@ body {
   margin: 3%;
 }
 
+.logout {
+  margin-bottom: 30px;
+  right: 20px;
+}
+
 .add-new-product {
   position: absolute;
   top: 150px;
@@ -27,9 +32,23 @@ body {
   font-size: 30px;
 }
 
-.logout {
-  margin-bottom: 30px;
-  right: 20px;
+.edit-button, .delete-button {
+  padding: 7px 10px;
+  z-index: 9999;
+}
+
+.edit-button {
+  color: #222;
+}
+.edit-button:hover {
+  color: #ea954f;
+}
+
+.delete-button svg {
+  color: #222;
+}
+.delete-button svg:hover {
+  color: #dc3545;
 }
 
 .green-button,

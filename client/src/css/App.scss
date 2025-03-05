@@ -23,6 +23,13 @@ body {
   //max-width: 700px;
   margin: 3%;
 }
+
+.logout {
+  margin-bottom: 30px;
+  right:20px;
+}
+
+// Link buttons
 .add-new-product {
   position: absolute;
   top: 150px;
@@ -35,12 +42,27 @@ body {
   font-size: 30px;
 }
 
-.logout {
-  margin-bottom: 30px;
-  right:20px;
+.edit-button, .delete-button{
+  padding: 7px 10px;
+  z-index: 9999;
 }
 
-// Link buttons
+.edit-button{
+  color: $navbar-color;
+
+  &:hover{
+    color: $orange;
+  }
+}
+
+.delete-button svg{
+  color: $navbar-color;
+
+  &:hover{
+    color: #dc3545;
+  }
+}
+
 .green-button,
 .red-button {
   padding: 7px 10px;
