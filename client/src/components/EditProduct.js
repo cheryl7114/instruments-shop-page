@@ -1,10 +1,10 @@
-import React, {Component} from "react"
-import {Redirect, Link} from "react-router-dom"
+import React, { Component } from "react"
+import { Redirect, Link } from "react-router-dom"
 import axios from "axios"
 
 import LinkInClass from "../components/LinkInClass"
 
-import {ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../config/global_constants"
+import { ACCESS_LEVEL_NORMAL_USER, SERVER_HOST } from "../config/global_constants"
 
 export default class EditProduct extends Component {
     constructor(props) {
@@ -20,17 +20,17 @@ export default class EditProduct extends Component {
             images: [],
             selectedFiles: [],
             previewImages: [],
-            redirectToDisplayAllProducts:localStorage.accessLevel < ACCESS_LEVEL_NORMAL_USER
+            redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_NORMAL_USER
         }
     }
 
     componentDidMount() {
         this.inputToFocus.focus()
 
-        axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, {headers:{"authorization":localStorage.token}})
+        axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, { headers: { "authorization": localStorage.token } })
             .then(res => {
                 console.log("Product Data:", res.data)
-                if(res.data) {
+                if (res.data) {
                     if (res.data.errorMessage) {
                         console.log(res.data.errorMessage)
                     } else {
@@ -89,7 +89,7 @@ export default class EditProduct extends Component {
     }
 
     handleChange = (e) => {
-        this.setState({[e.target.name]: e.target.value})
+        this.setState({ [e.target.name]: e.target.value })
     }
 
     handleFileChange = (e) => {
@@ -114,7 +114,7 @@ export default class EditProduct extends Component {
             previewImages: updatedPreviews,
             images: updatedImages
         }, () => {
-            axios.delete(`${SERVER_HOST}/products/image/${removedImage.filename}`, {headers: { "authorization": localStorage.token }})
+            axios.delete(`${SERVER_HOST}/products/image/${removedImage.filename}`, { headers: { "authorization": localStorage.token } })
                 .then(res => {
                     console.log("Image deleted successfully:", res.data.message)
                 })
@@ -151,14 +151,18 @@ export default class EditProduct extends Component {
                 }
             }
 
-            axios.put(`${SERVER_HOST}/products/${this.props.match.params.id}`,  formData, {headers:{"authorization":localStorage.token, "Content-Type": "multipart/form-data"}})
+            axios.put(`${SERVER_HOST}/products/${this.props.match.params.id}`, formData, { headers: { "authorization": localStorage.token, "Content-Type": "multipart/form-data" } })
                 .then(res => {
-                    if(res.data) {
+                    if (res.data) {
                         if (res.data.errorMessage) {
                             console.log(res.data.errorMessage)
                         } else {
                             console.log(`Record updated`)
-                            this.setState({redirectToDisplayAllProducts:true})
+                            this.setState({ redirectToDisplayAllProducts: true }, () => {
+                                setTimeout(() => {
+                                    window.location.reload()
+                                }, 100)
+                            })
                         }
                     } else {
                         console.log(`Record not updated`)
@@ -213,7 +217,7 @@ export default class EditProduct extends Component {
         return (
             <div className="body-container">
 
-                {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts"/> : null}
+                {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts" /> : null}
 
                 <form>
                     <div>
@@ -307,7 +311,7 @@ export default class EditProduct extends Component {
                         ))}
                     </div>
 
-                    <LinkInClass value="Update" className="green-button" onClick={this.handleSubmit}/>
+                    <LinkInClass value="Update" className="green-button" onClick={this.handleSubmit} />
                     <Link className="red-button" to={"/DisplayAllProducts"}>Cancel</Link>
                 </form>
             </div>
