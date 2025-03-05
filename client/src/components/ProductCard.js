@@ -1,7 +1,7 @@
 import React, {Component} from "react"
 import {Link} from "react-router-dom"
-import { CiEdit } from "react-icons/ci"
-import { CiTrash } from "react-icons/ci"
+import { CiEdit, CiTrash } from "react-icons/ci"
+
 
 import {ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../config/global_constants"
 import axios from "axios";
