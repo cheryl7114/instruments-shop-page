@@ -11,6 +11,7 @@ export default class Navbar extends React.Component {
   }
 
   render() {
+    const { cartItemCount = 0 } = this.props;
     const profilePhoto = localStorage.profilePhoto !== "null" ? localStorage.profilePhoto : null;
 
     return (
@@ -41,7 +42,14 @@ export default class Navbar extends React.Component {
                   onChange={this.handleSearchChange}
               />
             </div>
-            <CiShoppingCart className="cart-icon"/>
+            <div className="cart-icon-container">
+                    <Link to="/Cart" className="cart-icon">
+                    <CiShoppingCart className="cart-icon"/>
+                        {cartItemCount > 0 && (
+                            <span className="cart-badge">{cartItemCount}</span>
+                        )}
+                    </Link>
+                </div>
             {localStorage.accessLevel > ACCESS_LEVEL_GUEST ? (
                 <Link to={`/UserProfile/${localStorage.userId}`}>
                   {profilePhoto ? (

@@ -11,6 +11,7 @@ import Logout from "./components/Logout"
 import AddProduct from "./components/AddProduct"
 import EditProduct from "./components/EditProduct"
 import DeleteProduct from "./components/DeleteProduct"
+import Cart from "./components/Cart"
 import DisplayAllProducts from "./components/DisplayAllProducts"
 import ProductDetails from "./components/ProductDetails"
 import UserProfile from "./components/UserProfile"
@@ -33,7 +34,8 @@ export default class App extends Component {
             searchQuery: "",
             sortType: "none",
             selectedCategories: [],
-            selectedBrands: []
+            selectedBrands: [],
+            cartItems: JSON.parse(localStorage.getItem('cartItems') || "[]")
         }
     }
     componentDidMount() {
@@ -53,6 +55,58 @@ export default class App extends Component {
                 }
             })
     }
+
+    // cart management
+    addToCart = (product) => {
+        this.setState(prevState => {
+            const existingItem = prevState.cartItems.find(item => item._id === product._id)
+
+            let updatedCart
+            if (existingItem) {
+                // Update quantity if product already in cart
+                updatedCart = prevState.cartItems.map(item =>
+                    item._id === product._id
+                        ? { ...item, quantity: item.quantity + 1 }
+                        : item
+                )
+            } else {
+                // Add new item with quantity 1
+                updatedCart = [...prevState.cartItems, { ...product, quantity: 1 }]
+            }
+
+            // Save to localStorage
+            localStorage.setItem('cartItems', JSON.stringify(updatedCart))
+
+            return { cartItems: updatedCart }
+        })
+    }
+
+    removeFromCart = (productId) => {
+        this.setState(prevState => {
+            const updatedCart = prevState.cartItems.filter(item => item._id !== productId)
+            localStorage.setItem('cartItems', JSON.stringify(updatedCart))
+            return { cartItems: updatedCart }
+        })
+    }
+
+    updateQuantity = (productId, quantity) => {
+        if (quantity < 1) {
+            return
+        }
+        this.setState(prevState => {
+            const updatedCart = prevState.cartItems.map(item =>
+                item._id === productId ? { ...item, quantity } : item
+            )
+            localStorage.setItem('cartItems', JSON.stringify(updatedCart))
+            return { cartItems: updatedCart }
+        })
+    }
+
+    clearCart = () => {
+        localStorage.setItem('cartItems', JSON.stringify([]))
+        this.setState({ cartItems: [] })
+    }
+
 
     handleSearchChange = (e) => {
         console.log("Search value: ", e.target.value) // test for search purposes
@@ -136,10 +190,15 @@ export default class App extends Component {
                     <Navbar
                         searchValue={this.state.searchQuery}
                         handleSearchChange={this.handleSearchChange}
+                        cartItemCount={this.state.cartItems.reduce((total, item) => total + item.quantity, 0)}
                     />
                     <Switch>
-                        <Route exact path="/ProductDetails/:id" component={ProductDetails} />
-                        <Route exact path="/Register" component={Register} />
+                        <Route exact path="/ProductDetails/:id" render={(props) =>
+                            <ProductDetails
+                                {...props}
+                                addToCart={this.addToCart}
+                            />
+                        } />                        <Route exact path="/Register" component={Register} />
                         <Route exact path="/ResetDatabase" component={ResetDatabase} />
                         {/* Home route */}
                         <Route exact path="/" render={(props) =>
@@ -158,6 +217,16 @@ export default class App extends Component {
                         <LoggedInRoute exact path="/AddProduct" component={AddProduct} />
                         <LoggedInRoute exact path="/EditProduct/:id" component={EditProduct} />
                         <LoggedInRoute exact path="/DeleteProduct/:id" component={DeleteProduct} />
+                        <Route exact path="/Cart" render={(props) =>
+                            <Cart
+                                {...props}
+                                cartItems={this.state.cartItems}
+                                removeFromCart={this.removeFromCart}
+                                updateQuantity={this.updateQuantity}
+                                clearCart={this.clearCart}
+                            />
+                        } />
+                        {/* checkout route here */}
                         <LoggedInRoute path="/UserProfile/:id" component={UserProfile} />
                         {/* passing filtered and sortedproducts to DisplayAllProducts */}
                         <Route exact path="/DisplayAllProducts" render={(props) =>
