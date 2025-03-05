@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
-import { CiCirclePlus } from "react-icons/ci"
+import {CiCirclePlus, CiSquareChevUp, CiSquareChevDown, CiFilter} from "react-icons/ci";
 
 import axios from "axios"
 
@@ -66,6 +66,7 @@ export default class DisplayAllProducts extends Component {
             } else {
                 return <FaSortAmountDown />
             }
+            // return dropDownOpen ? <CiSquareChevUp /> : <CiSquareChevDown />
         }
         const productsToDisplay = this.props.products || this.state.products
 
@@ -77,7 +78,6 @@ export default class DisplayAllProducts extends Component {
                     </div>
                     :
                     <div>
-
                         <Link className="green-button" to={"/Login"}>Login</Link>
                         <Link className="red-button" to={"/ResetDatabase"}>Reset Database</Link>  <br /><br /><br />
                     </div>
@@ -122,6 +122,7 @@ export default class DisplayAllProducts extends Component {
                             <div className="sort-dropdown" onClick={this.toggleDropdown}>
                                 <button className="sort-button">
                                     {getSortIndicator(dropDownOpen)}
+                                    {/*<CiFilter size={20} /> */}
                                     Sort By
                                 </button>
                             </div>
@@ -154,19 +155,30 @@ export default class DisplayAllProducts extends Component {
                                 </div>
                             )}
                         </div>
-                        {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?
-                            <div className="add-new-product">
-                                <title>Add new product</title>
-                                <Link to={"/AddProduct"}>
-                                    <CiCirclePlus size={30} />
-                                </Link>
-                            </div>
-                            :
-                            null
-                        }
+                        {/*{localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?*/}
+                        {/*    <div className="add-new-product">*/}
+                        {/*        <title>Add new product</title>*/}
+                        {/*        <Link to={"/AddProduct"}>*/}
+                        {/*            <CiCirclePlus size={30} />*/}
+                        {/*        </Link>*/}
+                        {/*    </div>*/}
+                        {/*    :*/}
+                        {/*    null*/}
+                        {/*}*/}
 
                         <div className="products-container">
-                            <h2>Available Products</h2>
+                            <div className="products-header">
+                                <h2>Available Products</h2>
+                                {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN && (
+                                    <div className="add-new-product">
+                                        <Link to={"/AddProduct"}>
+                                            <CiCirclePlus size={30} />
+                                        </Link>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div>
                             {productsToDisplay.length === 0 ? (
                                 <div className="no-products">No products available</div>
                             ) : (

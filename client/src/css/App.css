@@ -20,18 +20,6 @@ body {
   right: 20px;
 }
 
-.add-new-product {
-  position: absolute;
-  top: 150px;
-  right: 50px;
-  z-index: 9999;
-}
-
-.add-new-product svg {
-  color: #222;
-  font-size: 30px;
-}
-
 .edit-button, .delete-button {
   padding: 7px 10px;
   z-index: 9999;
@@ -51,7 +39,7 @@ body {
   color: #dc3545;
 }
 
-.green-button,
+.orange-button,
 .red-button {
   padding: 7px 10px;
   font-size: 0.875rem;
@@ -65,10 +53,17 @@ body {
   cursor: pointer;
   text-align: center;
 }
-.green-button:hover,
+.orange-button:hover,
 .red-button:hover {
   text-decoration: none;
   color: #fff;
+}
+
+.orange-button {
+  background-color: #ea954f;
+}
+.orange-button:hover {
+  opacity: 0.8;
 }
 
 .red-button {
@@ -99,13 +94,39 @@ body {
   font-size: 30px;
 }
 
+.products-container {
+  margin-left: 63px;
+}
+
+.products-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.products-header h2 {
+  margin: 0;
+}
+.products-header .add-new-product {
+  display: flex;
+  align-items: center;
+}
+.products-header .add-new-product a {
+  display: flex;
+  text-decoration: none;
+}
+.products-header .add-new-product svg {
+  color: #222;
+  font-size: 30px;
+}
+
 .product-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  padding: 20px;
+  padding-top: 15px;
   justify-content: start;
   align-items: flex-start;
+  padding-left: 30px;
 }
 
 .product-card {
@@ -117,8 +138,8 @@ body {
 }
 
 .product-card img {
-  width: 280px;
-  height: 350px;
+  width: 300px;
+  height: 380px;
   display: flex;
   object-fit: contain;
   border-radius: 10px;
@@ -436,7 +457,7 @@ body {
   border-radius: 14px;
   border: 1px;
   padding: 15px;
-  background-color: transparent;
+  background-color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -481,7 +502,7 @@ body {
 .edit-product-container label {
   width: 100%;
   padding: 8px;
-  color: #222;
+  color: white;
 }
 
 .image-preview-container {
@@ -538,11 +559,6 @@ body {
 
 .filter-checkbox input {
   margin-right: 8px;
-}
-
-.products-container {
-  flex: 1;
-  min-width: 0;
 }
 
 @media (max-width: 768px) {
