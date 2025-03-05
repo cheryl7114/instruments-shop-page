@@ -21,7 +21,7 @@ export default class Navbar extends React.Component {
               <li><Link to="#">Piano</Link></li>
               <li><Link to="#">Drums</Link></li>
               <li><Link to="#">Violin</Link></li>
-              <li><Link to="#">Shop All</Link></li>
+              <li><Link to="/DisplayAllProducts">Shop All</Link></li>
             </ul>
           </div>
           <div className="most-right-side">

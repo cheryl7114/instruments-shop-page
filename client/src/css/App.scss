@@ -1,4 +1,5 @@
 $navbar-color: #222;
+$white:white;
 $light-gray: #f7f7f7;
 $product-details-colour: #8a8989;
 $font-color:#fff;
@@ -468,17 +469,23 @@ html, body {
 
 // Image upload preview
 .image-preview-wrapper {
+  width:45%;
+  height:300px;
   position: relative;
   display: inline-block;
   margin: 10px;
+  justify-content: start;
 }
 
 .image-preview {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 14px;
+  border: 1px;
+  padding:15px;
+  background-color: $white;
+  box-shadow:0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .remove-image-button {
@@ -491,9 +498,46 @@ html, body {
   width: 25px;
   height: 25px;
   text-align: center;
-  font-size: 16px;
+  font-size: 12px;
 }
 
+.edit-product-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 25px;
+  background: $navbar-color;
+  border-radius: 14px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.edit-product-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.edit-product-container input {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom:10px;
+  padding: 10px 15px;
+  border: 14px;
+  border-radius: 30px;
+  background-color: $white;
+}
+
+.edit-product-container label {
+  width: 100%;
+  padding: 8px;
+  color: $font-color;
+}
+
+.image-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 15px;
+  justify-content: start;
+}
 
 // Responsive Design
 @media (max-width: 768px) {
