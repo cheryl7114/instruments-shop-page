@@ -220,9 +220,24 @@ export default class AddProduct extends Component {
                         />
                     </div>
 
-                    <div>
+                    <div className="file-upload-container">
                         <label>Upload Images</label>
-                        <input type="file" multiple onChange={this.handleFileChange} />
+                        <div className="file-upload-wrapper">
+                            <input
+                                type="file"
+                                id="file-upload"
+                                multiple
+                                onChange={this.handleFileChange}
+                            />
+                            <label htmlFor="file-upload" className="custom-file-label">
+                                Click to upload
+                            </label>
+                        </div>
+                        {this.state.selectedFiles.length > 0 && (
+                            <div className="selected-files">
+                                {this.state.selectedFiles.length} file(s) selected
+                            </div>
+                        )}
                     </div>
 
                     {/* Image Previews */}
