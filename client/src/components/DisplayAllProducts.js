@@ -18,6 +18,7 @@ export default class DisplayAllProducts extends Component {
 
         this.state = {
             products: [],
+            brands:[],
             dropDownOpen: false
         }
     }
@@ -28,16 +29,21 @@ export default class DisplayAllProducts extends Component {
                 if (res.data) {
                     if (res.data.errorMessage) {
                         console.log(res.data.errorMessage)
+                    } else {
+                        console.log("Products fetched:", res.data);
+
+                        const uniqueBrands = [...new Set(res.data.map(product => product.brand))]
+
+                        this.setState({
+                            products: res.data,
+                            brands: uniqueBrands // Store brands dynamically
+                        });
                     }
-                    else {
-                        console.log("Records read")
-                        this.setState({ products: res.data })
-                    }
-                }
-                else {
-                    console.log("Record not found")
+                } else {
+                    console.log("No products found");
                 }
             })
+            .catch(err => console.log("Error fetching products", err));
     }
 
     toggleDropdown = () => {
@@ -59,7 +65,7 @@ export default class DisplayAllProducts extends Component {
     }
 
     render() {
-        const { dropDownOpen } = this.state
+        const { dropDownOpen, brands } = this.state
         const getSortIndicator = (dropDownOpen) => {
             if (dropDownOpen) {
                 return <FaSortAmountUp />
@@ -103,7 +109,7 @@ export default class DisplayAllProducts extends Component {
                         <div className="filter-section">
                             <h4>Brands</h4>
                             <div className="filter-options">
-                                {['Fender', 'Yamaha', 'Roland', 'Pearl', 'Selmer'].map(brand => (
+                                {brands.length > 0 ? brands.map(brand => (
                                     <label key={brand} className="filter-checkbox">
                                         <input
                                             type="checkbox"
@@ -113,7 +119,7 @@ export default class DisplayAllProducts extends Component {
                                         />
                                         {brand}
                                     </label>
-                                ))}
+                                )) :null}
                             </div>
                         </div>
                     </div>

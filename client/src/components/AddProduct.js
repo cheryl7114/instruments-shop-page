@@ -15,6 +15,7 @@ export default class AddProduct extends Component {
         this.state = {
             name: "",
             brand: "",
+            brands: [],
             colour: "",
             category: "",
             stock: "",
@@ -26,11 +27,33 @@ export default class AddProduct extends Component {
     }
 
     componentDidMount() {
-        this.inputToFocus.focus()
+        this.inputToFocus.focus();
+
+        axios.get(`${SERVER_HOST}/brands`)
+            .then(res => {
+                console.log("Fetching brands from:", `${SERVER_HOST}/brands`)
+                if (res.data) {
+                    console.log("Fetched brands from API:", res.data);
+
+                    this.setState({ brands: Object.keys(res.data) })
+                }
+            })
+            .catch(err => console.log("Error fetching brands", err))
     }
 
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value })
+    }
+
+    handleBlur = () => {
+        const brand = this.state.brand.trim()
+        if (brand && !this.state.brands.includes(brand)) {
+            this.setState(prevState => ({
+                brands: [...prevState.brands, brand],
+            }), () => {
+                console.log("Final brands list:", this.state.brands)
+            })
+        }
     }
 
     handleFileChange = (e) => {
@@ -62,6 +85,10 @@ export default class AddProduct extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault()
+
+        console.log("Submitting form...")
+        console.log("Brand being submitted:", this.state.brand)
+        console.log("Final brands list:", this.state.brands)
 
         let formData = new FormData()
         this.setState({ wasSubmittedAtLeastOnce: true })
@@ -164,22 +191,19 @@ export default class AddProduct extends Component {
 
                     <div>
                         <label htmlFor="brand">Brand</label>
-                        <div className="select-wrapper">
-                            <select
-                                id="brand"
-                                name="brand"
-                                value={this.state.brand}
-                                onChange={this.handleChange}
-                            >
-                                <option value="brand">Select a brand</option>
-                                {["Fender", "Yamaha", "Roland", "Pearl", "Selmer"].map((brand) => (
-                                    <option key={brand} value={brand}>
-                                        {brand}
-                                    </option>
-                                ))}
-                            </select>
-                            <CiCircleChevDown className="select-icon" />
-                        </div>
+                        <input
+                            type="text"
+                            id="brand"
+                            name="brand"
+                            value={this.state.brand}
+                            onChange={this.handleChange}
+                            onBlur={this.handleBlur}
+                        />
+                        <datalist id="brand-options">
+                            {this.state.brands.map((brand) => (
+                                <option key={brand} value={brand} />
+                            ))}
+                        </datalist>
                     </div>
 
                     <div>

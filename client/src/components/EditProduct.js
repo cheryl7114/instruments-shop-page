@@ -15,6 +15,7 @@ export default class EditProduct extends Component {
         this.state = {
             name: ``,
             brand: ``,
+            brands:[],
             colour: ``,
             category: ``,
             stock: ``,
@@ -53,6 +54,14 @@ export default class EditProduct extends Component {
                     console.log(`Record not found`)
                 }
             })
+        axios.get(`${SERVER_HOST}/brands`, { headers: { "authorization": localStorage.token } })
+            .then(res => {
+                console.log("Brands Data:", res.data);
+                if (res.data) {
+                    this.setState({ availableBrands: res.data });
+                }
+            })
+            .catch(err => console.error("Error fetching brands:", err));
     }
 
     loadImagePreviews = (images) => {
@@ -236,22 +245,19 @@ export default class EditProduct extends Component {
 
                     <div>
                         <label htmlFor="brand">Brand</label>
-                        <div className="select-wrapper">
-                            <select
-                                id="brand"
-                                name="brand"
-                                value={this.state.brand}
-                                onChange={this.handleChange}
-                            >
-                                <option value="brand">Select a brand</option>
-                                {["Fender", "Yamaha", "Roland", "Pearl", "Selmer"].map((brand) => (
-                                    <option key={brand} value={brand}>
-                                        {brand}
-                                    </option>
-                                ))}
-                            </select>
-                            <CiCircleChevDown className="select-icon" />
-                        </div>
+                        <input
+                            type="text"
+                            id="brand"
+                            name="brand"
+                            value={this.state.brand}
+                            onChange={this.handleChange}
+                            onBlur={this.handleBlur}
+                        />
+                        <datalist id="brand-options">
+                            {this.state.brands.map((brand) => (
+                                <option key={brand} value={brand} />
+                            ))}
+                        </datalist>
                     </div>
 
                     <div>
