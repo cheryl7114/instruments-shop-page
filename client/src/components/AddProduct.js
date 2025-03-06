@@ -164,13 +164,22 @@ export default class AddProduct extends Component {
 
                     <div>
                         <label htmlFor="brand">Brand</label>
-                        <input
-                            type="text"
-                            id="brand"
-                            name="brand"
-                            value={this.state.brand}
-                            onChange={this.handleChange}
-                        />
+                        <div className="select-wrapper">
+                            <select
+                                id="brand"
+                                name="brand"
+                                value={this.state.brand}
+                                onChange={this.handleChange}
+                            >
+                                <option value="brand">Select a brand</option>
+                                {["Fender", "Yamaha", "Roland", "Pearl", "Selmer"].map((brand) => (
+                                    <option key={brand} value={brand}>
+                                        {brand}
+                                    </option>
+                                ))}
+                            </select>
+                            <CiCircleChevDown className="select-icon" />
+                        </div>
                     </div>
 
                     <div>
