@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
 
-import {ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../config/global_constants"
+import { ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN, SERVER_HOST } from "../config/global_constants"
 
 export default class ProductDetails extends Component {
     constructor(props) {
@@ -24,6 +24,11 @@ export default class ProductDetails extends Component {
                     document.getElementById("mainImage").src = `data:image/png;base64,${res.data.image}`
                 }
             })
+    }
+
+    handleAddToCart = () => {
+        this.props.addToCart(this.state.product);
+        alert(`${this.state.product.name} added to cart!`);
     }
 
     componentDidMount() {
@@ -79,13 +84,13 @@ export default class ProductDetails extends Component {
                                 <img
                                     id="mainImage"
                                     alt={product.name}
-                                    className="main-image"/>
+                                    className="main-image" />
                             ) : (
                                 <p>No images available</p>
                             )}
 
                             <div className="thumbnail-container">
-                                {product.images && product.images.map(image=> (
+                                {product.images && product.images.map(image => (
                                     <img
                                         key={image._id}
                                         id={image._id}
@@ -107,6 +112,12 @@ export default class ProductDetails extends Component {
 
                             {localStorage.accessLevel > ACCESS_LEVEL_GUEST ? <Link className="green-button" to={"/EditProduct/" + product._id}>Edit</Link> : null}
                             {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ? <Link className="red-button" to={"/DeleteProduct/" + product._id}>Delete</Link> : null}
+                            <button
+                                className="green-button"
+                                onClick={this.handleAddToCart}
+                            >
+                                Add to Cart
+                            </button>                            
                             <Link className="red-button" to={"/DisplayAllProducts"}>Back</Link>
                         </div>
 

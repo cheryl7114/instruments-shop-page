@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
+import {CiCirclePlus} from "react-icons/ci";
 
 import axios from "axios"
 
@@ -65,6 +66,7 @@ export default class DisplayAllProducts extends Component {
             } else {
                 return <FaSortAmountDown />
             }
+            // return dropDownOpen ? <CiSquareChevUp /> : <CiSquareChevDown />
         }
         const productsToDisplay = this.props.products || this.state.products
 
@@ -76,16 +78,7 @@ export default class DisplayAllProducts extends Component {
                     </div>
                     :
                     <div>
-
-                        <Link className="green-button" to={"/Login"}>
-                            <svg id="profile" viewBox="0 0 20 24" width="20" height="20">
-                                <title>Login or Signup</title>
-                                <g fill="none" stroke="currentColor" strokeMiterlimit="10" strokeWidth="2">
-                                    <path d="M19 20.5 15.63 16H4.38L1 20.5"></path>
-                                    <circle cx="10" cy="8.5" r="4.5"></circle>
-                                </g>
-                            </svg>
-                        </Link>
+                        <Link className="green-button" to={"/Login"}>Login</Link>
                         <Link className="red-button" to={"/ResetDatabase"}>Reset Database</Link>  <br /><br /><br />
                     </div>
                 }
@@ -129,6 +122,7 @@ export default class DisplayAllProducts extends Component {
                             <div className="sort-dropdown" onClick={this.toggleDropdown}>
                                 <button className="sort-button">
                                     {getSortIndicator(dropDownOpen)}
+                                    {/*<CiFilter size={20} /> */}
                                     Sort By
                                 </button>
                             </div>
@@ -161,24 +155,39 @@ export default class DisplayAllProducts extends Component {
                                 </div>
                             )}
                         </div>
+                        {/*{localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?*/}
+                        {/*    <div className="add-new-product">*/}
+                        {/*        <title>Add new product</title>*/}
+                        {/*        <Link to={"/AddProduct"}>*/}
+                        {/*            <CiCirclePlus size={30} />*/}
+                        {/*        </Link>*/}
+                        {/*    </div>*/}
+                        {/*    :*/}
+                        {/*    null*/}
+                        {/*}*/}
 
                         <div className="products-container">
-                            <h2>Available Products</h2>
-                            {productsToDisplay.length === 0 ? (
-                                <div className="no-products">No products available</div>
-                            ) : (
-                                < div className="product-grid">
-                                    <ProductGrid products={productsToDisplay} />
-                                </div>
-                            )}
-                            {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?
-                                <div className="add-new-product">
-                                    <Link className="blue-button" to={"/AddProduct"}>Add New Product</Link>
-                                </div>
-                                :
-                                null
-                            }
+                            <div className="products-header">
+                                <h2>Available Products</h2>
+                                {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN && (
+                                    <div className="add-new-product">
+                                        <Link to={"/AddProduct"}>
+                                            <CiCirclePlus size={30} />
+                                        </Link>
+                                    </div>
+                                )}
+                            </div>
+                            <div>
+                                {productsToDisplay.length === 0 ? (
+                                    <div className="no-products">No products available</div>
+                                ) : (
+                                    < div className="product-grid">
+                                        <ProductGrid products={productsToDisplay} />
+                                    </div>
+                                )}
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div >

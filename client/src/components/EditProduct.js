@@ -1,10 +1,12 @@
 import React, {Component} from "react"
 import {Redirect, Link} from "react-router-dom"
+import {CiCircleChevDown, CiCircleRemove} from "react-icons/ci"
+
 import axios from "axios"
 
 import LinkInClass from "../components/LinkInClass"
 
-import {ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../config/global_constants"
+import { ACCESS_LEVEL_NORMAL_USER, SERVER_HOST } from "../config/global_constants"
 
 export default class EditProduct extends Component {
     constructor(props) {
@@ -20,17 +22,17 @@ export default class EditProduct extends Component {
             images: [],
             selectedFiles: [],
             previewImages: [],
-            redirectToDisplayAllProducts:localStorage.accessLevel < ACCESS_LEVEL_NORMAL_USER
+            redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_NORMAL_USER
         }
     }
 
     componentDidMount() {
         this.inputToFocus.focus()
 
-        axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, {headers:{"authorization":localStorage.token}})
+        axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, { headers: { "authorization": localStorage.token } })
             .then(res => {
                 console.log("Product Data:", res.data)
-                if(res.data) {
+                if (res.data) {
                     if (res.data.errorMessage) {
                         console.log(res.data.errorMessage)
                     } else {
@@ -89,7 +91,7 @@ export default class EditProduct extends Component {
     }
 
     handleChange = (e) => {
-        this.setState({[e.target.name]: e.target.value})
+        this.setState({ [e.target.name]: e.target.value })
     }
 
     handleFileChange = (e) => {
@@ -114,7 +116,7 @@ export default class EditProduct extends Component {
             previewImages: updatedPreviews,
             images: updatedImages
         }, () => {
-            axios.delete(`${SERVER_HOST}/products/image/${removedImage.filename}`, {headers: { "authorization": localStorage.token }})
+            axios.delete(`${SERVER_HOST}/products/image/${removedImage.filename}`, { headers: { "authorization": localStorage.token } })
                 .then(res => {
                     console.log("Image deleted successfully:", res.data.message)
                 })
@@ -151,14 +153,18 @@ export default class EditProduct extends Component {
                 }
             }
 
-            axios.put(`${SERVER_HOST}/products/${this.props.match.params.id}`,  formData, {headers:{"authorization":localStorage.token, "Content-Type": "multipart/form-data"}})
+            axios.put(`${SERVER_HOST}/products/${this.props.match.params.id}`, formData, { headers: { "authorization": localStorage.token, "Content-Type": "multipart/form-data" } })
                 .then(res => {
-                    if(res.data) {
+                    if (res.data) {
                         if (res.data.errorMessage) {
                             console.log(res.data.errorMessage)
                         } else {
                             console.log(`Record updated`)
-                            this.setState({redirectToDisplayAllProducts:true})
+                            this.setState({ redirectToDisplayAllProducts: true }, () => {
+                                setTimeout(() => {
+                                    window.location.reload()
+                                }, 100)
+                            })
                         }
                     } else {
                         console.log(`Record not updated`)
@@ -211,9 +217,9 @@ export default class EditProduct extends Component {
 
     render() {
         return (
-            <div className="body-container">
+            <div className="edit-product-container">
 
-                {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts"/> : null}
+                {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts" /> : null}
 
                 <form>
                     <div>
@@ -230,13 +236,22 @@ export default class EditProduct extends Component {
 
                     <div>
                         <label htmlFor="brand">Brand</label>
-                        <input
-                            type="text"
-                            id="brand"
-                            name="brand"
-                            value={this.state.brand}
-                            onChange={this.handleChange}
-                        />
+                        <div className="select-wrapper">
+                            <select
+                                id="brand"
+                                name="brand"
+                                value={this.state.brand}
+                                onChange={this.handleChange}
+                            >
+                                <option value="brand">Select a brand</option>
+                                {["Fender", "Yamaha", "Roland", "Pearl", "Selmer"].map((brand) => (
+                                    <option key={brand} value={brand}>
+                                        {brand}
+                                    </option>
+                                ))}
+                            </select>
+                            <CiCircleChevDown className="select-icon" />
+                        </div>
                     </div>
 
                     <div>
@@ -252,13 +267,22 @@ export default class EditProduct extends Component {
 
                     <div>
                         <label htmlFor="category">Category</label>
-                        <input
-                            type="text"
-                            id="category"
-                            name="category"
-                            value={this.state.category}
-                            onChange={this.handleChange}
-                        />
+                        <div className="select-wrapper">
+                            <select
+                                id="category"
+                                name="category"
+                                value={this.state.category}
+                                onChange={this.handleChange}
+                            >
+                                <option value="category">Select a category</option>
+                                {["Guitar", "Piano", "Trumpet", "Saxophone", "Drums", "Violin"].map((category) => (
+                                    <option key={category} value={category}>
+                                        {category}
+                                    </option>
+                                ))}
+                                </select>
+                            <CiCircleChevDown className="select-icon" />
+                        </div>
                     </div>
 
                     <div>
@@ -286,9 +310,25 @@ export default class EditProduct extends Component {
                         />
                     </div>
 
-                    <div>
-                        <label>Upload Images</label>
-                        <input type="file" multiple onChange={this.handleFileChange} />
+                    <div className="file-upload-container">
+                        <label>Uploaded Images</label>
+                        <div className="file-upload-wrapper">
+                            <input
+                                type="file"
+                                id="file-upload"
+                                multiple
+                                onChange={this.handleFileChange}
+                            />
+                            <label htmlFor="file-upload" className="custom-file-label">
+                                Click to upload
+                            </label>
+                        {/*<input type="file" multiple onChange={this.handleFileChange} />*/}
+                        </div>
+                        {this.state.selectedFiles.length > 0 && (
+                            <div className="selected-files">
+                                {this.state.selectedFiles.length} file(s) selected
+                            </div>
+                        )}
                     </div>
 
                     {/* Image Previews */}
@@ -300,15 +340,20 @@ export default class EditProduct extends Component {
                                     type="button"
                                     className="remove-image-button"
                                     onClick={() => this.handleRemoveImage(index)}
-                                >
-                                    ❌
+                                    >
+                                    <CiCircleRemove size={24} color="red" />
                                 </button>
                             </div>
                         ))}
                     </div>
 
-                    <LinkInClass value="Update" className="green-button" onClick={this.handleSubmit}/>
-                    <Link className="red-button" to={"/DisplayAllProducts"}>Cancel</Link>
+                    <LinkInClass value="Done" className="orange-button" onClick={this.handleSubmit}/>
+
+                    <div className="cancel-button">
+                        <Link to={"/DisplayAllProducts"}>
+                            <CiCircleRemove size={30} color="red" />
+                        </Link>
+                    </div>
                 </form>
             </div>
         )
