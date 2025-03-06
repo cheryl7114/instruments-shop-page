@@ -98,8 +98,7 @@ body {
 .main-image {
   width: 100%;
   max-height: 400px;
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
@@ -201,8 +200,7 @@ body {
   height: 150px;
   display: block;
   margin-bottom: 50px;
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
   border: 2px solid #ccc;
 }
 
@@ -262,9 +260,6 @@ body {
   padding: 4px;
   border-radius: 16px;
 }
-.navbar .search-bar input::-moz-placeholder {
-  color: #888;
-}
 .navbar .search-bar input::placeholder {
   color: #888;
 }
@@ -283,8 +278,7 @@ body {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
   border: 2px solid #ccc;
 }
 
@@ -376,8 +370,7 @@ body {
 .image-preview {
   width: 150px;
   height: 150px;
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
   border-radius: 8px;
   border: 1px solid #ccc;
 }
@@ -412,7 +405,6 @@ body {
   margin-bottom: 20px;
   position: sticky;
   top: 20px;
-  height: -moz-fit-content;
   height: fit-content;
 }
 
@@ -490,9 +482,7 @@ body {
 .sort-dropdown {
   position: relative;
   cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 
 .sort-button {
@@ -537,4 +527,6 @@ body {
 
 .sort-option:active {
   background-color: #e8e8e8;
-}/*# sourceMappingURL=App.css.map */
+}
+
+/*# sourceMappingURL=App.css.map */

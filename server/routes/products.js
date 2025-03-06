@@ -162,7 +162,7 @@ router.delete(`/products/image/:filename`, verifyUsersJWTPassword, checkAdminAcc
 
 router.post("/products", verifyUsersJWTPassword, checkAdminAccess, upload.array("images", parseInt(process.env.MAX_NUMBER_OF_UPLOAD_FILES_ALLOWED)), createProduct)
 router.get(`/products`, getAllProducts)
-router.get(`/products/:id`, verifyUsersJWTPassword, getProduct)
+router.get(`/products/:id`, getProduct)
 router.put(`/products/:id`, verifyUsersJWTPassword, upload.array("images", parseInt(process.env.MAX_NUMBER_OF_UPLOAD_FILES_ALLOWED)), updateProduct)
 router.delete(`/products/:id`, verifyUsersJWTPassword, checkAdminAccess, deleteProduct)
 
