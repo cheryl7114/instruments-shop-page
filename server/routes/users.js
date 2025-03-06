@@ -136,43 +136,77 @@ const returnUserDetails = (req, res) => {
 
 // read all users
 const readAllUsers = (req, res) => {
-    usersModel.find({}, "name email accessLevel", (error, data) => {
+    usersModel.find({}, "name email accessLevel profilePhotoFilename", (error, data) => {
         if (error || !data) {
             return res.json({ errorMessage: `Could not retrieve users` })
         }
-        res.json(data)
+
+        let usersArray = []
+        let i = 0
+
+        if (data.length === 0) {
+            return res.json([])
+        }
+
+        data.forEach((user) => {
+            let userObject = {
+                name: user.name,
+                email: user.email,
+                accessLevel: user.accessLevel,
+                profilePhoto: null
+            }
+
+            getProfilePhoto(user.profilePhotoFilename, (fileData) => {
+                userObject.profilePhoto = fileData
+                usersArray.push(userObject)
+                i++
+
+                // Send response only after processing all users
+                if (i === data.length) {
+                    res.json(usersArray)
+                }
+            })
+        })
     })
 }
 
 // fetch user details by ID
 const findUserByID = (req, res) => {
-    console.log("Route reached")
-    console.log("User ID from URL:", req.params.id)
     usersModel.findById(req.params.id, "name email password accessLevel profilePhotoFilename", (error, data) => {
         if (error) {
             console.error("Error while querying user:", error);
             return res.json({ errorMessage: 'Error querying user' });
         }
         if (!data) {
-            console.log('User not found for ID:', req.params.id);
             return res.json({ errorMessage: 'User not found' });
         }
-        // if profile photo exists, read it and return it as base64
-        if (data.profilePhotoFilename) {
-            fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${data.profilePhotoFilename}`, "base64", (err, fileData) => {
-                if (err) {
-                    return res.json({ name: data.name, email: data.email, password: data.password, accessLevel: data.accessLevel, profilePhoto: null })
-                }
 
-                res.json({
-                    name: data.name, email: data.email, password: data.password, accessLevel: data.accessLevel, profilePhoto: fileData
-                })
+        getProfilePhoto(data.profilePhotoFilename, (fileData) => {
+            res.json({
+                name: data.name,
+                email: data.email,
+                password: data.password,
+                accessLevel: data.accessLevel,
+                profilePhoto: fileData
             })
-        } else {
-            res.json({ name: data.name, email: data.email, password: data.password, accessLevel: data.accessLevel, profilePhoto: null })
-        }
+        })
     })
 }
+
+const getProfilePhoto = (filename, callback) => {
+    if (!filename) {
+        return callback(null) // No profile photo
+    }
+
+    fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${filename}`, "base64", (err, fileData) => {
+        if (err) {
+            return callback(null) // Return null if there's an error reading the file
+        }
+
+        callback(fileData) // Return the base64 string if file is read successfully
+    })
+}
+
 
 const userLogout = (req, res) => {
     res.json({})

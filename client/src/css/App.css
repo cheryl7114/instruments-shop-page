@@ -162,7 +162,6 @@ body {
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 .product-card img {
   width: 320px;
   height: 350px;
@@ -170,12 +169,10 @@ body {
   object-fit: contain;
   border-radius: 10px;
 }
-
 .product-card h4 {
   margin-top: 20px;
   margin-bottom: 5px;
 }
-
 .product-card p {
   margin-bottom: 20px;
 }
@@ -217,7 +214,6 @@ body {
   border: 2px solid transparent;
   transition: border 0.3s ease;
 }
-
 .thumbnail-image:hover {
   border: 2px solid #ea954f;
 }
@@ -487,8 +483,8 @@ body {
   margin: auto;
   box-shadow: 2px 6px 24px rgba(0, 0, 0, 0.5);
 }
-
-.login-container p {
+.login-page p,
+.register-page p {
   color: #222;
 }
 
@@ -501,15 +497,13 @@ body {
   border-radius: 14px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
 .add-product-container form {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-top: 20px;
 }
-
-.add-product-container input, select {
+.add-product-container input, .add-product-container select {
   width: 100%;
   margin-top: 8px;
   margin-bottom: 10px;
@@ -518,7 +512,6 @@ body {
   border-radius: 30px;
   appearance: none;
 }
-
 .add-product-container label {
   width: 100%;
   padding: 10px;
@@ -598,8 +591,7 @@ select {
   border: 1px solid #ccc;
   border-radius: 30px;
 }
-
-.file-upload-container label {
+.file-upload-container input label {
   width: 100%;
   padding: 10px;
   color: #222;
@@ -648,14 +640,12 @@ select {
   border-radius: 14px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
 .edit-product-container form {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-top: 20px;
 }
-
 .edit-product-container input {
   width: 100%;
   margin-top: 10px;
@@ -665,7 +655,6 @@ select {
   border-radius: 30px;
   background-color: white;
 }
-
 .edit-product-container label {
   width: 100%;
   padding: 8px;
@@ -702,7 +691,6 @@ select {
 .filter-section {
   margin-bottom: 20px;
 }
-
 .filter-section h4 {
   margin-bottom: 10px;
   font-size: 16px;
@@ -723,7 +711,6 @@ select {
   cursor: pointer;
   font-size: 14px;
 }
-
 .filter-checkbox input {
   margin-right: 8px;
 }
@@ -760,7 +747,6 @@ select {
   text-decoration: none;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
-
 .sort-button:hover {
   background-color: #f8f8f8;
 }
@@ -783,11 +769,9 @@ select {
   cursor: pointer;
   transition: background-color 0.2s;
 }
-
 .sort-option:hover {
   background-color: #f5f5f5;
 }
-
 .sort-option:active {
   background-color: #e8e8e8;
 }
@@ -824,15 +808,11 @@ select {
   position: sticky;
   top: 20px;
 }
-
-.cart-summary .subtotal,
-.cart-summary .shipping,
-.cart-summary .total {
+.cart-summary .subtotal, .cart-summary .shipping, .cart-summary .total {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
 }
-
 .cart-summary .total {
   font-weight: bold;
   border-top: 1px solid #ddd;
@@ -855,22 +835,18 @@ select {
   display: flex;
   flex-wrap: wrap;
 }
-
-.cart-item-container .item-image,
-.cart-item-container .item-details,
-.cart-item-container .item-actions {
+.cart-item-container .item-image, .cart-item-container .item-details, .cart-item-container .item-actions {
   flex: 1;
   min-width: 100px;
+  box-sizing: border-box;
+}
+.cart-item-container .bottom-item-container {
+  flex-basis: 100%;
   box-sizing: border-box;
 }
 
 .item-total {
   font-weight: bold;
-}
-
-.cart-item-container .bottom-item-container {
-  flex-basis: 100%;
-  box-sizing: border-box;
 }
 
 .bottom-item-container {
@@ -880,14 +856,12 @@ select {
   width: 100%;
   margin-top: 12px;
 }
-
 .bottom-item-container .quantity-control {
   display: flex;
   align-items: center;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
-
 .bottom-item-container button {
   background: none;
   border: none;
@@ -895,7 +869,6 @@ select {
   cursor: pointer;
   font-size: 16px;
 }
-
 .bottom-item-container input {
   width: 40px;
   text-align: center;
@@ -907,7 +880,6 @@ select {
 .bottom-item-container input:focus {
   outline: none;
 }
-
 .bottom-item-container .remove-item-icon {
   cursor: pointer;
   font-size: 1.2rem;

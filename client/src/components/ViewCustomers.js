@@ -34,7 +34,36 @@ export default class ViewCustomers extends Component {
         return(
             <div>
                 <h2>View Customers</h2>
-                {/*<p>`{users[0].name}`</p>*/}
+                <ul>
+                    {users.length > 0 ? (
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {users.map((user, index) => (
+                                user.accessLevel === 1? (  // Don't show admin users, only show customers
+                                    <tr key={index}>
+                                        {user.profilePhoto ? (
+                                            <img src={`data:image/png;base64,${user.profilePhoto}`} alt="Profile" className="profile-photo" />
+                                        ) : (
+                                            <p>No photo</p>
+                                        )}
+                                        <td>{user.name}</td>
+                                        <td>{user.email}</td>
+                                    </tr>
+                                    ) : null
+                            ))}
+                            </tbody>
+                        </table>
+                        ) : (
+                            <p>No customers found.</p>
+                        )
+                    }
+                </ul>
             </div>
         )
     }
