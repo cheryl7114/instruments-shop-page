@@ -869,7 +869,7 @@ select {
   cursor: pointer;
   font-size: 16px;
 }
-.bottom-item-container button input {
+.bottom-item-container input {
   width: 40px;
   text-align: center;
   border: none;
@@ -877,15 +877,15 @@ select {
   border-right: 1px solid #ddd;
   padding: 5px;
 }
-.bottom-item-container button input:focus {
+.bottom-item-container input:focus {
   outline: none;
 }
-.bottom-item-container button .remove-item-icon {
+.bottom-item-container .remove-item-icon {
   cursor: pointer;
   font-size: 1.2rem;
   transition: color 0.3s ease;
 }
-.bottom-item-container button .remove-item-icon:hover {
+.bottom-item-container .remove-item-icon:hover {
   opacity: 0.7;
 }
 
