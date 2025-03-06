@@ -20,7 +20,7 @@ body {
   height: 1px;
   width: 100%;
   border-top: 1px solid #ddd;
-  margin: 25px 0px;
+  margin: 25px 0;
 }
 
 .body-container {
@@ -38,6 +38,12 @@ body {
 }
 
 // Link buttons
+.cancel-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
 .edit-button, .delete-button{
   padding: 7px 10px;
   z-index: 9999;
@@ -61,15 +67,15 @@ body {
 
 .orange-button,
 .red-button {
-  padding: 7px 10px;
+  padding: 10px;
   font-size: 0.875rem;
   line-height: normal;
-  border-radius: 14px;
+  border-radius: 20px;
   color: white;
   background-color: $navbar-color;
   margin-right: 10px;
-  //position: relative;
-  top: 1px;
+  position:relative;
+  top: 5px;
   text-decoration: none;
   cursor: pointer;
   text-align: center;
@@ -82,6 +88,9 @@ body {
 
 .orange-button {
   background-color: $orange;
+  width:200px;
+  display:block;
+  margin: 1px auto;
 
   &:hover {
     opacity: 0.8;
@@ -548,6 +557,7 @@ body {
   max-width: 600px;
   margin: 50px auto;
   padding: 25px;
+  position: relative;
   background: white;
   border-radius: 14px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -557,12 +567,12 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-
+  margin-top: 20px;
 }
 
 .add-product-container input {
   width: 100%;
-  margin-top: 10px;
+  margin-top: 8px;
   margin-bottom: 10px;
   padding: 10px 15px;
   border: 1px solid #ccc;
@@ -572,10 +582,73 @@ body {
 
 .add-product-container label {
   width: 100%;
-  padding: 8px;
+  padding: 10px;
   color: $navbar-color;
 }
 
+//file upload
+.file-upload-container {
+  //display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 8px;
+  //margin-top: 10px;
+
+  .file-upload-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .custom-file-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 8px;
+      margin-bottom: 10px;
+      width: 100%;
+      padding: 8px;
+      font-size: 14px;
+      background-color: white;
+      border: 2px dashed $orange; // Dashed border for better UX
+      border-radius: 20px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: $orange;
+        color: white;
+      }
+    }
+  }
+
+  .selected-files {
+    font-size: 14px;
+    color: #333;
+    margin-top: 5px;
+    padding: 0 10px;
+  }
+}
+
+.file-upload-container input {
+  width: 100%;
+  margin-top: 8px;
+  margin-bottom: 10px;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+  //background-color: $orange;
+}
+
+.file-upload-container label {
+  width: 100%;
+  padding: 10px;
+  color: $navbar-color;
+}
 // Image upload preview
 .image-preview-wrapper {
   width:45%;
@@ -615,16 +688,19 @@ body {
 .edit-product-container {
   max-width: 600px;
   margin: 50px auto;
+  position: relative;
   padding: 25px;
   background: white;
   border-radius: 14px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
 }
 
 .edit-product-container form {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-top: 20px;
 }
 
 .edit-product-container input {
@@ -649,6 +725,7 @@ body {
   gap: 5px 15px;
   justify-content: start;
 }
+
 
 // product page layout
 .products-page-layout {
