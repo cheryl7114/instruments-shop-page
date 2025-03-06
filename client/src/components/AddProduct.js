@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { Redirect, Link } from "react-router-dom"
-import {CiCircleRemove } from "react-icons/ci"
+import {CiCircleRemove, CiCircleChevDown} from "react-icons/ci"
 
 import axios from "axios"
 
@@ -164,13 +164,22 @@ export default class AddProduct extends Component {
 
                     <div>
                         <label htmlFor="brand">Brand</label>
-                        <input
-                            type="text"
-                            id="brand"
-                            name="brand"
-                            value={this.state.brand}
-                            onChange={this.handleChange}
-                        />
+                        <div className="select-wrapper">
+                            <select
+                                id="brand"
+                                name="brand"
+                                value={this.state.brand}
+                                onChange={this.handleChange}
+                            >
+                                <option value="brand">Select a brand</option>
+                                {["Fender", "Yamaha", "Roland", "Pearl", "Selmer"].map((brand) => (
+                                    <option key={brand} value={brand}>
+                                        {brand}
+                                    </option>
+                                ))}
+                            </select>
+                            <CiCircleChevDown className="select-icon" />
+                        </div>
                     </div>
 
                     <div>
@@ -186,13 +195,22 @@ export default class AddProduct extends Component {
 
                     <div>
                         <label htmlFor="category">Category</label>
-                        <input
-                            type="text"
-                            id="category"
-                            name="category"
-                            value={this.state.category}
-                            onChange={this.handleChange}
-                        />
+                        <div className="select-wrapper">
+                            <select
+                                id="category"
+                                name="category"
+                                value={this.state.category}
+                                onChange={this.handleChange}
+                            >
+                                <option value="category">Select a category</option>
+                                {["Guitar", "Piano", "Trumpet", "Saxophone", "Drums", "Violin"].map((category) => (
+                                    <option key={category} value={category}>
+                                        {category}
+                                    </option>
+                                ))}
+                            </select>
+                            <CiCircleChevDown className="select-icon" />
+                        </div>
                     </div>
 
                     <div>

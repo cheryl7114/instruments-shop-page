@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
-import {CiCirclePlus, CiSquareChevUp, CiSquareChevDown, CiFilter} from "react-icons/ci";
+import {CiCirclePlus} from "react-icons/ci";
 
 import axios from "axios"
 
@@ -177,16 +177,17 @@ export default class DisplayAllProducts extends Component {
                                     </div>
                                 )}
                             </div>
+                            <div>
+                                {productsToDisplay.length === 0 ? (
+                                    <div className="no-products">No products available</div>
+                                ) : (
+                                    < div className="product-grid">
+                                        <ProductGrid products={productsToDisplay} />
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                        <div>
-                            {productsToDisplay.length === 0 ? (
-                                <div className="no-products">No products available</div>
-                            ) : (
-                                < div className="product-grid">
-                                    <ProductGrid products={productsToDisplay} />
-                                </div>
-                            )}
-                        </div>
+
                     </div>
                 </div>
             </div >
