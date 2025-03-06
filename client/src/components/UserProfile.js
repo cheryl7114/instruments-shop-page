@@ -22,26 +22,38 @@ export default class UserProfile extends Component {
         }
     }
 
-    componentDidMount() {
+    componentDidMount() {    
         axios.get(`${SERVER_HOST}/users/${this.props.match.params.id}`, { headers: { "authorization": localStorage.token } })
             .then(res => {
+                console.log("User API response:", res.data);
                 if (res.data) {
                     if (res.data.errorMessage) {
-                        console.log(res.data.errorMessage)
+                        console.log("Error message:", res.data.errorMessage);
                     } else {
-                        this.setState({ user: res.data })
-                        console.log("User details retrieved")
+                        this.setState({ user: res.data });
+                        console.log("User details retrieved:", res.data);
                     }
                 } else {
-                    console.log("User not found")
+                    console.log("User not found");
                 }
             })
-            .catch(err => console.error("Error fetching user:", err))
+            .catch(err => {
+                console.error("Error fetching user:", err);
+                // Try to get response details if available
+                if (err.response) {
+                    console.error("Response data:", err.response.data);
+                    console.error("Response status:", err.response.status);
+                }
+            });
     }
 
     render() {
         const { user } = this.state
         const { match } = this.props
+
+        if (!user || !user.name) {
+            return <div>Loading...</div>
+        }
 
         return (
             <div className="body-container">

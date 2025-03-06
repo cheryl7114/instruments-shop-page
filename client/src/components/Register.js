@@ -46,7 +46,7 @@ export default class Register extends Component {
                         console.log("User registered and logged in")
 
                         localStorage.name = res.data.name
-                        localStorage.userId = res.data.user._id
+                        localStorage.userId = res.data.userId || (res.data.user ? res.data.user._id : null)
                         localStorage.accessLevel = res.data.accessLevel
                         localStorage.token = res.data.token
 
@@ -62,7 +62,7 @@ export default class Register extends Component {
                         this.setState({ isRegistered: true }, () => {
                             // delay the refresh to allow redirection to happen
                             setTimeout(() => {
-                                window.location.reload()
+                                window.location.href = "/DisplayAllProducts"
                             }, 100)
                         })
                     }
@@ -125,7 +125,6 @@ export default class Register extends Component {
                             onChange={this.handleChange}
                         />
                     </div>
-
                     <div className="input-container">
                         <input
                             type = "file"
@@ -134,7 +133,7 @@ export default class Register extends Component {
                     </div>
 
                     <LinkInClass value="Register" className="sign-in-button" onClick={this.handleSubmit} />
-                    <Link className="cancel-link" to={"/DisplayAllCars"}>Cancel</Link>
+                    <Link className="cancel-link" to={"/DisplayAllProducts"}>Cancel</Link>
                 </form>
             </div>
         )

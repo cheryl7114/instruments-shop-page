@@ -1,5 +1,7 @@
 import React, {Component} from "react"
 import {Link} from "react-router-dom"
+import { CiEdit, CiTrash } from "react-icons/ci"
+
 
 import {ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../config/global_constants"
 import axios from "axios";
@@ -42,8 +44,19 @@ export default class ProductCard extends Component {
                 </Link>
                 <h4>{this.props.product.name}</h4>
                 <p>€{this.props.product.price}</p>
-                {localStorage.accessLevel > ACCESS_LEVEL_GUEST ? <Link className="green-button" to={"/EditProduct/" + this.props.product._id}>Edit</Link> : null}
-                {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ? <Link className="red-button" to={"/DeleteProduct/" + this.props.product._id}>Delete</Link> : null}
+                {localStorage.accessLevel > ACCESS_LEVEL_GUEST ?
+                    <Link className="edit-button" to={"/EditProduct/" + this.props.product._id}>
+                        <CiEdit size={25} />
+                    </Link>
+                    :
+                null}
+                {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?
+                    <Link className="delete-button" to={"/DeleteProduct/" + this.props.product._id}>
+                        <CiTrash size={25} />
+                    </Link>
+                    :
+                 null
+                }
             </div>
         )
     }

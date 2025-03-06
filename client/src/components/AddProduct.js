@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import { Redirect, Link } from "react-router-dom"
+import {CiCircleRemove, CiCircleChevDown} from "react-icons/ci"
 
 import axios from "axios"
 
@@ -76,20 +77,25 @@ export default class AddProduct extends Component {
 
 
 
-            if(this.state.selectedFiles) {
-                for(let i = 0; i < this.state.selectedFiles.length; i++) {
+            if (this.state.selectedFiles) {
+                for (let i = 0; i < this.state.selectedFiles.length; i++) {
                     formData.append("images", this.state.selectedFiles[i])
                 }
             }
 
-            axios.post(`${SERVER_HOST}/products`, formData, { headers: { "authorization": localStorage.token, "Content-type": "multipart/form-data"} })
+            axios.post(`${SERVER_HOST}/products`, formData, { headers: { "authorization": localStorage.token, "Content-type": "multipart/form-data" } })
                 .then(res => {
                     if (res.data) {
                         if (res.data.errorMessage) {
                             console.log(res.data.errorMessage)
                         } else {
                             console.log("Product added")
-                            this.setState({ redirectToDisplayAllProducts: true })
+                            // Set state for redirection and refresh the page after a short delay
+                            this.setState({ redirectToDisplayAllProducts: true }, () => {
+                                setTimeout(() => {
+                                    window.location.reload()
+                                }, 100)
+                            })
                         }
                     } else {
                         console.log("Product not added")
@@ -141,7 +147,7 @@ export default class AddProduct extends Component {
 
     render() {
         return (
-            <div className="body-container">
+            <div className="add-product-container">
                 {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts" /> : null}
                 <form>
                     <div>
@@ -158,13 +164,22 @@ export default class AddProduct extends Component {
 
                     <div>
                         <label htmlFor="brand">Brand</label>
-                        <input
-                            type="text"
-                            id="brand"
-                            name="brand"
-                            value={this.state.brand}
-                            onChange={this.handleChange}
-                        />
+                        <div className="select-wrapper">
+                            <select
+                                id="brand"
+                                name="brand"
+                                value={this.state.brand}
+                                onChange={this.handleChange}
+                            >
+                                <option value="brand">Select a brand</option>
+                                {["Fender", "Yamaha", "Roland", "Pearl", "Selmer"].map((brand) => (
+                                    <option key={brand} value={brand}>
+                                        {brand}
+                                    </option>
+                                ))}
+                            </select>
+                            <CiCircleChevDown className="select-icon" />
+                        </div>
                     </div>
 
                     <div>
@@ -180,13 +195,22 @@ export default class AddProduct extends Component {
 
                     <div>
                         <label htmlFor="category">Category</label>
-                        <input
-                            type="text"
-                            id="category"
-                            name="category"
-                            value={this.state.category}
-                            onChange={this.handleChange}
-                        />
+                        <div className="select-wrapper">
+                            <select
+                                id="category"
+                                name="category"
+                                value={this.state.category}
+                                onChange={this.handleChange}
+                            >
+                                <option value="category">Select a category</option>
+                                {["Guitar", "Piano", "Trumpet", "Saxophone", "Drums", "Violin"].map((category) => (
+                                    <option key={category} value={category}>
+                                        {category}
+                                    </option>
+                                ))}
+                            </select>
+                            <CiCircleChevDown className="select-icon" />
+                        </div>
                     </div>
 
                     <div>
@@ -214,9 +238,24 @@ export default class AddProduct extends Component {
                         />
                     </div>
 
-                    <div>
+                    <div className="file-upload-container">
                         <label>Upload Images</label>
-                        <input type="file" multiple onChange={this.handleFileChange} />
+                        <div className="file-upload-wrapper">
+                            <input
+                                type="file"
+                                id="file-upload"
+                                multiple
+                                onChange={this.handleFileChange}
+                            />
+                            <label htmlFor="file-upload" className="custom-file-label">
+                                Click to upload
+                            </label>
+                        </div>
+                        {this.state.selectedFiles.length > 0 && (
+                            <div className="selected-files">
+                                {this.state.selectedFiles.length} file(s) selected
+                            </div>
+                        )}
                     </div>
 
                     {/* Image Previews */}
@@ -229,14 +268,18 @@ export default class AddProduct extends Component {
                                     className="remove-image-button"
                                     onClick={() => this.handleRemoveImage(index)}
                                 >
-                                    ❌
+                                    <CiCircleRemove size={24} color="red" />
                                 </button>
                             </div>
                         ))}
                     </div>
 
-                    <LinkInClass value="Add" className="green-button" onClick={this.handleSubmit} />
-                    <Link className="red-button" to={"/DisplayAllProducts"}>Cancel</Link>
+                    <LinkInClass value="Add" className="orange-button" onClick={this.handleSubmit} />
+                    <div className="cancel-button">
+                        <Link to={"/DisplayAllProducts"}>
+                            <CiCircleRemove size={30} color="red" />
+                        </Link>
+                    </div>
                 </form>
             </div>
         )
