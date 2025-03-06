@@ -58,11 +58,12 @@ body {
   padding: 10px;
   font-size: 0.875rem;
   line-height: normal;
-  border-radius: 14px;
+  border-radius: 20px;
   color: white;
   background-color: #222;
   margin-right: 10px;
-  top: 1px;
+  position: relative;
+  top: 5px;
   text-decoration: none;
   cursor: pointer;
   text-align: center;
@@ -75,6 +76,9 @@ body {
 
 .orange-button {
   background-color: #ea954f;
+  width: 200px;
+  display: block;
+  margin: 1px auto;
 }
 .orange-button:hover {
   opacity: 0.8;

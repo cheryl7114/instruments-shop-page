@@ -70,12 +70,12 @@ body {
   padding: 10px;
   font-size: 0.875rem;
   line-height: normal;
-  border-radius: 14px;
+  border-radius: 20px;
   color: white;
   background-color: $navbar-color;
   margin-right: 10px;
-  //position: relative;
-  top: 1px;
+  position:relative;
+  top: 5px;
   text-decoration: none;
   cursor: pointer;
   text-align: center;
@@ -88,6 +88,9 @@ body {
 
 .orange-button {
   background-color: $orange;
+  width:200px;
+  display:block;
+  margin: 1px auto;
 
   &:hover {
     opacity: 0.8;
@@ -690,6 +693,7 @@ body {
   background: white;
   border-radius: 14px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
 }
 
 .edit-product-container form {
