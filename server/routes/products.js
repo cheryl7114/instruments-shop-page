@@ -1,5 +1,4 @@
 const router = require(`express`).Router()
-const Product = require("../models/products")
 const productsModel = require(`../models/products`)
 const jwt = require('jsonwebtoken')
 const fs = require('fs')
@@ -161,20 +160,9 @@ router.delete(`/products/image/:filename`, verifyUsersJWTPassword, checkAdminAcc
     })
 })
 
-//get brand
-router.get("/brands", async (req, res) => {
-    try {
-        const brands = await Product.distinct("brand"); // Get unique brands from products
-        res.json(brands);
-    } catch (error) {
-        console.error("Error fetching brands:", error);
-        res.status(500).json({ message: "Server error" });
-    }
-})
-
 router.post("/products", verifyUsersJWTPassword, checkAdminAccess, upload.array("images", parseInt(process.env.MAX_NUMBER_OF_UPLOAD_FILES_ALLOWED)), createProduct)
 router.get(`/products`, getAllProducts)
-router.get(`/products/:id`, verifyUsersJWTPassword, getProduct)
+router.get(`/products/:id`, getProduct)
 router.put(`/products/:id`, verifyUsersJWTPassword, upload.array("images", parseInt(process.env.MAX_NUMBER_OF_UPLOAD_FILES_ALLOWED)), updateProduct)
 router.delete(`/products/:id`, verifyUsersJWTPassword, checkAdminAccess, deleteProduct)
 

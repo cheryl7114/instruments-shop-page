@@ -113,20 +113,18 @@ export default class Checkout extends Component {
                 {error && <p className="error">{error}</p>}
 
                 <form onSubmit={this.handleSubmit}>
-                    {localStorage.accessLevel === ACCESS_LEVEL_GUEST && (
-                        <div className="form-group">
-                            <label>Email</label>
-                            <input
-                                type="email"
-                                name="email"
-                                value={this.state.email}
-                                onChange={this.handleChange}
-                                required
-                            />
-                        </div>
-                    )}
                     {!this.state.userHasAddress || localStorage.accessLevel === ACCESS_LEVEL_GUEST ? (
                         <>
+                            <div className="form-group">
+                                <label>Email</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={this.state.email}
+                                    onChange={this.handleChange}
+                                    required
+                                />
+                            </div>
                             <h3>Delivery Address</h3>
                             <div className="form-group">
                                 <label>Street Address</label>
