@@ -57,10 +57,10 @@ body {
   }
 }
 
-.delete-button svg{
+.delete-button svg {
   color: $navbar-color;
 
-  &:hover{
+  &:hover {
     color: #dc3545;
   }
 }
@@ -557,6 +557,17 @@ body {
 
   p {
     color:$navbar-color;
+  }
+}
+
+.error {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 5px;
+
+  ul {
+    margin: 0;
+    padding-left: 20px;
   }
 }
 
