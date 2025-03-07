@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
-import {CiCirclePlus} from "react-icons/ci";
+import {CiCirclePlus} from "react-icons/ci"
 
 import axios from "axios"
 
@@ -9,8 +9,8 @@ import Logout from "./Logout"
 
 import { ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN, SERVER_HOST } from "../config/global_constants"
 
-import { FaSortAmountDown } from "react-icons/fa";
-import { FaSortAmountUp } from "react-icons/fa";
+import { FaSortAmountDown } from "react-icons/fa"
+import { FaSortAmountUp } from "react-icons/fa"
 
 export default class DisplayAllProducts extends Component {
     constructor(props) {
@@ -24,7 +24,7 @@ export default class DisplayAllProducts extends Component {
     }
 
     componentDidMount() {
-        console.log("Component Mounted. Initial State:", this.state)
+        // console.log("Component Mounted. Initial State:", this.state)
         axios.get(`${SERVER_HOST}/products`)
             .then(res => {
                 if (res.data) {

@@ -592,6 +592,12 @@ body {
     padding: 10px;
     color: $navbar-color;
   }
+
+  .error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 0;
+  }
 }
 
 .select-wrapper {
@@ -824,7 +830,7 @@ select {
     align-items: center; /* Ensures icon and text are aligned */
     cursor: pointer;
     background-color: #fff;
-    padding: 8px 12px;
+    padding: 7px 12px;
     border-radius: 20px;
     border: 1px solid #ddd;
     color: #333;

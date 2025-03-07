@@ -45,18 +45,70 @@ export default class AddProduct extends Component {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    handleBlur = () => {
-        const brand = this.state.brand.trim()
-        console.log("Current brand:", brand);
-        if (brand && !this.state.brands.includes(brand)) {
-            console.log("Brand does not exist in brands list, adding:", brand)
-            this.setState(prevState => ({
-                brands: {...prevState.brands,
-                        [brand]: { id: Object.keys(prevState.brands).length + 1 }}
-            }), () => {
-                console.log("Updated brands list:", this.state.brands)
+    handleBlur = (e) => {
+        e.persist()
+
+        this.setState({ [e.target.name]: e.target.value.trim() }, () => {
+            let errors = { ...this.state.errors }
+            const value = this.state[e.target.name]
+
+            // Validation for empty fields
+            if (!value) {
+                errors[e.target.name] = "* This field must not be blank."
+            } else {
+                switch (e.target.name) {
+                    case "name":
+                    case "brand":
+                        if (!/^[A-Za-z0-9 ]+$/.test(value)) {
+                            errors[e.target.name] = "* Can only contain letters, numbers, and spaces."
+                        } else {
+                            delete errors[e.target.name]
+                        }
+                        break
+                    case "colour":
+                        if (!/^[A-Za-z]+$/.test(value)) {
+                            errors[e.target.name] = "* Can only contain letters."
+                        } else {
+                            delete errors[e.target.name]
+                        }
+                        break
+                    case "stock":
+                        if (!Number.isInteger(Number(value)) || Number(value) < 0) {
+                            errors[e.target.name] = "* Must be a non-negative integer."
+                        } else {
+                            delete errors[e.target.name]
+                        }
+                        break
+                    case "price":
+                        if (!Number.isInteger(Number(value)) || Number(value) < 0) {
+                            errors[e.target.name] = "* Must be a non-negative integer."
+                        } else {
+                            delete errors[e.target.name]
+                        }
+                        break
+                    default:
+                        break
+                }
+            }
+
+            if (e.target.name === "brand" && value) {
+                if (!this.state.brands.hasOwnProperty(value)) {
+                    console.log("Brand does not exist in brands list, adding:", value)
+                    this.setState(prevState => ({
+                        brands: {
+                            ...prevState.brands,
+                            [value]: { id: Object.keys(prevState.brands).length + 1 }
+                        }
+                    }), () => {
+                        console.log("Updated brands list:", this.state.brands)
+                    })
+                }
+            }
+
+            this.setState({ errors }, () => {
+                console.log(`Error on ${e.target.name} field: `, errors)
             })
-        }
+        })
     }
 
     handleFileChange = (e) => {
@@ -89,15 +141,17 @@ export default class AddProduct extends Component {
     handleSubmit = (e) => {
         e.preventDefault()
 
+        if (!this.validate()) {
+            return
+        }
+
         console.log("Submitting form...")
-        console.log("Brand being submitted:", this.state.brand)
-        console.log("Final brands list:", this.state.brands)
 
         let formData = new FormData()
         this.setState({ wasSubmittedAtLeastOnce: true })
-        const formInputsState = this.validate()
+        //const formInputsState = this.validate()
 
-        if (Object.keys(formInputsState).every(index => formInputsState[index])) {
+        //if (Object.keys(formInputsState).every(index => formInputsState[index])) {
             formData.append("name", this.state.name)
             formData.append("brand", this.state.brand)
             formData.append("colour", this.state.colour)
@@ -130,10 +184,7 @@ export default class AddProduct extends Component {
                         console.log("Product not added")
                     }
                 })
-                .catch(err => console.log("Error submitting form:", err));
-        } else {
-            console.log("Form validation failed. Fix the errors before submitting.");
-        }
+                .catch(err => console.log("Error submitting form:", err))
     }
 
     validateName() {
@@ -151,10 +202,10 @@ export default class AddProduct extends Component {
         return pattern.test(String(this.state.colour).trim())
     }
 
-    validateCategory() {
-        const pattern = /^[A-Za-z]+$/ // only letters (guitar, piano, etc.)
-        return pattern.test(String(this.state.category).trim())
-    }
+    // validateCategory() {
+    //     const pattern = /^[A-Za-z]+$/ // only letters (guitar, piano, etc.)
+    //     return pattern.test(String(this.state.category).trim())
+    // }
 
     validateStock() {
         const stock = parseInt(this.state.stock)
@@ -167,14 +218,33 @@ export default class AddProduct extends Component {
     }
 
     validate() {
-        return {
-            name: this.validateName(),
-            brand: this.validateBrand(),
-            colour: this.validateColour(),
-            category: this.validateCategory(),
-            stock: this.validateStock(),
-            price: this.validatePrice()
+        let errors = {}
+
+        if (!this.validateName()) {
+            errors.name = "* can only contain letters, numbers, and spaces."
         }
+        if (!this.validateBrand()) {
+            errors.brand = "* can only contain letters, numbers, and spaces."
+        }
+        if (!this.validateColour()) {
+            errors.colour = "* can only contain letters."
+        }
+        if (!this.validateStock()) {
+            errors.stock = "* must be a non-negative integer."
+        }
+        if (!this.validatePrice()) {
+            errors.price = "* must be a non-negative integer."
+        }
+        if (this.state.selectedFiles.length === 0) {
+            errors.images = "* must upload at least one photo."
+        }
+
+        this.setState({ errors }, () => {
+            if (Object.keys(errors).length > 0) {
+                console.log("Validation failed. Fix the errors before submitting: ", errors)
+            }
+        })
+        return Object.keys(errors).length === 0 // Returns true if no errors
     }
 
     render() {
@@ -190,8 +260,10 @@ export default class AddProduct extends Component {
                             name="name"
                             value={this.state.name}
                             onChange={this.handleChange}
+                            onBlur={this.handleBlur}
                             ref={(input) => { this.inputToFocus = input }}
                         />
+                        {this.state.errors.name && <div className="error">{this.state.errors.name}</div>}
                     </div>
 
                     <div>
@@ -204,6 +276,7 @@ export default class AddProduct extends Component {
                             onChange={this.handleChange}
                             onBlur={this.handleBlur}
                         />
+                        {this.state.errors.brand && <div className="error">{this.state.errors.brand}</div>}
                         <datalist id="brand-options">
                             {Object.keys(this.state.brands).map((brand) => (
                                 <option key={brand} value={brand} />
@@ -219,7 +292,9 @@ export default class AddProduct extends Component {
                             name="colour"
                             value={this.state.colour}
                             onChange={this.handleChange}
+                            onBlur={this.handleBlur}
                         />
+                        {this.state.errors.colour && <div className="error">{this.state.errors.colour}</div>}
                     </div>
 
                     <div>
@@ -230,6 +305,7 @@ export default class AddProduct extends Component {
                                 name="category"
                                 value={this.state.category}
                                 onChange={this.handleChange}
+                                onBlur={this.handleBlur}
                             >
                                 <option value="category">Select a category</option>
                                 {["Guitar", "Piano", "Trumpet", "Saxophone", "Drums", "Violin"].map((category) => (
@@ -240,6 +316,7 @@ export default class AddProduct extends Component {
                             </select>
                             <CiCircleChevDown className="select-icon" />
                         </div>
+                        {this.state.errors.category && <div className="error">{this.state.errors.category}</div>}
                     </div>
 
                     <div>
@@ -250,8 +327,10 @@ export default class AddProduct extends Component {
                             name="stock"
                             value={this.state.stock}
                             onChange={this.handleChange}
+                            onBlur={this.handleBlur}
                             min="0"
                         />
+                        {this.state.errors.stock && <div className="error">{this.state.errors.stock}</div>}
                     </div>
 
                     <div>
@@ -262,9 +341,11 @@ export default class AddProduct extends Component {
                             name="price"
                             value={this.state.price}
                             onChange={this.handleChange}
+                            onBlur={this.handleBlur}
                             min="0"
                             step="0.01"
                         />
+                        {this.state.errors.price && <div className="error">{this.state.errors.price}</div>}
                     </div>
 
                     <div className="file-upload-container">
@@ -285,6 +366,7 @@ export default class AddProduct extends Component {
                                 {this.state.selectedFiles.length} file(s) selected
                             </div>
                         )}
+                        {this.state.errors.images && <div className="error">{this.state.errors.images}</div>}
                     </div>
 
                     {/* Image Previews */}
