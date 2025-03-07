@@ -155,7 +155,6 @@ const returnUserDetails = (req, res) => {
 
 // Read all users
 const readAllUsers = (req, res) => {
-    usersModel.find({}, "name email accessLevel profilePhotoFilename", (error, data) => {
     usersModel.find({}, "name email accessLevel profilePhotoFilename deliveryAddress phoneNumber", (error, data) => {
         if (error || !data) {
             return res.json({ errorMessage: `Could not retrieve users` })
@@ -173,7 +172,9 @@ const readAllUsers = (req, res) => {
                 name: user.name,
                 email: user.email,
                 accessLevel: user.accessLevel,
-                profilePhoto: null
+                profilePhoto: null,
+                deliveryAddress: user.deliveryAddress,
+                phoneNumber: user.phoneNumber
             }
 
             getProfilePhoto(user.profilePhotoFilename, (fileData) => {
@@ -207,8 +208,11 @@ const findUserByID = (req, res) => {
                 email: data.email,
                 password: data.password,
                 accessLevel: data.accessLevel,
-                profilePhoto: fileData
+                profilePhoto: fileData,
+                address: data.address,
+                phoneNumber: data.phoneNumber
             })
+
         })
     })
 }
@@ -226,6 +230,30 @@ const getProfilePhoto = (filename, callback) => {
         callback(fileData) // Return the base64 string if file is read successfully
     })
 }
+
+// Update address and phone number before users can make a purchase
+router.post(`/users/update/:email`, verifyUsersJWTPassword, (req, res) => {
+    const { address, city, postcode, phoneNumber } = req.body
+
+    usersModel.updateOne(
+        { email: req.params.email },
+        {
+            $set: {
+                'deliveryAddress.address': address,
+                'deliveryAddress.city': city,
+                'deliveryAddress.postcode': postcode,
+                phoneNumber: phoneNumber
+            }
+        },
+        (error, data) => {
+            if (error) {
+                return res.json({ errorMessage: `Failed to update user` })
+            }
+            res.json({ successMessage: `User updated successfully` })
+        }
+    )
+})
+
 
 
 const userLogout = (req, res) => {
