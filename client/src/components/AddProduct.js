@@ -57,9 +57,9 @@ export default class AddProduct extends Component {
     }
 
     handleFileChange = (e) => {
-        const selectedFiles = Array.from(e.target.files)
+        const selectedFiles = [...e.target.files]
 
-        const updatedFiles = [...this.state.selectedFiles, ...selectedFiles]
+        const updatedFiles = [...this.state.selectedFiles, ...selectedFiles].filter(file => file instanceof File)
         const newPreviews = selectedFiles.map(file => URL.createObjectURL(file))
 
         this.setState({
@@ -201,7 +201,7 @@ export default class AddProduct extends Component {
                         />
                         <datalist id="brand-options">
                             {this.state.brands.map((brand) => (
-                                <option key={brand} value={brand} />
+                                <option key={String(brand)} value={String(brand)} />
                             ))}
                         </datalist>
                     </div>
@@ -286,7 +286,7 @@ export default class AddProduct extends Component {
                     <div className="image-preview-container">
                         {this.state.previewImages.map((img, index) => (
                             <div key={index} className="image-preview-wrapper">
-                                <img src={img} alt="Preview" className="image-preview" />
+                                <img src={img||""} alt="Preview" className="image-preview" />
                                 <button
                                     type="button"
                                     className="remove-image-button"
