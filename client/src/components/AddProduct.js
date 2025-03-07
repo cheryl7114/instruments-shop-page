@@ -80,8 +80,8 @@ export default class AddProduct extends Component {
                         }
                         break
                     case "price":
-                        if (!Number.isInteger(Number(value)) || Number(value) < 0) {
-                            errors[e.target.name] = "* Must be a non-negative integer."
+                        if (isNaN(Number(value)) || Number(value) < 0) {
+                            errors[e.target.name] = "* Must be a non-negative number."
                         } else {
                             delete errors[e.target.name]
                         }
@@ -213,8 +213,8 @@ export default class AddProduct extends Component {
     }
 
     validatePrice() {
-        const price = parseInt(this.state.price)
-        return Number.isInteger(price) && price >= 0 // no negative values
+        const price = parseFloat(this.state.price)
+        return !isNaN(price) && price >= 0 // no negative values
     }
 
     validate() {
