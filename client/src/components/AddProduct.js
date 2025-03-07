@@ -15,28 +15,54 @@ export default class AddProduct extends Component {
         this.state = {
             name: "",
             brand: "",
+            brands: {},
             colour: "",
             category: "",
             stock: "",
             price: "",
             selectedFiles: [],
             previewImages: [],
+            errors: {},
             redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_ADMIN
         }
     }
 
     componentDidMount() {
+        console.log("Component Mounted. Initial State:", this.state)
         this.inputToFocus.focus()
+
+        axios.get(`${SERVER_HOST}/brands`)
+            .then(res => {
+                if (res.data) {
+                    console.log("Fetched brands from API:", res.data)
+                    this.setState({ brands: res.data })
+                }
+            })
+            .catch(err => console.log("Error fetching brands", err))
     }
 
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    handleFileChange = (e) => {
-        const selectedFiles = Array.from(e.target.files)
+    handleBlur = () => {
+        const brand = this.state.brand.trim()
+        console.log("Current brand:", brand);
+        if (brand && !this.state.brands.includes(brand)) {
+            console.log("Brand does not exist in brands list, adding:", brand)
+            this.setState(prevState => ({
+                brands: {...prevState.brands,
+                        [brand]: { id: Object.keys(prevState.brands).length + 1 }}
+            }), () => {
+                console.log("Updated brands list:", this.state.brands)
+            })
+        }
+    }
 
-        const updatedFiles = [...this.state.selectedFiles, ...selectedFiles]
+    handleFileChange = (e) => {
+        const selectedFiles = [...e.target.files]
+
+        const updatedFiles = [...this.state.selectedFiles, ...selectedFiles].filter(file => file instanceof File)
         const newPreviews = selectedFiles.map(file => URL.createObjectURL(file))
 
         this.setState({
@@ -63,6 +89,10 @@ export default class AddProduct extends Component {
     handleSubmit = (e) => {
         e.preventDefault()
 
+        console.log("Submitting form...")
+        console.log("Brand being submitted:", this.state.brand)
+        console.log("Final brands list:", this.state.brands)
+
         let formData = new FormData()
         this.setState({ wasSubmittedAtLeastOnce: true })
         const formInputsState = this.validate()
@@ -75,8 +105,6 @@ export default class AddProduct extends Component {
             formData.append("stock", this.state.stock)
             formData.append("price", this.state.price)
 
-
-
             if (this.state.selectedFiles) {
                 for (let i = 0; i < this.state.selectedFiles.length; i++) {
                     formData.append("images", this.state.selectedFiles[i])
@@ -85,11 +113,12 @@ export default class AddProduct extends Component {
 
             axios.post(`${SERVER_HOST}/products`, formData, { headers: { "authorization": localStorage.token, "Content-type": "multipart/form-data" } })
                 .then(res => {
+                    console.log("Server Response:", res.data)
                     if (res.data) {
                         if (res.data.errorMessage) {
-                            console.log(res.data.errorMessage)
+                            console.log("Error:",res.data.errorMessage)
                         } else {
-                            console.log("Product added")
+                            console.log("Product successfully added.")
                             // Set state for redirection and refresh the page after a short delay
                             this.setState({ redirectToDisplayAllProducts: true }, () => {
                                 setTimeout(() => {
@@ -101,6 +130,9 @@ export default class AddProduct extends Component {
                         console.log("Product not added")
                     }
                 })
+                .catch(err => console.log("Error submitting form:", err));
+        } else {
+            console.log("Form validation failed. Fix the errors before submitting.");
         }
     }
 
@@ -164,22 +196,19 @@ export default class AddProduct extends Component {
 
                     <div>
                         <label htmlFor="brand">Brand</label>
-                        <div className="select-wrapper">
-                            <select
-                                id="brand"
-                                name="brand"
-                                value={this.state.brand}
-                                onChange={this.handleChange}
-                            >
-                                <option value="brand">Select a brand</option>
-                                {["Fender", "Yamaha", "Roland", "Pearl", "Selmer"].map((brand) => (
-                                    <option key={brand} value={brand}>
-                                        {brand}
-                                    </option>
-                                ))}
-                            </select>
-                            <CiCircleChevDown className="select-icon" />
-                        </div>
+                        <input
+                            type="text"
+                            id="brand"
+                            name="brand"
+                            value={this.state.brand}
+                            onChange={this.handleChange}
+                            onBlur={this.handleBlur}
+                        />
+                        <datalist id="brand-options">
+                            {Object.keys(this.state.brands).map((brand) => (
+                                <option key={brand} value={brand} />
+                            ))}
+                        </datalist>
                     </div>
 
                     <div>
@@ -262,7 +291,7 @@ export default class AddProduct extends Component {
                     <div className="image-preview-container">
                         {this.state.previewImages.map((img, index) => (
                             <div key={index} className="image-preview-wrapper">
-                                <img src={img} alt="Preview" className="image-preview" />
+                                <img src={img||""} alt="Preview" className="image-preview" />
                                 <button
                                     type="button"
                                     className="remove-image-button"

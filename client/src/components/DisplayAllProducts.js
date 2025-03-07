@@ -18,48 +18,60 @@ export default class DisplayAllProducts extends Component {
 
         this.state = {
             products: [],
+            brands:{},
             dropDownOpen: false
         }
     }
 
     componentDidMount() {
+        console.log("Component Mounted. Initial State:", this.state)
         axios.get(`${SERVER_HOST}/products`)
             .then(res => {
                 if (res.data) {
                     if (res.data.errorMessage) {
                         console.log(res.data.errorMessage)
-                    }
-                    else {
-                        console.log("Records read")
-                        this.setState({ products: res.data })
-                    }
-                }
-                else {
-                    console.log("Record not found")
+                    } else {
+                        console.log("Products fetched:", res.data)
+
+                        const brandsObject = {}
+                        res.data.forEach(product => {
+                            brandsObject[product.brand] = true
+                        })
+                        this.setState({
+                            products: res.data,
+                            brands: brandsObject
+                        })}
+                } else {
+                    console.log("No products found")
                 }
             })
+            .catch(err => console.log("Error fetching products", err))
     }
 
     toggleDropdown = () => {
+        console.log("Toggling dropdown:", !this.state.dropDownOpen)
         this.setState(prevState => ({
             dropDownOpen: !prevState.dropDownOpen
         }))
     }
 
     handleSortChange = (sortType) => {
+        console.log("Sorting by:", sortType)
         this.props.handleSortChange(sortType)
     }
 
     handleCategoryChange = (category) => (e) => {
+        console.log(`Category changed to ${category}`)
         this.props.handleCategoryFilter(category, e.target.checked)
     }
 
     handleBrandChange = (brand) => (e) => {
+        console.log(`Category changed to ${brand}`)
         this.props.handleBrandFilter(brand, e.target.checked)
     }
 
     render() {
-        const { dropDownOpen } = this.state
+        const { dropDownOpen, brands } = this.state
         const getSortIndicator = (dropDownOpen) => {
             if (dropDownOpen) {
                 return <FaSortAmountUp />
@@ -103,7 +115,7 @@ export default class DisplayAllProducts extends Component {
                         <div className="filter-section">
                             <h4>Brands</h4>
                             <div className="filter-options">
-                                {['Fender', 'Yamaha', 'Roland', 'Pearl', 'Selmer'].map(brand => (
+                                {Object.keys(brands).map(brand => (
                                     <label key={brand} className="filter-checkbox">
                                         <input
                                             type="checkbox"
@@ -118,14 +130,13 @@ export default class DisplayAllProducts extends Component {
                         </div>
                     </div>
                     <div className="main-products-container">
-                        <div className="sort-container">
-                            <div className="sort-dropdown" onClick={this.toggleDropdown}>
-                                <button className="sort-button">
+                        <button className="sort-button" onClick={this.toggleDropdown}>
+                            <span className="sort-content">
+                                <span className="sort-icon">
                                     {getSortIndicator(dropDownOpen)}
-                                    {/*<CiFilter size={20} /> */}
-                                    Sort By
-                                </button>
-                            </div>
+                                </span>
+                                Sort By
+                            </span>
                             {dropDownOpen && (
                                 <div className="sort-dropdown-content">
                                     <div
@@ -154,7 +165,9 @@ export default class DisplayAllProducts extends Component {
                                     </div>
                                 </div>
                             )}
-                        </div>
+                        </button>
+
+
                         {/*{localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?*/}
                         {/*    <div className="add-new-product">*/}
                         {/*        <title>Add new product</title>*/}
@@ -189,6 +202,7 @@ export default class DisplayAllProducts extends Component {
                         </div>
 
                     </div>
+
                 </div>
             </div >
         )
