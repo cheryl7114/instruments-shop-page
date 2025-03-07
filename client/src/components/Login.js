@@ -27,8 +27,6 @@ export default class Login extends Component {
                     if (res.data.errorMessage) {
                         console.log(res.data.errorMessage)
                     } else {
-                        console.log("User logged in")
-
                         localStorage.name = res.data.name
                         localStorage.userId = res.data.userId;
                         localStorage.accessLevel = res.data.accessLevel

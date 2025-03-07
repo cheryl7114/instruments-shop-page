@@ -16,6 +16,7 @@ import DisplayAllProducts from "./components/DisplayAllProducts"
 import ProductDetails from "./components/ProductDetails"
 import UserProfile from "./components/UserProfile"
 import LoggedInRoute from "./components/LoggedInRoute"
+import Checkout from "./components/Checkout"
 
 import { SERVER_HOST, ACCESS_LEVEL_GUEST } from "./config/global_constants"
 
@@ -198,7 +199,8 @@ export default class App extends Component {
                                 {...props}
                                 addToCart={this.addToCart}
                             />
-                        } />                        <Route exact path="/Register" component={Register} />
+                        } />                        
+                        <Route exact path="/Register" component={Register} />
                         <Route exact path="/ResetDatabase" component={ResetDatabase} />
                         {/* Home route */}
                         <Route exact path="/" render={(props) =>
@@ -226,7 +228,12 @@ export default class App extends Component {
                                 clearCart={this.clearCart}
                             />
                         } />
-                        {/* checkout route here */}
+                        <Route exact path="/Checkout" render={(props) =>
+                            <Checkout
+                                {...props}
+                                clearCart={this.clearCart}
+                            />
+                        } />
                         <LoggedInRoute path="/UserProfile/:id" component={UserProfile} />
                         {/* passing filtered and sortedproducts to DisplayAllProducts */}
                         <Route exact path="/DisplayAllProducts" render={(props) =>

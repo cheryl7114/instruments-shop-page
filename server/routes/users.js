@@ -46,7 +46,7 @@ const resetDatabase = (req, res, next) => {
 
 // add admin user for testing purposes
 const addAdminUser = (req, res) => {
-    const adminPassword = `123!"£qweQWE`
+    const adminPassword = `123!"Â£qweQWE`
     bcrypt.hash(adminPassword, parseInt(process.env.PASSWORD_HASH_SALT_ROUNDS), (err, hash) => {
         usersModel.create({ name: "Administrator", email: "admin@admin.com", password: hash, accessLevel: parseInt(process.env.ACCESS_LEVEL_ADMIN) }, (createError, createData) => {
             if (createData) {
@@ -91,18 +91,38 @@ const checkDuplicateUser = (req, res, next) => {
     })
 }
 
-// add new user
+// Add new user
 const addNewUser = (req, res) => {
-    bcrypt.hash(req.params.password, parseInt(process.env.PASSWORD_HASH_SALT_ROUNDS), (err, hash) => {
-        usersModel.create({ name: req.params.name, email: req.params.email, password: hash, profilePhotoFilename: req.file.filename }, (error, data) => {
+    const { name, email, password, address, city, postcode, phoneNumber } = req.body // Adjust the way you're extracting the data
+    bcrypt.hash(password, parseInt(process.env.PASSWORD_HASH_SALT_ROUNDS), (err, hash) => {
+        usersModel.create({
+            name,
+            email,
+            password: hash,
+            profilePhotoFilename: req.file.filename,
+            deliveryAddress: {
+                address: address || "",
+                city: city || "",
+                postcode: postcode || ""
+            },
+            phoneNumber: phoneNumber || ""
+        }, (error, data) => {
             if (data) {
                 const token = jwt.sign({ email: data.email, accessLevel: data.accessLevel }, JWT_PRIVATE_KEY, { algorithm: 'HS256', expiresIn: process.env.JWT_EXPIRY })
 
                 fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${req.file.filename}`, 'base64', (err, fileData) => {
-                    res.json({ userId: data._id, name: data.name, email: data.email, accessLevel: data.accessLevel, profilePhoto: fileData, token: token })
+                    res.json({
+                        userId: data._id,
+                        name: data.name,
+                        email: data.email,
+                        accessLevel: data.accessLevel,
+                        profilePhoto: fileData,
+                        deliveryAddress: data.deliveryAddress,
+                        phoneNumber: data.phoneNumber,
+                        token: token
+                    })
                 })
-            }
-            else {
+            } else {
                 res.json({ errorMessage: `User was not registered` })
             }
         })
@@ -120,66 +140,128 @@ const checkUserExists = (req, res, next) => {
     })
 }
 
-// return user details
+// Return user details
 const returnUserDetails = (req, res) => {
     const token = jwt.sign({ email: req.data.email, accessLevel: req.data.accessLevel }, JWT_PRIVATE_KEY, { algorithm: 'HS256', expiresIn: process.env.JWT_EXPIRY })
 
     fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${req.data.profilePhotoFilename}`, 'base64', (err, fileData) => {
         if (fileData) {
-            res.json({ userId: req.data._id, name: req.data.name, email: req.data.email, accessLevel: req.data.accessLevel, profilePhoto: fileData, token: token })
-        }
-        else {
-            res.json({ userId: req.data._id, name: req.data.name, email: req.data.email, accessLevel: req.data.accessLevel, profilePhoto: null, token: token })
+            res.json({userId: req.data._id, name: req.data.name, email: req.data.email, accessLevel: req.data.accessLevel, profilePhoto: fileData, deliveryAddress: req.data.deliveryAddress, phoneNumber: req.data.phoneNumber, token: token})
+        } else {
+            res.json({userId: req.data._id, name: req.data.name, email: req.data.email, accessLevel: req.data.accessLevel, profilePhoto: null, deliveryAddress: req.data.deliveryAddress, phoneNumber: req.data.phoneNumber, token: token})
         }
     })
 }
 
-// read all users
+// Read all users
 const readAllUsers = (req, res) => {
-    usersModel.find({}, "name email accessLevel", (error, data) => {
+    usersModel.find({}, "name email accessLevel profilePhotoFilename deliveryAddress phoneNumber", (error, data) => {
         if (error || !data) {
             return res.json({ errorMessage: `Could not retrieve users` })
         }
-        res.json(data)
+
+        let usersArray = []
+        let i = 0
+
+        if (data.length === 0) {
+            return res.json([])
+        }
+
+        data.forEach((user) => {
+            let userObject = {
+                name: user.name,
+                email: user.email,
+                accessLevel: user.accessLevel,
+                profilePhoto: null,
+                deliveryAddress: user.deliveryAddress,
+                phoneNumber: user.phoneNumber
+            }
+
+            getProfilePhoto(user.profilePhotoFilename, (fileData) => {
+                userObject.profilePhoto = fileData
+                usersArray.push(userObject)
+                i++
+
+                // Send response only after processing all users
+                if (i === data.length) {
+                    res.json(usersArray)
+                }
+            })
+        })
     })
 }
 
 // fetch user details by ID
 const findUserByID = (req, res) => {
-    console.log("Route reached")
-    console.log("User ID from URL:", req.params.id)
     usersModel.findById(req.params.id, "name email password accessLevel profilePhotoFilename", (error, data) => {
         if (error) {
             console.error("Error while querying user:", error);
             return res.json({ errorMessage: 'Error querying user' });
         }
         if (!data) {
-            console.log('User not found for ID:', req.params.id);
             return res.json({ errorMessage: 'User not found' });
         }
-        // if profile photo exists, read it and return it as base64
-        if (data.profilePhotoFilename) {
-            fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${data.profilePhotoFilename}`, "base64", (err, fileData) => {
-                if (err) {
-                    return res.json({ name: data.name, email: data.email, password: data.password, accessLevel: data.accessLevel, profilePhoto: null })
-                }
 
-                res.json({
-                    name: data.name, email: data.email, password: data.password, accessLevel: data.accessLevel, profilePhoto: fileData
-                })
+        getProfilePhoto(data.profilePhotoFilename, (fileData) => {
+            res.json({
+                name: data.name,
+                email: data.email,
+                password: data.password,
+                accessLevel: data.accessLevel,
+                profilePhoto: fileData,
+                address: data.address,
+                phoneNumber: data.phoneNumber
             })
-        } else {
-            res.json({ name: data.name, email: data.email, password: data.password, accessLevel: data.accessLevel, profilePhoto: null })
-        }
+
+        })
     })
 }
+
+const getProfilePhoto = (filename, callback) => {
+    if (!filename) {
+        return callback(null) // No profile photo
+    }
+
+    fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${filename}`, "base64", (err, fileData) => {
+        if (err) {
+            return callback(null) // Return null if there's an error reading the file
+        }
+
+        callback(fileData) // Return the base64 string if file is read successfully
+    })
+}
+
+// Update address and phone number before users can make a purchase
+router.post(`/users/update/:email`, verifyUsersJWTPassword, (req, res) => {
+    const { address, city, postcode, phoneNumber } = req.body
+
+    usersModel.updateOne(
+        { email: req.params.email },
+        {
+            $set: {
+                'deliveryAddress.address': address,
+                'deliveryAddress.city': city,
+                'deliveryAddress.postcode': postcode,
+                phoneNumber: phoneNumber
+            }
+        },
+        (error, data) => {
+            if (error) {
+                return res.json({ errorMessage: `Failed to update user` })
+            }
+            res.json({ successMessage: `User updated successfully` })
+        }
+    )
+})
+
+
 
 const userLogout = (req, res) => {
     res.json({})
 }
 
 router.post(`/users/reset_user_collection`, resetDatabase, addAdminUser)
-router.post(`/users/register/:name/:email/:password`, upload.single("profilePhoto"), checkFileUpload, checkFileIsImage, checkDuplicateUser, addNewUser)
+router.post('/users/register', upload.single("profilePhoto"), checkFileUpload, checkFileIsImage, checkDuplicateUser, addNewUser);
 router.post(`/users/login/:email/:password`, checkUserExists, verifyUserPassword, returnUserDetails)
 router.post(`/users/logout`, userLogout)
 router.get(`/users`, verifyUsersJWTPassword, readAllUsers)
