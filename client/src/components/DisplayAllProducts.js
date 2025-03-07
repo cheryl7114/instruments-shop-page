@@ -18,7 +18,7 @@ export default class DisplayAllProducts extends Component {
 
         this.state = {
             products: [],
-            brands:[],
+            brands:{},
             dropDownOpen: false
         }
     }
@@ -30,20 +30,21 @@ export default class DisplayAllProducts extends Component {
                     if (res.data.errorMessage) {
                         console.log(res.data.errorMessage)
                     } else {
-                        console.log("Products fetched:", res.data);
+                        console.log("Products fetched:", res.data)
 
-                        const uniqueBrands = [...new Set(res.data.map(product => product.brand))]
-
+                        const brandsObject = {}
+                        res.data.forEach(product => {
+                            brandsObject[product.brand] = true
+                        })
                         this.setState({
                             products: res.data,
-                            brands: uniqueBrands // Store brands dynamically
-                        });
-                    }
+                            brands: brandsObject
+                        })}
                 } else {
-                    console.log("No products found");
+                    console.log("No products found")
                 }
             })
-            .catch(err => console.log("Error fetching products", err));
+            .catch(err => console.log("Error fetching products", err))
     }
 
     toggleDropdown = () => {
@@ -109,7 +110,7 @@ export default class DisplayAllProducts extends Component {
                         <div className="filter-section">
                             <h4>Brands</h4>
                             <div className="filter-options">
-                                {brands.length > 0 ? brands.map(brand => (
+                                {Object.keys(brands).map(brand => (
                                     <label key={brand} className="filter-checkbox">
                                         <input
                                             type="checkbox"
@@ -119,7 +120,7 @@ export default class DisplayAllProducts extends Component {
                                         />
                                         {brand}
                                     </label>
-                                )) :null}
+                                ))}
                             </div>
                         </div>
                     </div>

@@ -15,30 +15,39 @@ export default class AddProduct extends Component {
         this.state = {
             name: "",
             brand: "",
-            brands: [],
+            brands: {},
             colour: "",
             category: "",
             stock: "",
             price: "",
             selectedFiles: [],
             previewImages: [],
+            errors: {},
             redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_ADMIN
         }
     }
 
     componentDidMount() {
-        this.inputToFocus.focus();
+        this.inputToFocus.focus()
 
         axios.get(`${SERVER_HOST}/brands`)
             .then(res => {
-                console.log("Fetching brands from:", `${SERVER_HOST}/brands`)
                 if (res.data) {
-                    console.log("Fetched brands from API:", res.data);
-
-                    this.setState({ brands: Object.keys(res.data) })
+                    console.log("Fetched brands from API:", res.data)
+                    this.setState({ brands: res.data })  // Assuming API returns { "Yamaha": {}, "Fender": {} }
                 }
             })
             .catch(err => console.log("Error fetching brands", err))
+        // axios.get(`${SERVER_HOST}/brands`)
+        //     .then(res => {
+        //         console.log("Fetching brands from:", `${SERVER_HOST}/brands`)
+        //         if (res.data) {
+        //             console.log("Fetched brands from API:", res.data);
+        //
+        //             this.setState({ brands: Object.keys(res.data) })
+        //         }
+        //     })
+        //     .catch(err => console.log("Error fetching brands", err))
     }
 
     handleChange = (e) => {
@@ -49,9 +58,10 @@ export default class AddProduct extends Component {
         const brand = this.state.brand.trim()
         if (brand && !this.state.brands.includes(brand)) {
             this.setState(prevState => ({
-                brands: [...prevState.brands, brand],
+                brands: {...prevState.brands,
+                        [brand]: { id: Object.keys(prevState.brands).length + 1 }}
             }), () => {
-                console.log("Final brands list:", this.state.brands)
+                console.log("Updated brands:", this.state.brands)
             })
         }
     }
@@ -200,8 +210,8 @@ export default class AddProduct extends Component {
                             onBlur={this.handleBlur}
                         />
                         <datalist id="brand-options">
-                            {this.state.brands.map((brand) => (
-                                <option key={String(brand)} value={String(brand)} />
+                            {Object.keys(this.state.brands).map((brand) => (
+                                <option key={brand} value={brand} />
                             ))}
                         </datalist>
                     </div>

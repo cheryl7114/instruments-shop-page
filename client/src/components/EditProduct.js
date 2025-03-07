@@ -15,7 +15,7 @@ export default class EditProduct extends Component {
         this.state = {
             name: ``,
             brand: ``,
-            brands:[],
+            brands:{},
             colour: ``,
             category: ``,
             stock: ``,
@@ -30,7 +30,7 @@ export default class EditProduct extends Component {
     componentDidMount() {
         this.inputToFocus.focus()
 
-        axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, { headers: { "authorization": localStorage.token } })
+        axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, {headers: {"authorization": localStorage.token}})
             .then(res => {
                 console.log("Product Data:", res.data)
                 if (res.data) {
@@ -54,14 +54,14 @@ export default class EditProduct extends Component {
                     console.log(`Record not found`)
                 }
             })
-        axios.get(`${SERVER_HOST}/brands`, { headers: { "authorization": localStorage.token } })
+        axios.get(`${SERVER_HOST}/brands`, {headers: {"authorization": localStorage.token}})
             .then(res => {
-                console.log("Brands Data:", res.data);
+                console.log("Brands Data:", res.data)
                 if (res.data) {
-                    this.setState({ availableBrands: res.data });
+                    this.setState({brands: res.data})
                 }
             })
-            .catch(err => console.error("Error fetching brands:", err));
+            .catch(err => console.error("Error fetching brands:", err))
     }
 
     loadImagePreviews = (images) => {
@@ -254,8 +254,8 @@ export default class EditProduct extends Component {
                             onBlur={this.handleBlur}
                         />
                         <datalist id="brand-options">
-                            {this.state.brands.map((brand) => (
-                                <option key={String(brand)} value={String(brand)} />
+                            {Object.keys(this.state.brands).map((brandKey) => (
+                                <option key={brandKey} value={this.state.brands[brandKey]} />
                             ))}
                         </datalist>
                     </div>
