@@ -46,7 +46,7 @@ const resetDatabase = (req, res, next) => {
 
 // add admin user for testing purposes
 const addAdminUser = (req, res) => {
-    const adminPassword = `123!"£qweQWE`
+    const adminPassword = `123!"Â£qweQWE`
     bcrypt.hash(adminPassword, parseInt(process.env.PASSWORD_HASH_SALT_ROUNDS), (err, hash) => {
         usersModel.create({ name: "Administrator", email: "admin@admin.com", password: hash, accessLevel: parseInt(process.env.ACCESS_LEVEL_ADMIN) }, (createError, createData) => {
             if (createData) {

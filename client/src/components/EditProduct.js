@@ -15,6 +15,7 @@ export default class EditProduct extends Component {
         this.state = {
             name: ``,
             brand: ``,
+            brands:{},
             colour: ``,
             category: ``,
             stock: ``,
@@ -29,7 +30,7 @@ export default class EditProduct extends Component {
     componentDidMount() {
         this.inputToFocus.focus()
 
-        axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, { headers: { "authorization": localStorage.token } })
+        axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, {headers: {"authorization": localStorage.token}})
             .then(res => {
                 console.log("Product Data:", res.data)
                 if (res.data) {
@@ -53,6 +54,14 @@ export default class EditProduct extends Component {
                     console.log(`Record not found`)
                 }
             })
+        axios.get(`${SERVER_HOST}/brands`, {headers: {"authorization": localStorage.token}})
+            .then(res => {
+                console.log("Brands Data:", res.data)
+                if (res.data) {
+                    this.setState({brands: res.data})
+                }
+            })
+            .catch(err => console.error("Error fetching brands:", err))
     }
 
     loadImagePreviews = (images) => {
@@ -95,7 +104,7 @@ export default class EditProduct extends Component {
     }
 
     handleFileChange = (e) => {
-        const selectedFiles = Array.from(e.target.files)
+        const selectedFiles = [...e.target.files]
 
         this.setState({ selectedFiles }, () => {
             const previews = selectedFiles.map(file => URL.createObjectURL(file))
@@ -236,22 +245,19 @@ export default class EditProduct extends Component {
 
                     <div>
                         <label htmlFor="brand">Brand</label>
-                        <div className="select-wrapper">
-                            <select
-                                id="brand"
-                                name="brand"
-                                value={this.state.brand}
-                                onChange={this.handleChange}
-                            >
-                                <option value="brand">Select a brand</option>
-                                {["Fender", "Yamaha", "Roland", "Pearl", "Selmer"].map((brand) => (
-                                    <option key={brand} value={brand}>
-                                        {brand}
-                                    </option>
-                                ))}
-                            </select>
-                            <CiCircleChevDown className="select-icon" />
-                        </div>
+                        <input
+                            type="text"
+                            id="brand"
+                            name="brand"
+                            value={this.state.brand}
+                            onChange={this.handleChange}
+                            onBlur={this.handleBlur}
+                        />
+                        <datalist id="brand-options">
+                            {Object.keys(this.state.brands).map((brandKey) => (
+                                <option key={brandKey} value={this.state.brands[brandKey]} />
+                            ))}
+                        </datalist>
                     </div>
 
                     <div>
@@ -335,7 +341,7 @@ export default class EditProduct extends Component {
                     <div className="image-preview-container">
                         {this.state.previewImages.map((img, index) => (
                             <div key={index} className="image-preview-wrapper">
-                                <img src={img} alt="Preview" className="image-preview" />
+                                <img src={img || " "} alt="Preview" className="image-preview" />
                                 <button
                                     type="button"
                                     className="remove-image-button"
