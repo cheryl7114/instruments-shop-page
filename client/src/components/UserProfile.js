@@ -50,6 +50,7 @@ export default class UserProfile extends Component {
     render() {
         const { user } = this.state
         const { match } = this.props
+        console.log("User state in component:", this.state.user)
 
         if (!user || !user.name) {
             return <div>Loading...</div>

@@ -488,6 +488,16 @@ body {
   color: #222;
 }
 
+.error {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+.error ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
 .add-product-container {
   max-width: 600px;
   margin: 50px auto;
