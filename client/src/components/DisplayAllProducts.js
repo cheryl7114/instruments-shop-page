@@ -24,6 +24,7 @@ export default class DisplayAllProducts extends Component {
     }
 
     componentDidMount() {
+        console.log("Component Mounted. Initial State:", this.state)
         axios.get(`${SERVER_HOST}/products`)
             .then(res => {
                 if (res.data) {
@@ -48,20 +49,24 @@ export default class DisplayAllProducts extends Component {
     }
 
     toggleDropdown = () => {
+        console.log("Toggling dropdown:", !this.state.dropDownOpen)
         this.setState(prevState => ({
             dropDownOpen: !prevState.dropDownOpen
         }))
     }
 
     handleSortChange = (sortType) => {
+        console.log("Sorting by:", sortType)
         this.props.handleSortChange(sortType)
     }
 
     handleCategoryChange = (category) => (e) => {
+        console.log(`Category changed to ${category}`)
         this.props.handleCategoryFilter(category, e.target.checked)
     }
 
     handleBrandChange = (brand) => (e) => {
+        console.log(`Category changed to ${brand}`)
         this.props.handleBrandFilter(brand, e.target.checked)
     }
 
@@ -125,14 +130,13 @@ export default class DisplayAllProducts extends Component {
                         </div>
                     </div>
                     <div className="main-products-container">
-                        <div className="sort-container">
-                            <div className="sort-dropdown" onClick={this.toggleDropdown}>
-                                <button className="sort-button">
+                        <button className="sort-button" onClick={this.toggleDropdown}>
+                            <span className="sort-content">
+                                <span className="sort-icon">
                                     {getSortIndicator(dropDownOpen)}
-                                    {/*<CiFilter size={20} /> */}
-                                    Sort By
-                                </button>
-                            </div>
+                                </span>
+                                Sort By
+                            </span>
                             {dropDownOpen && (
                                 <div className="sort-dropdown-content">
                                     <div
@@ -161,7 +165,9 @@ export default class DisplayAllProducts extends Component {
                                     </div>
                                 </div>
                             )}
-                        </div>
+                        </button>
+
+
                         {/*{localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?*/}
                         {/*    <div className="add-new-product">*/}
                         {/*        <title>Add new product</title>*/}
@@ -196,6 +202,7 @@ export default class DisplayAllProducts extends Component {
                         </div>
 
                     </div>
+
                 </div>
             </div >
         )

@@ -28,26 +28,17 @@ export default class AddProduct extends Component {
     }
 
     componentDidMount() {
+        console.log("Component Mounted. Initial State:", this.state)
         this.inputToFocus.focus()
 
         axios.get(`${SERVER_HOST}/brands`)
             .then(res => {
                 if (res.data) {
                     console.log("Fetched brands from API:", res.data)
-                    this.setState({ brands: res.data })  // Assuming API returns { "Yamaha": {}, "Fender": {} }
+                    this.setState({ brands: res.data })
                 }
             })
             .catch(err => console.log("Error fetching brands", err))
-        // axios.get(`${SERVER_HOST}/brands`)
-        //     .then(res => {
-        //         console.log("Fetching brands from:", `${SERVER_HOST}/brands`)
-        //         if (res.data) {
-        //             console.log("Fetched brands from API:", res.data);
-        //
-        //             this.setState({ brands: Object.keys(res.data) })
-        //         }
-        //     })
-        //     .catch(err => console.log("Error fetching brands", err))
     }
 
     handleChange = (e) => {
@@ -56,12 +47,14 @@ export default class AddProduct extends Component {
 
     handleBlur = () => {
         const brand = this.state.brand.trim()
+        console.log("Current brand:", brand);
         if (brand && !this.state.brands.includes(brand)) {
+            console.log("Brand does not exist in brands list, adding:", brand)
             this.setState(prevState => ({
                 brands: {...prevState.brands,
                         [brand]: { id: Object.keys(prevState.brands).length + 1 }}
             }), () => {
-                console.log("Updated brands:", this.state.brands)
+                console.log("Updated brands list:", this.state.brands)
             })
         }
     }
@@ -112,8 +105,6 @@ export default class AddProduct extends Component {
             formData.append("stock", this.state.stock)
             formData.append("price", this.state.price)
 
-
-
             if (this.state.selectedFiles) {
                 for (let i = 0; i < this.state.selectedFiles.length; i++) {
                     formData.append("images", this.state.selectedFiles[i])
@@ -122,11 +113,12 @@ export default class AddProduct extends Component {
 
             axios.post(`${SERVER_HOST}/products`, formData, { headers: { "authorization": localStorage.token, "Content-type": "multipart/form-data" } })
                 .then(res => {
+                    console.log("Server Response:", res.data)
                     if (res.data) {
                         if (res.data.errorMessage) {
-                            console.log(res.data.errorMessage)
+                            console.log("Error:",res.data.errorMessage)
                         } else {
-                            console.log("Product added")
+                            console.log("Product successfully added.")
                             // Set state for redirection and refresh the page after a short delay
                             this.setState({ redirectToDisplayAllProducts: true }, () => {
                                 setTimeout(() => {
@@ -138,6 +130,9 @@ export default class AddProduct extends Component {
                         console.log("Product not added")
                     }
                 })
+                .catch(err => console.log("Error submitting form:", err));
+        } else {
+            console.log("Form validation failed. Fix the errors before submitting.");
         }
     }
 
