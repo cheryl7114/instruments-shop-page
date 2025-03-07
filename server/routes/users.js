@@ -193,7 +193,7 @@ const readAllUsers = (req, res) => {
 
 // fetch user details by ID
 const findUserByID = (req, res) => {
-    usersModel.findById(req.params.id, "name email password accessLevel profilePhotoFilename", (error, data) => {
+    usersModel.findById(req.params.id, "name email password accessLevel profilePhotoFilename deliveryAddress phoneNumber", (error, data) => {
         if (error) {
             console.error("Error while querying user:", error);
             return res.json({ errorMessage: 'Error querying user' });
@@ -209,7 +209,7 @@ const findUserByID = (req, res) => {
                 password: data.password,
                 accessLevel: data.accessLevel,
                 profilePhoto: fileData,
-                address: data.address,
+                deliveryAddress: data.deliveryAddress,
                 phoneNumber: data.phoneNumber
             })
 
