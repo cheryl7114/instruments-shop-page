@@ -18,19 +18,23 @@ const verifyUsersJWTPassword = (req, res, next) => {
 
 // create a new order
 const createNewOrder = (req, res) => {
-    const newOrder = new ordersModel({
-        userId: req.body.userId,
-        userEmail: req.body.userEmail,
-        products: req.body.products,
-        total: req.body.total
-    })
-    newOrder.save((error, data) => {
-        if (error) {
-            res.json({ errorMessage: `Error creating order` })
-        } else {
-            res.json(data)
-        }
-    })
+    try {
+        const newOrder = new ordersModel({
+            ...(req.body.userId && { userId: req.body.userId }),
+            userEmail: req.body.userEmail,
+            products: req.body.products,
+            total: req.body.total
+        })
+        newOrder.save((error, data) => {
+            if (error) {
+                res.json({ errorMessage: `Error creating order` })
+            } else {
+                res.json(data)
+            }
+        })
+    } catch (error) {
+        res.json({ errorMessage: `Error creating order` })
+    }
 }
 
 // get orders for a user
@@ -44,7 +48,7 @@ const getOrdersForUser = (req, res) => {
     })
 }
 
-router.post('/orders', verifyUsersJWTPassword, createNewOrder)
+router.post('/orders', createNewOrder)
 router.get('/orders/user', verifyUsersJWTPassword, getOrdersForUser)
 
 module.exports = router

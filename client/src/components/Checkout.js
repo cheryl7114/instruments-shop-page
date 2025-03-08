@@ -21,6 +21,36 @@ export default class Checkout extends Component {
         }
     }
 
+    componentDidMount() {
+        // First check if the user is logged in
+        const isLoggedIn = localStorage.token &&
+            localStorage.token !== "null" &&
+            localStorage.userId &&
+            localStorage.userId !== "null"
+        console.log("ComponentDidMount - Login status:", isLoggedIn)
+        // Only fetch user details if logged in
+        if (isLoggedIn) {
+            // Use localStorage.userId instead of this.props.match.params.id
+            axios.get(`${SERVER_HOST}/users/${localStorage.userId}`, {
+                headers: { "authorization": localStorage.token }
+            })
+                .then(res => {
+                    console.log("User data fetched:", res.data)
+                    if (res.data && res.data.deliveryAddress && res.data.deliveryAddress.address) {
+                        this.setState({
+                            userHasAddress: true,
+                            deliveryAddress: res.data.deliveryAddress
+                        })
+                    }
+                })
+                .catch(err => {
+                    console.error("Error fetching user data:", err)
+                })
+        } else {
+            console.log("User is a guest, skipping address fetch")
+        }
+    }
+
     handleChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
@@ -66,7 +96,7 @@ export default class Checkout extends Component {
         axios.post(`${SERVER_HOST}/orders`, order, { headers: { "authorization": localStorage.token } })
             .then(res => {
                 if (res.data && res.data._id) {
-                    // clear cart
+                    // clear cart after successful order
                     this.props.clearCart()
 
                     this.setState({
@@ -89,6 +119,12 @@ export default class Checkout extends Component {
 
     render() {
         const { orderComplete, orderID, error } = this.state
+        const isLoggedIn = localStorage.token &&
+            localStorage.token !== "null" &&
+            localStorage.userId &&
+            localStorage.userId !== "null"
+        const isGuest = !isLoggedIn
+        const needsAddress = !this.state.userHasAddress || isGuest
 
         if (orderComplete) {
             return (
@@ -113,7 +149,7 @@ export default class Checkout extends Component {
                 {error && <p className="error">{error}</p>}
 
                 <form onSubmit={this.handleSubmit}>
-                    {!this.state.userHasAddress || localStorage.accessLevel === ACCESS_LEVEL_GUEST ? (
+                    {isGuest && (
                         <>
                             <div className="form-group">
                                 <label>Email</label>
@@ -125,6 +161,10 @@ export default class Checkout extends Component {
                                     required
                                 />
                             </div>
+                        </>
+                    )}
+                    {needsAddress && (
+                        <>
                             <h3>Delivery Address</h3>
                             <div className="form-group">
                                 <label>Street Address</label>
@@ -170,19 +210,15 @@ export default class Checkout extends Component {
                                 />
                             </div>
                         </>
-                    ) : (
-                        <>
-
-                            <div className="order-summary">
-                                <h3>Order Summary</h3>
-                                <p>Total: €{total.toFixed(2)}</p>
-                            </div>
-
-                            <button type="submit" className="green-button">
-                                Place Order
-                            </button>
-                        </>
                     )}
+                    <div className="order-summary">
+                        <h3>Order Summary</h3>
+                        <p>Total: €{total.toFixed(2)}</p>
+                    </div>
+
+                    <button type="submit" className="green-button">
+                        Place Order
+                    </button>
                 </form>
             </div>
         )
