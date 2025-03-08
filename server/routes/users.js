@@ -24,6 +24,14 @@ const verifyUsersJWTPassword = (req, res, next) => {
     })
 }
 
+const checkAdminAccess = (req, res, next) => {
+    if (req.decodedToken.accessLevel >= parseInt(process.env.ACCESS_LEVEL_ADMIN)) {
+        next()
+    } else {
+        res.json({ errorMessage: `User is not an administrator` })
+    }
+}
+
 // verify user's login password
 const verifyUserPassword = (req, res, next) => {
     bcrypt.compare(req.params.password, req.data.password, (err, result) => {
@@ -46,7 +54,7 @@ const resetDatabase = (req, res, next) => {
 
 // add admin user for testing purposes
 const addAdminUser = (req, res) => {
-    const adminPassword = `123!"Â£qweQWE`
+    const adminPassword = `123!"£qweQWE`
     bcrypt.hash(adminPassword, parseInt(process.env.PASSWORD_HASH_SALT_ROUNDS), (err, hash) => {
         usersModel.create({ name: "Administrator", email: "admin@admin.com", password: hash, accessLevel: parseInt(process.env.ACCESS_LEVEL_ADMIN) }, (createError, createData) => {
             if (createData) {
@@ -90,7 +98,6 @@ const checkDuplicateUser = (req, res, next) => {
         return next()
     })
 }
-
 
 // Add new user
 const addNewUser = (req, res) => {
@@ -170,6 +177,7 @@ const readAllUsers = (req, res) => {
 
         data.forEach((user) => {
             let userObject = {
+                _id: user._id,
                 name: user.name,
                 email: user.email,
                 accessLevel: user.accessLevel,
@@ -209,6 +217,7 @@ const findUserByID = (req, res) => {
                 email: data.email,
                 password: data.password,
                 accessLevel: data.accessLevel,
+                profilePhotoFilename: data.profilePhotoFilename,
                 profilePhoto: fileData,
                 deliveryAddress: data.deliveryAddress,
                 phoneNumber: data.phoneNumber
@@ -255,7 +264,25 @@ router.post(`/users/update/:email`, verifyUsersJWTPassword, (req, res) => {
     )
 })
 
+const deleteUser = (req, res) => {
+    usersModel.findByIdAndRemove(req.params.id, (err, data) => {
+        res.json(data)
+    })
+}
 
+// Delete Profile Pic Route
+router.delete(`/users/profile-pic/:filename`, verifyUsersJWTPassword, checkAdminAccess, (req, res) => {
+    const filePath = `${process.env.UPLOADED_FILES_FOLDER}/${req.params.filename}`
+
+    fs.unlink(filePath, (err) => {
+        if (err) {
+            console.error(`Failed to delete image: ${req.params.filename}`, err)
+            return res.status(500).json({ errorMessage: `Failed to delete image` })
+        }
+        console.log(`Image deleted: ${req.params.filename}`)
+        res.json({ message: `Image deleted successfully` })
+    })
+})
 
 const userLogout = (req, res) => {
     res.json({})
@@ -265,7 +292,8 @@ router.post(`/users/reset_user_collection`, resetDatabase, addAdminUser)
 router.post('/users/register', upload.single("profilePhoto"), checkFileUpload, checkFileIsImage, checkDuplicateUser, addNewUser);
 router.post(`/users/login/:email/:password`, checkUserExists, verifyUserPassword, returnUserDetails)
 router.post(`/users/logout`, userLogout)
-router.get(`/users`, verifyUsersJWTPassword, readAllUsers)
+router.get(`/users`, verifyUsersJWTPassword, checkAdminAccess, readAllUsers)
 router.get(`/users/:id`, verifyUsersJWTPassword, findUserByID)
+router.delete(`/users/:id`, verifyUsersJWTPassword, checkAdminAccess, deleteUser)
 
 module.exports = router
