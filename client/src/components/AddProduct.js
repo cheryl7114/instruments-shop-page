@@ -23,8 +23,8 @@ export default class AddProduct extends Component {
             selectedFiles: [],
             previewImages: [],
             errors: {},
+            showModal: false,
             redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_ADMIN,
-            showModal:false
         }
     }
 
