@@ -9,7 +9,8 @@ let ordersSchema = new mongoose.Schema({
             quantity: {type: Number},
             price: {type: Number}
         }],
-        total: {type: Number}
+        total: {type: Number},
+        paypalPaymentID: {type: String, required: true},
     },{
         collection: `orders`
     })
