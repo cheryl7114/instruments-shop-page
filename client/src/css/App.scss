@@ -88,9 +88,10 @@ body {
 
 .orange-button {
   background-color: $orange;
-  width:200px;
+  width:250px;
   display:block;
   margin: 1px auto;
+  border: none;
 
   &:hover {
     opacity: 0.8;
@@ -1019,6 +1020,27 @@ select {
   }
 }
 
+//modal
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items:start;
+}
+
+.modal-content {
+  background: white;
+  margin:50px;
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+}
+
 /* Cart summary section */
 .cart-summary {
   background-color: #f9f9f9;
@@ -1045,7 +1067,6 @@ select {
     cursor: pointer;
     text-align: center;
     text-decoration: none;
-
     &:hover {
       opacity: 0.8;
     }

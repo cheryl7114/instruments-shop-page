@@ -23,7 +23,8 @@ export default class AddProduct extends Component {
             selectedFiles: [],
             previewImages: [],
             errors: {},
-            redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_ADMIN
+            redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_ADMIN,
+            showModal:false
         }
     }
 
@@ -179,24 +180,22 @@ export default class AddProduct extends Component {
 
             axios.post(`${SERVER_HOST}/products`, formData, { headers: { "authorization": localStorage.token, "Content-type": "multipart/form-data" } })
                 .then(res => {
-                    //console.log("Server Response:", res.data)
                     if (res.data) {
                         if (res.data.errorMessage) {
-                            console.log("Error:",res.data.errorMessage)
+                            console.log("Error: ", res.data.errorMessage)
                         } else {
-                            //console.log("Product successfully added.")
-                            // Set state for redirection and refresh the page after a short delay
-                            this.setState({ redirectToDisplayAllProducts: true }, () => {
-                                setTimeout(() => {
-                                    window.location.reload()
-                                }, 100)
-                            })
+                            console.log("Product successfully added.")
+                            this.setState({ showModal: true })
+
+                            setTimeout(() => {
+                                this.setState({ redirectToDisplayAllProducts: true })
+                            }, 10000)
                         }
                     } else {
                         console.log("Product not added")
                     }
                 })
-                .catch(err => console.log("Error submitting form:", err))
+                .catch(err => console.log("Error submitting form:", err));
     }
 
     validateName() {
@@ -369,6 +368,14 @@ export default class AddProduct extends Component {
                         </Link>
                     </div>
                 </form>
+                {this.state.showModal && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h4>Product Added Successfully!</h4>
+                            <button className="orange-button" onClick={() => this.setState({ showModal: false })}>OK</button>
+                        </div>
+                    </div>
+                )}
             </div>
         )
     }
