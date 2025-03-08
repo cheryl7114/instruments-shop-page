@@ -207,10 +207,9 @@ export default class EditProduct extends Component {
         return Number.isInteger(stock) && stock >= 0 // no negative values
     }
 
-
     validatePrice() {
-        const price = parseInt(this.state.price);
-        return Number.isInteger(price) && price >= 0 // no negative values
+        const price = parseFloat(this.state.price)
+        return !isNaN(price) && price >= 0 // no negative values
     }
 
     validate() {
@@ -251,7 +250,6 @@ export default class EditProduct extends Component {
                             name="brand"
                             value={this.state.brand}
                             onChange={this.handleChange}
-                            onBlur={this.handleBlur}
                         />
                         <datalist id="brand-options">
                             {Object.keys(this.state.brands).map((brandKey) => (
