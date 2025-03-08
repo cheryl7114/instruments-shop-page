@@ -28,13 +28,13 @@ export default class AddProduct extends Component {
     }
 
     componentDidMount() {
-        console.log("Component Mounted. Initial State:", this.state)
+        //console.log("Component Mounted. Initial State:", this.state)
         this.inputToFocus.focus()
 
-        axios.get(`${SERVER_HOST}/brands`)
+        axios.get(`${SERVER_HOST}/brands`, {headers: {"authorization": localStorage.token}})
             .then(res => {
                 if (res.data) {
-                    console.log("Fetched brands from API:", res.data)
+                    //console.log("Fetched brands from API:", res.data)
                     this.setState({ brands: res.data })
                 }
             })
@@ -98,23 +98,17 @@ export default class AddProduct extends Component {
 
             if (e.target.name === "brand" && value) {
                 if (!this.state.brands.hasOwnProperty(value)) {
-                    console.log("Brand does not exist in brands list, adding:", value)
+                    //console.log("Add to brand list:", value)
                     this.setState(prevState => ({
                         brands: {
                             ...prevState.brands,
                             [value]: { id: Object.keys(prevState.brands).length + 1 }
                         }
-                    }), () => {
-                        console.log("Updated brands list:", this.state.brands)
-                    })
+                    }))
                 }
             }
 
-            this.setState({ errors }, () => {
-                if (Object.keys(errors).length > 0) {
-                    console.log("Validation failed. Fix the errors before submitting: ", errors)
-                }
-            })
+            this.setState({ errors })
             return Object.keys(errors).length === 0
         })
     }
@@ -160,9 +154,10 @@ export default class AddProduct extends Component {
 
         if (Object.keys(errors).length > 0) {
             this.setState({ errors })
+            return
         }
 
-        console.log("Submitting form...")
+        //console.log("Submitting form...")
 
         let formData = new FormData()
         this.setState({ wasSubmittedAtLeastOnce: true })
@@ -184,12 +179,12 @@ export default class AddProduct extends Component {
 
             axios.post(`${SERVER_HOST}/products`, formData, { headers: { "authorization": localStorage.token, "Content-type": "multipart/form-data" } })
                 .then(res => {
-                    console.log("Server Response:", res.data)
+                    //console.log("Server Response:", res.data)
                     if (res.data) {
                         if (res.data.errorMessage) {
                             console.log("Error:",res.data.errorMessage)
                         } else {
-                            console.log("Product successfully added.")
+                            //console.log("Product successfully added.")
                             // Set state for redirection and refresh the page after a short delay
                             this.setState({ redirectToDisplayAllProducts: true }, () => {
                                 setTimeout(() => {
