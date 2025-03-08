@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { ACCESS_LEVEL_GUEST, SERVER_HOST } from "../config/global_constants"
+import { SANDBOX_CLIENT_ID, SERVER_HOST } from "../config/global_constants"
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js"
 
 export default class Checkout extends Component {
     constructor(props) {
@@ -14,15 +15,25 @@ export default class Checkout extends Component {
                 postcode: '',
                 phone: ''
             },
+            isLoggedIn: localStorage.token && localStorage.token !== "null",
             userHasAddress: false,
             orderComplete: false,
+            proceedPayment: false,
             total: 0,
             error: ''
         }
     }
 
     componentDidMount() {
+        // First validate if there are items in cart
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || []
+        if (!cartItems.length) {
+            // Redirect to cart page if no items
+            window.location.href = '/Cart'
+            return
+        }
         // First check if the user is logged in
+        // since guest users don't have a local storage token
         const isLoggedIn = localStorage.token &&
             localStorage.token !== "null" &&
             localStorage.userId &&
@@ -68,72 +79,147 @@ export default class Checkout extends Component {
     }
 
     calculateTotal() {
-        const cartItems = JSON.parse(localStorage.getItem('cartItems'))
-        return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0) + 5
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || []
+        if (!cartItems.length) {
+            return 0
+        }
+        
+        const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0)
+        const shippingCost = subtotal > 0 ? 5 : 0;
+
+        return subtotal + shippingCost
     }
 
-    handleSubmit = (e) => {
+    handleProceedToPayment = (e) => {
         e.preventDefault()
 
-        const cartItems = JSON.parse(localStorage.getItem('cartItems'))
+        if (this.validateForm()) {
+            this.setState({
+                proceedPayment: true,
+                error: ''
+            })
+        }
+    }
 
-        const products = cartItems.map(item => ({
-            productID: item._id,
-            quantity: item.quantity,
-            price: item.price
-        }))
+    validateForm = () => {
+        const { email, deliveryAddress } = this.state
+        const isLoggedIn = localStorage.token && localStorage.token !== "null"
 
-        const total = this.calculateTotal()
-
-        let order = {
-            userId: localStorage.getItem('userId'),
-            userEmail: localStorage.userId ? localStorage.email : this.state.email,
-            deliveryAddress: this.state.deliveryAddress,
-            products: products,
-            total: total
+        // Check email for guest users
+        if (!isLoggedIn && !email) {
+            this.setState({ error: "Please enter your email address." });
+            return false
         }
 
-        axios.post(`${SERVER_HOST}/orders`, order, { headers: { "authorization": localStorage.token } })
-            .then(res => {
-                if (res.data && res.data._id) {
-                    // clear cart after successful order
-                    this.props.clearCart()
+        // Check delivery address
+        if (!deliveryAddress.address || !deliveryAddress.city ||
+            !deliveryAddress.postcode || !deliveryAddress.phone) {
+            this.setState({ error: "Please complete all delivery address fields." })
+            return false
+        }
 
-                    this.setState({
-                        orderComplete: true,
-                        orderID: res.data._id
-                    })
-                } else if (res.data && res.data.errorMessage) {
-                    this.setState({
-                        error: res.data.errorMessage
-                    })
+        return true
+    }
+
+    proceedPayment = () => {
+        this.setState({
+            proceedPayment: true
+        })
+    }
+
+    createOrder = (data, actions) => {
+        const total = this.calculateTotal()
+
+        return actions.order.create({
+            purchase_units: [{
+                description: "Your order from Our Store",
+                amount: {
+                    currency_code: "EUR",
+                    value: total.toFixed(2)
                 }
-            })
-            .catch(err => {
-                console.error(err)
-                this.setState({
-                    error: 'Error submitting order: ' + err.message
+            }]
+        })
+    }
+
+    onApprove = (data, actions) => {
+        return actions.order.capture().then(details => {
+            console.log("Order approved:", details)
+
+            const cartItems = JSON.parse(localStorage.getItem('cartItems'))
+
+            const products = cartItems.map(item => ({
+                productID: item._id,
+                quantity: item.quantity,
+                price: item.price
+            }))
+
+            const total = this.calculateTotal()
+
+            // create order object
+            const order = {
+                userId: localStorage.getItem('userId'),
+                email: localStorage.userId ? localStorage.email : this.state.email,
+                deliveryAddress: this.state.deliveryAddress,
+                products: products,
+                total: total,
+                paypalPaymentID: data.orderID
+            }
+
+            axios.post(`${SERVER_HOST}/orders`, order, { headers: { "authorization": localStorage.token } })
+                .then(res => {
+                    if (res.data && res.data._id) {
+                        // clear cart after successful order
+                        this.props.clearCart()
+
+                        this.setState({
+                            orderComplete: true,
+                            orderID: res.data._id
+                        })
+                    } else if (res.data && res.data.errorMessage) {
+                        this.setState({
+                            error: res.data.errorMessage
+                        })
+                    }
                 })
-            })
+                .catch(err => {
+                    console.error(err)
+                    this.setState({
+                        error: 'Error submitting order: ' + err.message
+                    })
+                })
+        })
+    }
+
+    onError = (err) => {
+        console.error("PayPal error:", err);
+        this.setState({
+            error: "There was a problem processing your payment. Please try again."
+        })
+    }
+
+    onCancel = () => {
+        console.log("Payment cancelled by user");
+        this.setState({
+            error: "Payment was cancelled. You can try again when you're ready."
+        })
     }
 
     render() {
-        const { orderComplete, orderID, error } = this.state
-        const isLoggedIn = localStorage.token &&
-            localStorage.token !== "null" &&
-            localStorage.userId &&
-            localStorage.userId !== "null"
+        const { orderComplete, orderID, error, userHasAddress, isLoggedIn } = this.state
         const isGuest = !isLoggedIn
-        const needsAddress = !this.state.userHasAddress || isGuest
+        const needsAddress = !userHasAddress || isGuest
 
         if (orderComplete) {
             return (
                 <div className="checkout-success">
+                    <div className="fa-check-wrapper">
+                        <i className="fa-solid fa-circle-check"></i>
+                    </div>
                     <h2>Thank You For Your Order!</h2>
                     <p>Your order has been placed successfully.</p>
                     <p>Order ID: {orderID}</p>
                     <button
-                        className="blue-button"
+                        className="continue-shopping"
                         onClick={() => window.location.href = '/DisplayAllProducts'}>
                         Continue Shopping
                     </button>
@@ -148,7 +234,7 @@ export default class Checkout extends Component {
                 <h2>Checkout</h2>
                 {error && <p className="error">{error}</p>}
 
-                <form onSubmit={this.handleSubmit}>
+                <form>
                     {isGuest && (
                         <>
                             <div className="form-group">
@@ -165,7 +251,6 @@ export default class Checkout extends Component {
                     )}
                     {needsAddress && (
                         <>
-                            <h3>Delivery Address</h3>
                             <div className="form-group">
                                 <label>Street Address</label>
                                 <input
@@ -209,16 +294,41 @@ export default class Checkout extends Component {
                                     required
                                 />
                             </div>
+                            <button
+                                type="button"
+                                className="continue-button"
+                                onClick={this.handleProceedToPayment}>
+                                Continue to Payment
+                            </button>
                         </>
                     )}
-                    <div className="order-summary">
-                        <h3>Order Summary</h3>
-                        <p>Total: €{total.toFixed(2)}</p>
+                    <div className={`paypal-container ${!this.state.proceedPayment ? 'disabled' : ''}`}>
+                        <div className="order-summary">
+                            <h3>Order Summary</h3>
+                            <p>Total: €{total.toFixed(2)}</p>
+                        </div>
+                        {!this.state.proceedPayment && (
+                            <div className="payment-message">
+                                <p>Please complete the form above and click "Continue to Payment" to proceed</p>
+                            </div>
+                        )}
+                        {(this.state.proceedPayment || (isLoggedIn && userHasAddress)) && (
+                            <PayPalScriptProvider options={{
+                                currency: "EUR",
+                                "client-id": SANDBOX_CLIENT_ID,
+                                components: "buttons,funding-eligibility"
+                            }}>
+                                <PayPalButtons
+                                    style={{ layout: "horizontal", tagline: false, shape: "pill", label: "pay" }}
+                                    fundingSource={undefined}
+                                    createOrder={this.createOrder}
+                                    onApprove={this.onApprove}
+                                    onError={this.onError}
+                                    onCancel={this.onCancel}
+                                />
+                            </PayPalScriptProvider>
+                        )}
                     </div>
-
-                    <button type="submit" className="green-button">
-                        Place Order
-                    </button>
                 </form>
             </div>
         )

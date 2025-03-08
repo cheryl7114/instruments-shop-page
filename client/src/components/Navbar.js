@@ -11,8 +11,8 @@ export default class Navbar extends React.Component {
   }
 
   render() {
-    const { cartItemCount = 0 } = this.props;
-    const profilePhoto = localStorage.profilePhoto !== "null" ? localStorage.profilePhoto : null;
+    const { cartItemCount = 0 } = this.props
+    const profilePhoto = localStorage.profilePhoto !== "null" ? localStorage.profilePhoto : null
 
     return (
         <nav className="navbar">
