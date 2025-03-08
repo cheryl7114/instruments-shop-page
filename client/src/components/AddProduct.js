@@ -49,38 +49,43 @@ export default class AddProduct extends Component {
         e.persist()
 
         this.setState({ [e.target.name]: e.target.value.trim() }, () => {
-            let errors = { ...this.state.errors }
+            let errors = {}
             const value = this.state[e.target.name]
 
-            // Validation for empty fields
             if (!value) {
                 errors[e.target.name] = "* This field must not be blank."
             } else {
                 switch (e.target.name) {
                     case "name":
+                        if (!this.validateName()) {
+                            errors[e.target.name] = "* Can only contain letters, numbers, and spaces."
+                        } else {
+                            delete errors[e.target.name]
+                        }
+                        break
                     case "brand":
-                        if (!/^[A-Za-z0-9 ]+$/.test(value)) {
+                        if (!this.validateBrand()) {
                             errors[e.target.name] = "* Can only contain letters, numbers, and spaces."
                         } else {
                             delete errors[e.target.name]
                         }
                         break
                     case "colour":
-                        if (!/^[A-Za-z]+$/.test(value)) {
-                            errors[e.target.name] = "* Can only contain letters."
+                        if (!this.validateColour()) {
+                            errors[e.target.name] = "* Can only contain letters and spaces."
                         } else {
                             delete errors[e.target.name]
                         }
                         break
                     case "stock":
-                        if (!Number.isInteger(Number(value)) || Number(value) < 0) {
+                        if (!this.validateStock()) {
                             errors[e.target.name] = "* Must be a non-negative integer."
                         } else {
                             delete errors[e.target.name]
                         }
                         break
                     case "price":
-                        if (isNaN(Number(value)) || Number(value) < 0) {
+                        if (!this.validatePrice()) {
                             errors[e.target.name] = "* Must be a non-negative number."
                         } else {
                             delete errors[e.target.name]
@@ -106,8 +111,11 @@ export default class AddProduct extends Component {
             }
 
             this.setState({ errors }, () => {
-                console.log(`Error on ${e.target.name} field: `, errors)
+                if (Object.keys(errors).length > 0) {
+                    console.log("Validation failed. Fix the errors before submitting: ", errors)
+                }
             })
+            return Object.keys(errors).length === 0
         })
     }
 
@@ -117,10 +125,11 @@ export default class AddProduct extends Component {
         const updatedFiles = [...this.state.selectedFiles, ...selectedFiles].filter(file => file instanceof File)
         const newPreviews = selectedFiles.map(file => URL.createObjectURL(file))
 
-        this.setState({
+        this.setState(prevState => ({
             selectedFiles: updatedFiles,
-            previewImages: [...this.state.previewImages, ...newPreviews]
-        })
+            previewImages: [...prevState.previewImages, ...newPreviews],
+            errors: { ...prevState.errors, images: updatedFiles.length > 0 ? undefined : "* Must upload at least one photo." }
+        }))
     }
 
     handleRemoveImage = (index) => {
@@ -141,8 +150,16 @@ export default class AddProduct extends Component {
     handleSubmit = (e) => {
         e.preventDefault()
 
-        if (!this.validate()) {
-            return
+        let errors={}
+
+        if (this.state.selectedFiles.length === 0) {
+            errors.images = "* Must upload at least one photo."
+        }else {
+            delete errors.images
+        }
+
+        if (Object.keys(errors).length > 0) {
+            this.setState({ errors })
         }
 
         console.log("Submitting form...")
@@ -198,14 +215,9 @@ export default class AddProduct extends Component {
     }
 
     validateColour() {
-        const pattern = /^[A-Za-z]+$/ // only letters (red, blue, etc.)
+        const pattern = /^[A-Za-z ]+$/ // only letters and spaces (red, blue, etc.)
         return pattern.test(String(this.state.colour).trim())
     }
-
-    // validateCategory() {
-    //     const pattern = /^[A-Za-z]+$/ // only letters (guitar, piano, etc.)
-    //     return pattern.test(String(this.state.category).trim())
-    // }
 
     validateStock() {
         const stock = parseInt(this.state.stock)
@@ -214,37 +226,7 @@ export default class AddProduct extends Component {
 
     validatePrice() {
         const price = parseFloat(this.state.price)
-        return !isNaN(price) && price >= 0 // no negative values
-    }
-
-    validate() {
-        let errors = {}
-
-        if (!this.validateName()) {
-            errors.name = "* can only contain letters, numbers, and spaces."
-        }
-        if (!this.validateBrand()) {
-            errors.brand = "* can only contain letters, numbers, and spaces."
-        }
-        if (!this.validateColour()) {
-            errors.colour = "* can only contain letters."
-        }
-        if (!this.validateStock()) {
-            errors.stock = "* must be a non-negative integer."
-        }
-        if (!this.validatePrice()) {
-            errors.price = "* must be a non-negative integer."
-        }
-        if (this.state.selectedFiles.length === 0) {
-            errors.images = "* must upload at least one photo."
-        }
-
-        this.setState({ errors }, () => {
-            if (Object.keys(errors).length > 0) {
-                console.log("Validation failed. Fix the errors before submitting: ", errors)
-            }
-        })
-        return Object.keys(errors).length === 0 // Returns true if no errors
+        return !isNaN(price) && price >= 0 // Allows decimals for currency
     }
 
     render() {
