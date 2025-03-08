@@ -182,20 +182,20 @@ export default class AddProduct extends Component {
                 .then(res => {
                     if (res.data) {
                         if (res.data.errorMessage) {
-                            console.log("Error: ", res.data.errorMessage)
+                            console.log("Error:", res.data.errorMessage)
                         } else {
                             console.log("Product successfully added.")
-                            this.setState({ showModal: true })
-
-                            setTimeout(() => {
-                                this.setState({ redirectToDisplayAllProducts: true })
-                            }, 10000)
+                            this.setState({ showModal: true }, () => {
+                                setTimeout(() => {
+                                    this.setState({ redirectToDisplayAllProducts: true })
+                                }, 10000)
+                            })
                         }
                     } else {
                         console.log("Product not added")
                     }
                 })
-                .catch(err => console.log("Error submitting form:", err));
+                .catch(err => console.log("Error submitting form:", err))
     }
 
     validateName() {
@@ -372,7 +372,7 @@ export default class AddProduct extends Component {
                     <div className="modal-overlay">
                         <div className="modal-content">
                             <h4>Product Added Successfully!</h4>
-                            <button className="orange-button" onClick={() => this.setState({ showModal: false })}>OK</button>
+                            <button className="orange-button" onClick={() => {this.setState({ showModal: false, redirectToDisplayAllProducts: true })}}>OK</button>
                         </div>
                     </div>
                 )}
