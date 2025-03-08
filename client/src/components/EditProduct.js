@@ -24,6 +24,7 @@ export default class EditProduct extends Component {
             selectedFiles: [],
             previewImages: [],
             errors:{},
+            showModal:false,
             redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_NORMAL_USER
         }
     }
@@ -278,15 +279,15 @@ export default class EditProduct extends Component {
                         if (res.data.errorMessage) {
                             console.log(res.data.errorMessage)
                         } else {
-                            console.log(`Record updated`)
-                            this.setState({ redirectToDisplayAllProducts: true }, () => {
-                                setTimeout(() => {
-                                    window.location.reload()
-                                }, 100)
-                            })
+                            console.log(`Product data updated.`)
+                            this.setState({ showModal: true })
+
+                            setTimeout(() => {
+                                this.setState({ redirectToDisplayAllProducts: true })
+                            }, 10000)
                         }
                     } else {
-                        console.log(`Record not updated`)
+                        console.log(`Product record not updated.`)
                     }
                 })
         //}
@@ -467,6 +468,14 @@ export default class EditProduct extends Component {
                         </Link>
                     </div>
                 </form>
+                {this.state.showModal && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h4>Product Edited Successfully!</h4>
+                            <button className="orange-button" onClick={() => {this.setState({ showModal: false, redirectToDisplayAllProducts: true })}}>OK</button>
+                        </div>
+                    </div>
+                )}
             </div>
         )
     }
