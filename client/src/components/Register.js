@@ -138,7 +138,7 @@ export default class Register extends Component {
                         <input
                             name="name"
                             type="text"
-                            placeholder="*Name"
+                            placeholder="*Username"
                             value={this.state.name}
                             onChange={this.handleChange}
                         />
