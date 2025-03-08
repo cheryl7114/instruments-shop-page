@@ -77,19 +77,20 @@ const checkFileIsImage = (req, res, next) => {
     return next()
 }
 
-// check if user does not already exists
+// check if user does not already exist
 const checkDuplicateUser = (req, res, next) => {
     // If a user with this email does not already exist, then create new user
-    usersModel.findOne({ email: req.params.email }, (uniqueError, uniqueData) => {
+    usersModel.findOne({ email: req.body.email }, (uniqueError, uniqueData) => {
         if (uniqueData) {
-            res.json({ errorMessage: `User already exists` })
+            return res.json({ errorMessage: `User already exists` })
         }
         if (uniqueError) {
-            res.json({ errorMessage: `Error checking for duplicate user` })
+            return res.json({ errorMessage: `Error checking for duplicate user` })
         }
         return next()
     })
 }
+
 
 // Add new user
 const addNewUser = (req, res) => {
