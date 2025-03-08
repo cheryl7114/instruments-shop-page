@@ -21,9 +21,10 @@ const createNewOrder = (req, res) => {
     try {
         const newOrder = new ordersModel({
             ...(req.body.userId && { userId: req.body.userId }),
-            userEmail: req.body.userEmail,
+            email: req.body.email,
             products: req.body.products,
-            total: req.body.total
+            total: req.body.total,
+            paypalPaymentID: req.body.paypalPaymentID
         })
         newOrder.save((error, data) => {
             if (error) {
