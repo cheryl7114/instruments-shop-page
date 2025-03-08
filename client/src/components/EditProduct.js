@@ -23,11 +23,14 @@ export default class EditProduct extends Component {
             images: [],
             selectedFiles: [],
             previewImages: [],
+            errors:{},
             redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_NORMAL_USER
         }
     }
 
     componentDidMount() {
+        //console.log("Product ID:", this.props.match.params.id)
+        //console.log("Component Mounted. Initial State:", this.state)
         this.inputToFocus.focus()
 
         axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, {headers: {"authorization": localStorage.token}})
@@ -46,7 +49,7 @@ export default class EditProduct extends Component {
                             price: res.data.price,
                             images: res.data.images || [] // Ensure images is always an array
                         }, () => {
-                            console.log("Images State:", this.state.images) // Debugging line
+                            //console.log("Images State:", this.state.images) // Debugging line
                             this.loadImagePreviews(this.state.images)
                         })
                     }
@@ -54,14 +57,28 @@ export default class EditProduct extends Component {
                     console.log(`Record not found`)
                 }
             })
+            .catch(err => {
+                    console.error("Failed to fetch product:", err)
+                    this.setState({ redirectToDisplayAllProducts: true })
+                })
+
         axios.get(`${SERVER_HOST}/brands`, {headers: {"authorization": localStorage.token}})
             .then(res => {
-                console.log("Brands Data:", res.data)
+                //console.log("Brands Data:", res.data)
                 if (res.data) {
-                    this.setState({brands: res.data})
+                    this.setState({ brands: res.data })
                 }
             })
-            .catch(err => console.error("Error fetching brands:", err))
+            .catch(err => {
+                if (err.response && err.response.status === 404) {
+                    console.warn("Brands API returned 404 - No brands found.")
+                    this.setState({ brands: [] })
+                } else {
+                    console.error("Error fetching brands:", err)
+                }
+            })
+        //console.log("SERVER_HOST:", SERVER_HOST)
+        //console.log("Fetching brands from:", `${SERVER_HOST}/brands`)
     }
 
     loadImagePreviews = (images) => {
@@ -74,7 +91,7 @@ export default class EditProduct extends Component {
             return
         }
 
-        console.log("Loading previews for images:", images) // Debugging
+        //console.log("Loading previews for images:", images) // Debugging
 
         // Extract filenames from image objects
         const filenames = images.map(img => img.filename)
@@ -94,7 +111,7 @@ export default class EditProduct extends Component {
         )
 
         Promise.all(previewPromises).then(previews => {
-            console.log("Loaded image previews:", previews) // Debugging
+            //console.log("Loaded image previews:", previews) // Debugging
             this.setState({ previewImages: previews.filter(img => img !== null) })
         })
     }
@@ -103,13 +120,93 @@ export default class EditProduct extends Component {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    handleFileChange = (e) => {
-        const selectedFiles = [...e.target.files]
+    handleBlur = (e) => {
+        e.persist()
 
-        this.setState({ selectedFiles }, () => {
-            const previews = selectedFiles.map(file => URL.createObjectURL(file))
-            this.setState({ previewImages: [...this.state.previewImages, ...previews] })
+        this.setState({ [e.target.name]: e.target.value.trim() }, () => {
+            let errors = {}
+            const value = this.state[e.target.name]
+
+            if (!value) {
+                errors[e.target.name] = "* This field must not be blank."
+            } else {
+                switch (e.target.name) {
+                    case "name":
+                        if (!this.validateName()) {
+                            errors[e.target.name] = "* Can only contain letters, numbers, and spaces."
+                        } else {
+                            delete errors[e.target.name]
+                        }
+                        break
+                    case "brand":
+                        if (!this.validateBrand()) {
+                            errors[e.target.name] = "* Can only contain letters, numbers, and spaces."
+                        } else {
+                            delete errors[e.target.name]
+                        }
+                        break
+                    case "colour":
+                        if (!this.validateColour()) {
+                            errors[e.target.name] = "* Can only contain letters and spaces."
+                        } else {
+                            delete errors[e.target.name]
+                        }
+                        break
+                    case "stock":
+                        if (!this.validateStock()) {
+                            errors[e.target.name] = "* Must be a non-negative integer."
+                        } else {
+                            delete errors[e.target.name]
+                        }
+                        break
+                    case "price":
+                        if (!this.validatePrice()) {
+                            errors[e.target.name] = "* Must be a non-negative number."
+                        } else {
+                            delete errors[e.target.name]
+                        }
+                        break
+                    default:
+                        break
+                }
+            }
+
+            if (e.target.name === "brand" && value) {
+                if (!this.state.brands.hasOwnProperty(value)) {
+                    console.log("Brand does not exist in brands list, adding:", value)
+                    this.setState(prevState => ({
+                        brands: {
+                            ...prevState.brands,
+                            [value]: { id: Object.keys(prevState.brands).length + 1 }
+                        }
+                    }), () => {
+                        console.log("Updated brands list:", this.state.brands)
+                    })
+                }
+            }
+
+            this.setState({ errors }, () => {
+                if (Object.keys(errors).length > 0) {
+                    console.log("Validation failed. Fix the errors before submitting: ", errors)
+                }
+            })
+            return Object.keys(errors).length === 0
         })
+    }
+
+    handleFileChange = (e) => {
+        const newFiles = [...e.target.files]
+        const uniqueFiles = newFiles.filter(file => !this.state.selectedFiles.some(f => f.name === file.name))
+
+        if (uniqueFiles.length) {
+            this.setState(prevState => ({
+                selectedFiles: [...prevState.selectedFiles, ...uniqueFiles],
+                previewImages: [...prevState.previewImages, ...uniqueFiles.map(file => URL.createObjectURL(file))],
+                errors: { ...prevState.errors, images: undefined }
+            }), () => {
+                console.log("Updated selectedFiles state:", this.state.selectedFiles)
+            })
+        }
     }
 
     handleRemoveImage = (index) => {
@@ -138,11 +235,24 @@ export default class EditProduct extends Component {
     handleSubmit = (e) => {
         e.preventDefault()
 
+        let errors={}
+
+        if (this.state.selectedFiles.length === 0 && this.state.images.length === 0) {
+            errors.images = "* Must upload at least one photo."
+        }else {
+            delete errors.images
+        }
+
+        if (Object.keys(errors).length > 0) {
+            this.setState({ errors })
+            return
+        }
+
         let formData = new FormData()
         this.setState({ wasSubmittedAtLeastOnce: true })
-        const formInputsState = this.validate()
+        //const formInputsState = this.validate()
 
-        if (Object.keys(formInputsState).every(index => formInputsState[index])) {
+        //if (Object.keys(formInputsState).every(index => formInputsState[index])) {
             formData.append("name", this.state.name)
             formData.append("brand", this.state.brand)
             formData.append("colour", this.state.colour)
@@ -179,7 +289,7 @@ export default class EditProduct extends Component {
                         console.log(`Record not updated`)
                     }
                 })
-        }
+        //}
     }
 
     validateName() {
@@ -193,13 +303,8 @@ export default class EditProduct extends Component {
     }
 
     validateColour() {
-        const pattern = /^[A-Za-z]+$/ // only letters (red, blue, etc.)
-        return pattern.test(String(this.state.colour).trim());
-    }
-
-    validateCategory() {
-        const pattern = /^[A-Za-z]+$/ // only letters (guitar, piano, etc.)
-        return pattern.test(String(this.state.category).trim());
+        const pattern = /^[A-Za-z ]+$/ // only letters and spaces(red, blue, etc.)
+        return pattern.test(String(this.state.colour).trim())
     }
 
     validateStock() {
@@ -210,17 +315,6 @@ export default class EditProduct extends Component {
     validatePrice() {
         const price = parseFloat(this.state.price)
         return !isNaN(price) && price >= 0 // no negative values
-    }
-
-    validate() {
-        return {
-            name: this.validateName(),
-            brand: this.validateBrand(),
-            colour: this.validateColour(),
-            category: this.validateCategory(),
-            stock: this.validateStock(),
-            price: this.validatePrice(),
-        }
     }
 
     render() {
@@ -238,8 +332,10 @@ export default class EditProduct extends Component {
                             name="name"
                             value={this.state.name}
                             onChange={this.handleChange}
-                            ref={(input) => { this.inputToFocus = input; }}
+                            onBlur={this.handleBlur}
+                            ref={(input) => { this.inputToFocus = input }}
                         />
+                        {this.state.errors.name && <div className="error">{this.state.errors.name}</div>}
                     </div>
 
                     <div>
@@ -250,12 +346,14 @@ export default class EditProduct extends Component {
                             name="brand"
                             value={this.state.brand}
                             onChange={this.handleChange}
+                            onBlur={this.handleBlur}
                         />
                         <datalist id="brand-options">
                             {Object.keys(this.state.brands).map((brandKey) => (
                                 <option key={brandKey} value={this.state.brands[brandKey]} />
                             ))}
                         </datalist>
+                        {this.state.errors.brand && <div className="error">{this.state.errors.brand}</div>}
                     </div>
 
                     <div>
@@ -266,7 +364,9 @@ export default class EditProduct extends Component {
                             name="colour"
                             value={this.state.colour}
                             onChange={this.handleChange}
+                            onBlur={this.handleBlur}
                         />
+                        {this.state.errors.colour && <div className="error">{this.state.errors.colour}</div>}
                     </div>
 
                     <div>
@@ -277,6 +377,7 @@ export default class EditProduct extends Component {
                                 name="category"
                                 value={this.state.category}
                                 onChange={this.handleChange}
+                                onBlur={this.handleBlur}
                             >
                                 <option value="category">Select a category</option>
                                 {["Guitar", "Piano", "Trumpet", "Saxophone", "Drums", "Violin"].map((category) => (
@@ -287,6 +388,7 @@ export default class EditProduct extends Component {
                                 </select>
                             <CiCircleChevDown className="select-icon" />
                         </div>
+                        {this.state.errors.category && <div className="error">{this.state.errors.category}</div>}
                     </div>
 
                     <div>
@@ -297,8 +399,10 @@ export default class EditProduct extends Component {
                             name="stock"
                             value={this.state.stock}
                             onChange={this.handleChange}
+                            onBlur={this.handleBlur}
                             min="0"
                         />
+                        {this.state.errors.stock && <div className="error">{this.state.errors.stock}</div>}
                     </div>
 
                     <div>
@@ -309,9 +413,11 @@ export default class EditProduct extends Component {
                             name="price"
                             value={this.state.price}
                             onChange={this.handleChange}
+                            onBlur={this.handleBlur}
                             min="0"
                             step="0.01"
                         />
+                        {this.state.errors.price && <div className="error">{this.state.errors.price}</div>}
                     </div>
 
                     <div className="file-upload-container">
@@ -322,6 +428,7 @@ export default class EditProduct extends Component {
                                 id="file-upload"
                                 multiple
                                 onChange={this.handleFileChange}
+                                onBlur={this.handleBlur}
                             />
                             <label htmlFor="file-upload" className="custom-file-label">
                                 Click to upload
@@ -333,6 +440,7 @@ export default class EditProduct extends Component {
                                 {this.state.selectedFiles.length} file(s) selected
                             </div>
                         )}
+                        {this.state.errors.images && <div className="error">{this.state.errors.images}</div>}
                     </div>
 
                     {/* Image Previews */}
