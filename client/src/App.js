@@ -11,10 +11,12 @@ import Logout from "./components/Logout"
 import AddProduct from "./components/AddProduct"
 import EditProduct from "./components/EditProduct"
 import DeleteProduct from "./components/DeleteProduct"
+import DeleteCustomer from "./components/DeleteCustomer"
 import Cart from "./components/Cart"
 import DisplayAllProducts from "./components/DisplayAllProducts"
 import ProductDetails from "./components/ProductDetails"
 import UserProfile from "./components/UserProfile"
+import ViewCustomers from "./components/ViewCustomers"
 import LoggedInRoute from "./components/LoggedInRoute"
 import Checkout from "./components/Checkout"
 
@@ -219,6 +221,7 @@ export default class App extends Component {
                         <LoggedInRoute exact path="/AddProduct" component={AddProduct} />
                         <LoggedInRoute exact path="/EditProduct/:id" component={EditProduct} />
                         <LoggedInRoute exact path="/DeleteProduct/:id" component={DeleteProduct} />
+                        <LoggedInRoute exact path="/DeleteCustomer/:id" component={DeleteCustomer} />
                         <Route exact path="/Cart" render={(props) =>
                             <Cart
                                 {...props}
@@ -235,6 +238,7 @@ export default class App extends Component {
                             />
                         } />
                         <LoggedInRoute path="/UserProfile/:id" component={UserProfile} />
+                        <LoggedInRoute path="/ViewCustomers/" component={ViewCustomers} />
                         {/* passing filtered and sortedproducts to DisplayAllProducts */}
                         <Route exact path="/DisplayAllProducts" render={(props) =>
                             <DisplayAllProducts

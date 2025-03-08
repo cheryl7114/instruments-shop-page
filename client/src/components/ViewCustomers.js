@@ -1,6 +1,8 @@
-import React, { Component } from "react";
-import axios from "axios";
-import { SERVER_HOST } from "../config/global_constants";
+import React, { Component } from "react"
+import axios from "axios"
+import { SERVER_HOST } from "../config/global_constants"
+import {CiTrash} from "react-icons/ci"
+import {Link} from "react-router-dom"
 
 export default class ViewCustomers extends Component {
     constructor(props) {
@@ -44,6 +46,7 @@ export default class ViewCustomers extends Component {
                                 <th>City</th>
                                 <th>Postcode</th>
                                 <th>Phone Number</th>
+                                <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -61,6 +64,12 @@ export default class ViewCustomers extends Component {
                                         <td>{user.deliveryAddress?.city ? user.deliveryAddress.city : "Not available"}</td>
                                         <td>{user.deliveryAddress?.postcode ? user.deliveryAddress.postcode : "Not available"}</td>
                                         <td>{user.phoneNumber ? user.phoneNumber : "Not available"}</td>
+                                        <td>
+                                            {/*{user.id ? user.id: "No id"}*/}
+                                            <Link className="delete-button" to={`/DeleteCustomer/${user._id}`}>
+                                                <CiTrash size={25} />
+                                            </Link>
+                                        </td>
                                     </tr>
                                 ) : null
                             ))}
