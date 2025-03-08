@@ -299,6 +299,10 @@ body {
 .sidebar-with-content {
   display: flex;
   margin-top: 40px;
+  overflow: hidden;
+  border-radius: 20px;
+  border:none;
+  box-shadow: 2px 6px 24px rgba(0, 0, 0, 0.5)
 }
 
 .sidebar {
@@ -306,7 +310,7 @@ body {
   max-width: 200px;
   background: $orange;
   padding: 15px;
-  border-radius: 8px;
+  //border-radius: 8px;
 
   h2 {
     padding: 10px;
@@ -319,21 +323,23 @@ body {
   }
 
   .sidebar-choices {
-    display: block; // Ensures the links behave like <p> elements (full-width clickable)
-    margin: 10px 0; // Adds spacing between links
-    padding: 8px 12px; // Provides comfortable padding
-    border-radius: 5px;
+    display: block;
+    margin: 10px 0;
+    padding: 8px 12px;
+    border-radius: 20px;
     transition: background 0.3s ease, color 0.3s ease;
-    text-decoration: none; // Removes the default underline
-    color: black;
-    font-size: 16px; // Matches paragraph styling
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
 
     &:hover {
-      background: #ddd;
+      background: rgb(0,0,0,0.1);
+      border-radius: 20px;
     }
 
     &:active {
-      background: #ccc; // Slightly darker when clicked
+      background: rgb(0,0,0,0.8);
+      border-radius: 20px;
     }
   }
 }
@@ -342,7 +348,7 @@ body {
   flex-grow: 1;
   padding: 50px;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  //border-radius: 8px;
   background: #fff;
 
   p {
@@ -499,7 +505,7 @@ body {
     padding: 8px 54px 8px 18px;
     margin-bottom: 14px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 20px;
     font-size: 1rem;
 
     &:focus {
@@ -529,7 +535,7 @@ body {
     background-color: $orange;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 20px;
     font-size: 1rem;
     cursor: pointer;
     text-align: center;
@@ -550,7 +556,6 @@ body {
   align-items: center;
   background-color: white;
   padding: 64px;
-  border: thin solid rgb(147, 145, 145);
   border-radius: 20px;
   max-width: 400px;
   margin: auto;
@@ -1104,39 +1109,62 @@ select {
 
 // Admin View Panel
 .table-container {
-  margin: 20px;
 
   table {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
+    border-radius: 20px;
+    overflow: hidden;
 
     th, td {
-      padding: 12px 15px;
-      border: 1px solid #ddd;
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+      border-right: 1px solid #ddd;
       text-align: left;
+
+      :last-child {
+        border-right: none;
+      }
     }
 
     th {
+      padding: 12px 15px;
       background-color: #f2f2f2;
       color: #333;
     }
 
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
+    tr {
+      border-bottom: 1px solid #ddd;
 
-    tr:hover {
-      background-color: #f1f1f1;
-    }
+      &:last-child {
+        border-bottom: none;
+      }
 
-    td img.profile-photo {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-right: 10px;
+      td:last-child {
+        border-right: none;
+      }
+
+      th:last-child {
+        border-right: none;
+      }
+
+      :hover {
+        background-color: #f1f1f1;
+      }
+
+      td img.profile-photo {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 10px;
+      }
     }
+  }
+
+  tbody tr:last-child td {
+    border-bottom: white;
   }
 
   .no-customers {

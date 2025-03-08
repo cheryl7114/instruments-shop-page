@@ -39,7 +39,7 @@ export default class DeleteProduct extends Component {
         const { product } = this.state
         if (!product) return
 
-        // 删除产品的图片
+        // 删除产品图片
         const imageDeletePromises = (product.images || []).map(image =>
             axios.delete(`${SERVER_HOST}/products/image/${image.filename}`, {
                 headers: { "authorization": localStorage.token }
@@ -63,13 +63,13 @@ export default class DeleteProduct extends Component {
             .catch(err => {
                 console.error("Error:", err)
                 this.setState({ errorMessage: err.message || "An error occurred while deleting the product." })
-                window.location.href = "/DisplayAllProducts" // 返回产品列表
+                window.location.href = "/DisplayAllProducts"
             })
     }
 
     handleCloseModal = () => {
         this.setState({ showConfirmModal: false, showSuccessModal: false })
-        window.location.href = "/DisplayAllProducts" // ✅ 关闭 modal 后跳转回产品列表
+        window.location.href = "/DisplayAllProducts"
     }
 
     render() {

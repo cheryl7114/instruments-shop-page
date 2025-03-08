@@ -223,6 +223,11 @@ export default class AddProduct extends Component {
         return !isNaN(price) && price >= 0 // Allows decimals for currency
     }
 
+    handleCloseModal = () => {
+        this.setState({ showModal:false })
+        window.location.href = "/DisplayAllProducts"
+    }
+
     render() {
         return (
             <div className="add-product-container">
@@ -372,7 +377,7 @@ export default class AddProduct extends Component {
                     <div className="modal-overlay">
                         <div className="modal-content">
                             <h4>Product Added Successfully!</h4>
-                            <button className="orange-button" onClick={() => {this.setState({ showModal: false, redirectToDisplayAllProducts: true })}}>OK</button>
+                            <button className="orange-button" onClick={this.handleCloseModal}>OK</button>
                         </div>
                     </div>
                 )}

@@ -33,8 +33,7 @@ export default class ViewCustomers extends Component {
         const users = this.state.users
         return (
             <div className="table-container">
-                <h2>View Customers</h2><br />
-                <ul>
+                <h2>View Customers</h2>
                     {users.length > 0 ? (
                         <table>
                             <thead>
@@ -78,7 +77,6 @@ export default class ViewCustomers extends Component {
                     ) : (
                         <p className="no-customers">No customers found.</p>
                     )}
-                </ul>
             </div>
         )
     }

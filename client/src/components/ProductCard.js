@@ -44,7 +44,7 @@ export default class ProductCard extends Component {
                 </Link>
                 <h4>{this.props.product.name}</h4>
                 <p>€{this.props.product.price}</p>
-                {localStorage.accessLevel > ACCESS_LEVEL_GUEST ?
+                {localStorage.accessLevel > ACCESS_LEVEL_ADMIN ?
                     <Link className="edit-button" to={"/EditProduct/" + this.props.product._id}>
                         <CiEdit size={25} />
                     </Link>

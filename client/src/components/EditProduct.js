@@ -6,7 +6,7 @@ import axios from "axios"
 
 import LinkInClass from "../components/LinkInClass"
 
-import { ACCESS_LEVEL_NORMAL_USER, SERVER_HOST } from "../config/global_constants"
+import { ACCESS_LEVEL_ADMIN, SERVER_HOST } from "../config/global_constants"
 
 export default class EditProduct extends Component {
     constructor(props) {
@@ -25,7 +25,7 @@ export default class EditProduct extends Component {
             previewImages: [],
             errors:{},
             showModal:false,
-            redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_NORMAL_USER
+            redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_ADMIN
         }
     }
 
@@ -318,6 +318,11 @@ export default class EditProduct extends Component {
         return !isNaN(price) && price >= 0 // no negative values
     }
 
+    handleCloseModal = () => {
+        this.setState({ showModal: false })
+        window.location.href = "/DisplayAllProducts" // ✅ 关闭 modal 后跳转回产品列表
+    }
+
     render() {
         return (
             <div className="edit-product-container">
@@ -472,7 +477,7 @@ export default class EditProduct extends Component {
                     <div className="modal-overlay">
                         <div className="modal-content">
                             <h4>Product Edited Successfully!</h4>
-                            <button className="orange-button" onClick={() => {this.setState({ showModal: false, redirectToDisplayAllProducts: true })}}>OK</button>
+                            <button className="orange-button" onClick={this.handleCloseModal}>OK</button>
                         </div>
                     </div>
                 )}
