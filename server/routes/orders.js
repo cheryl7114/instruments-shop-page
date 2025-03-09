@@ -19,13 +19,13 @@ const verifyUsersJWTPassword = (req, res, next) => {
 // create a new order
 const createNewOrder = (req, res) => {
     try {
-        const { userId, name, email, deliveryAddress, products, total, paypalPaymentID } = req.body
+        const { userId, name, email, deliveryAddress, phoneNumber, products, total, paypalPaymentID } = req.body
 
-        if (!name || !email || !deliveryAddress || !products || !total || !paypalPaymentID) {
+        if (!name || !email || !deliveryAddress || !phoneNumber || !products || !total || !paypalPaymentID) {
             return res.json({ errorMessage: `All fields are required` })
         }
 
-        if (!deliveryAddress.address || !deliveryAddress.city || !deliveryAddress.postcode || !deliveryAddress.phone) {
+        if (!deliveryAddress.address || !deliveryAddress.city || !deliveryAddress.postcode) {
             return res.json({ errorMessage: `Complete delivery address required` })
         }
 
@@ -34,6 +34,7 @@ const createNewOrder = (req, res) => {
             name,
             email,
             deliveryAddress,
+            phoneNumber,
             products,
             total,
             paypalPaymentID

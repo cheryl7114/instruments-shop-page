@@ -66,7 +66,7 @@ export default class PurchaseHistory extends Component {
                                             <div className="order-details">
                                                 <p><strong>Delivery Address:</strong></p>
                                                 <p>{order.deliveryAddress.address}, {order.deliveryAddress.city}, {order.deliveryAddress.postcode}</p>
-                                                <p><strong>Phone:</strong> {order.deliveryAddress.phone}</p>
+                                                <p><strong>Phone:</strong> {order.phoneNumber}</p>
                                                 <p><strong>Payment ID:</strong> {order.paypalPaymentID}</p>
 
                                                 <p><strong>Products:</strong></p>

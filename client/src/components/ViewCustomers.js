@@ -42,7 +42,7 @@ export default class ViewCustomers extends Component {
         return (
             <div className="table-container">
                 <h2>View Customers</h2><br/>
-                <i><p>Click on rows to expand for full details.</p></i>
+                <i><p>Click on rows to view full details.</p></i>
                 {users.length > 0 ? (
                     <table>
                         <thead>
