@@ -1790,14 +1790,14 @@ select {
     flex-direction: column;
     align-items: center;
     padding: 10px;
-    position: relative; // Add this for proper positioning
+    position: relative;
 
     .nav-links {
       flex-direction: column;
       gap: 10px;
       margin-left: 0;
       text-align: center;
-      width: 100%; // Ensure full width
+      width: 100%;
     }
 
     .icons {
@@ -1874,7 +1874,7 @@ select {
 
     .item-actions {
       flex-direction: column;
-      align-items: stretch !important; // Force full width
+      align-items: stretch !important;
       gap: 10px;
 
       button {
