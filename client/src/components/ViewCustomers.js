@@ -76,7 +76,7 @@ export default class ViewCustomers extends Component {
                         value={searchQuery}
                         onChange={this.handleSearchChange}
                     />
-                </div><br/><br/>
+                </div><br/>
                 {filteredUsers.length > 0 ? (
                     <table>
                         <thead>

@@ -32,6 +32,8 @@ body {
   position: absolute;
   top: 10px;
   right: 10px;
+  background: transparent;
+  border: none;
 }
 
 .edit-button,
@@ -1101,11 +1103,21 @@ select {
 .table-container table {
   width: 100%;
   border-collapse: collapse;
+  margin: 20px 0;
+  border-radius: 20px;
+  overflow: hidden;
 }
 .table-container table th, .table-container table td {
   padding: 12px 15px;
-  border: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd;
   text-align: left;
+}
+.table-container table td:last-child, .table-container table th:last-child {
+  border-right: none;
+}
+.table-container table tbody tr:last-of-type td {
+  border-bottom: none;
 }
 .table-container table th {
   background-color: #f2f2f2;
@@ -1113,6 +1125,9 @@ select {
 }
 .table-container table tr:nth-child(even) {
   background-color: #f9f9f9;
+}
+.table-container table tr:hover {
+  background-color: #f1f1f1;
 }
 .table-container table td img.profile-photo {
   width: 100px;
