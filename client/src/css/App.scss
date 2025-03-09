@@ -1252,11 +1252,23 @@ select {
   table {
     width: 100%;
     border-collapse: collapse;
+    margin: 20px 0;
+    border-radius: 20px;
+    overflow: hidden;
 
     th, td {
       padding: 12px 15px;
-      border: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+      border-right: 1px solid #ddd;
       text-align: left;
+    }
+
+    td:last-child, th:last-child {
+      border-right: none;
+    }
+
+    tbody tr:last-of-type td {
+      border-bottom: none;
     }
 
     th {
@@ -1266,6 +1278,10 @@ select {
 
     tr:nth-child(even) {
       background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
     }
 
     td img.profile-photo {
@@ -1279,6 +1295,7 @@ select {
     ul {
       padding-left: 20px;
     }
+
   }
 }
 
