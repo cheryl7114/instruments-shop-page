@@ -3,7 +3,7 @@ import {Link} from "react-router-dom"
 import { CiEdit, CiTrash } from "react-icons/ci"
 
 
-import {ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../config/global_constants"
+import {ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../config/global_constants"
 import axios from "axios";
 
 export default class ProductCard extends Component {

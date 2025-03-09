@@ -140,6 +140,7 @@ export default class ProductDetails extends Component {
                             <button
                                 className="add-to-cart-button"
                                 onClick={this.handleAddToCart}
+                                disabled={product.stock <= 0}
                             >
                                 {product.stock <= 0 ? 'Out of Stock' : (
                                     <>
@@ -147,6 +148,7 @@ export default class ProductDetails extends Component {
                                     </>
                                 )}
                             </button>
+
                         </div>
 
                     </div>

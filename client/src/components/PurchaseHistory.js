@@ -13,7 +13,7 @@ export default class PurchaseHistory extends Component {
     }
 
     componentDidMount() {
-        axios.post(`${SERVER_HOST}/orders/history`, {userId: localStorage.getItem("userId")})
+        axios.post(`${SERVER_HOST}/orders/history`, { userId: localStorage.getItem("userId") })
             .then(res => {
                 if (res.data.errorMessage) {
                     this.setState({ error: res.data.errorMessage })
@@ -54,29 +54,36 @@ export default class PurchaseHistory extends Component {
                         <tbody>
                         {orders.map((order, index) => (
                             <>
-                                <tr className="clickable-row" onClick={() => this.toggleRow(index)} key={index}>
+                                <tr key={order._id} className="clickable-row" onClick={() => this.toggleRow(index)}>
                                     <td>{order._id}</td>
-                                    <td>{new Date(order.orderDate).toLocaleDateString()}</td>
+                                    <td>{new Date(order.orderDate).toLocaleString()}</td>
                                     <td>€{order.total.toFixed(2)}</td>
                                 </tr>
 
                                 {expandedRow === index && (
                                     <tr className="expanded-row">
                                         <td colSpan="3">
-                                            <div className="order-details">
-                                                <p><strong>Delivery Address:</strong></p>
-                                                <p>{order.deliveryAddress.address}, {order.deliveryAddress.city}, {order.deliveryAddress.postcode}</p>
-                                                <p><strong>Phone:</strong> {order.phoneNumber}</p>
-                                                <p><strong>Payment ID:</strong> {order.paypalPaymentID}</p>
+                                            <div className="expanded-row-details">
+                                                <div className="address-details">
+                                                    <strong>Delivery Address:</strong> {order.deliveryAddress.address}, {order.deliveryAddress.city}, {order.deliveryAddress.postcode}<br />
+                                                    <strong>Phone:</strong> {order.phoneNumber}<br />
+                                                    <strong>Payment ID:</strong> {order.paypalPaymentID}<br />
+                                                </div>
 
-                                                <p><strong>Products:</strong></p>
-                                                <ul>
-                                                    {order.products.map((product, i) => (
-                                                        <li key={i}>
-                                                            {product.productID?.name || "Unknown Product"} - {product.quantity} × €{product.price.toFixed(2)}
-                                                        </li>
-                                                    ))}
-                                                </ul>
+                                                <div className="product-details">
+                                                    <strong>Product(s) Bought:</strong>
+                                                    <ul>
+                                                        {order.products && order.products.length > 0 ? (
+                                                            order.products.map((product, i) => (
+                                                                <li key={i} className="product-item">
+                                                                    {product.productID?.name || "Removed Product"} - {product.quantity} × €{product.price.toFixed(2)}
+                                                                </li>
+                                                            ))
+                                                        ) : (
+                                                            <li>No products found for this order.</li>
+                                                        )}
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
