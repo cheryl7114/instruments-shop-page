@@ -1,0 +1,44 @@
+[{
+  "_id": {
+    "$oid": "67ce2647c90701b4ac3a25e6"
+  },
+  "status": "pending",
+  "orderId": {
+    "$oid": "67ce262ec90701b4ac3a25cf"
+  },
+  "userId": {
+    "$oid": "67ce1c0970c9f3589c40ff70"
+  },
+  "productId": {
+    "$oid": "67ce22dec90701b4ac3a257f"
+  },
+  "quantity": 1,
+  "reason": "I changed my mind",
+  "refundAmount": 749,
+  "returnDate": {
+    "$date": "2025-03-09T23:37:43.924Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ce2777c90701b4ac3a2618"
+  },
+  "status": "pending",
+  "orderId": {
+    "$oid": "67ce2754c90701b4ac3a2609"
+  },
+  "userId": {
+    "$oid": "67ce191970c9f3589c40ff4f"
+  },
+  "productId": {
+    "$oid": "67ce2195c90701b4ac3a256a"
+  },
+  "quantity": 1,
+  "reason": "Its too ugly",
+  "refundAmount": 899,
+  "returnDate": {
+    "$date": "2025-03-09T23:42:47.743Z"
+  },
+  "__v": 0
+}]
