@@ -8,6 +8,7 @@
 html,
 body {
   background: #f7f7f7;
+  overflow-x: hidden;
 }
 
 .underline {
@@ -321,7 +322,7 @@ body {
   border-radius: 30px;
 }
 .product-card img {
-  width: 320px;
+  width: 310px;
   height: 350px;
   display: flex;
   -o-object-fit: contain;
@@ -1420,6 +1421,20 @@ select {
   -o-object-fit: cover;
      object-fit: cover;
   margin-right: 10px;
+}
+.table-container table ul {
+  padding-left: 20px;
+}
+.table-container table .sort-pointer {
+  cursor: pointer;
+}
+.table-container table .return-link {
+  color: #ea954f;
+  text-decoration: none;
+}
+.table-container table .return-link:hover {
+  text-decoration: underline;
+}
 
 .clickable-row {
   cursor: pointer;
@@ -1607,16 +1622,45 @@ select {
   .navbar {
     flex-direction: column;
     align-items: center;
+    padding: 10px;
+    position: relative;
   }
   .navbar .nav-links {
     flex-direction: column;
     gap: 10px;
+    margin-left: 0;
+    text-align: center;
+    width: 100%;
   }
   .navbar .icons {
     margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
   .navbar .logo {
     display: none;
+  }
+  .navbar .cart-badge {
+    top: -5px;
+    right: -5px;
+  }
+  .navbar .nav-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .navbar .nav-buttons button {
+    width: 100%;
+    padding: 10px 0;
+  }
+  .orange-button,
+  .blue-button,
+  .red-button {
+    width: 100% !important;
+    margin: 5px 0 !important;
+    padding: 12px !important;
   }
   .products-page-layout {
     flex-direction: column;
@@ -1624,14 +1668,35 @@ select {
   .filter-container {
     flex-basis: 100%;
     position: static;
+    padding: 15px;
+  }
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .product-card {
+    width: 100%;
+    position: relative;
+  }
+  .product-card button {
+    position: static !important;
+    margin-top: 10px !important;
+    width: 100% !important;
+  }
+  .product-card img {
+    width: 100%;
+    height: 300px;
   }
   .cart-items {
     flex-direction: column;
   }
-  .item-actions {
+  .cart-items .item-actions {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch !important;
     gap: 10px;
+  }
+  .cart-items .item-actions button {
+    width: 100%;
+    margin: 5px 0;
   }
   .quantity-selector {
     width: 100%;
@@ -1641,4 +1706,144 @@ select {
   .remove-item-icon {
     align-self: flex-end;
   }
-}/*# sourceMappingURL=App.css.map */
+  .product-details {
+    flex-direction: column;
+  }
+  .product-details .product-info {
+    width: 100%;
+    padding: 20px 0;
+  }
+  .product-details .product-info .add-to-cart-button {
+    width: 100% !important;
+    margin-top: 15px;
+  }
+  .newsletter {
+    padding: 50px 20px;
+  }
+  .newsletter button {
+    width: 100%;
+  }
+}
+@media (max-width: 992px) {
+  .content-overlay h2 {
+    font-size: 2rem;
+  }
+  .main-image {
+    max-height: 400px;
+  }
+  .sidebar-with-content {
+    flex-direction: column;
+  }
+  .sidebar-with-content .sidebar {
+    width: 100%;
+    max-width: none;
+  }
+  .sidebar-with-content .sidebar .sidebar-choices {
+    text-align: center;
+    padding: 12px;
+  }
+  .checkout-container {
+    max-width: 90%;
+    padding: 20px;
+  }
+  .checkout-container button {
+    width: 100%;
+    margin: 10px 0 !important;
+  }
+  .table-container table th, .table-container table td {
+    padding: 8px 10px;
+  }
+  .blue-button {
+    width: 50px;
+    height: 50px;
+  }
+  .blue-button svg {
+    font-size: 24px;
+  }
+}
+@media (max-width: 480px) {
+  .content-overlay h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+  .product-grid .product-card {
+    padding: 10px;
+  }
+  .product-grid .product-card button {
+    padding: 10px !important;
+    font-size: 0.9rem;
+  }
+  .product-grid .product-card img {
+    height: 250px;
+  }
+  .newsletter {
+    padding: 30px 15px;
+  }
+  .newsletter form {
+    flex-direction: column;
+  }
+  .newsletter form input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .newsletter form button {
+    width: 100%;
+    padding: 12px;
+  }
+  .thumbnail-image {
+    width: 50px;
+    height: 50px;
+  }
+  .login-page {
+    padding: 30px;
+    width: 90%;
+  }
+  .login-page button {
+    width: 100%;
+  }
+  .register-page {
+    padding: 20px;
+    width: 90%;
+  }
+  .register-page button {
+    width: 100%;
+    margin-top: 15px;
+  }
+  .orange-button {
+    width: 100%;
+  }
+  .cart-summary {
+    padding: 15px;
+  }
+  .cart-summary .cart-actions {
+    flex-direction: column;
+  }
+  .cart-summary .cart-actions button {
+    width: 100%;
+    margin: 5px 0;
+  }
+  .image-preview-wrapper {
+    width: 100%;
+    height: 250px;
+  }
+  .modal-content {
+    margin: 20px;
+    padding: 20px;
+  }
+  .modal-content button {
+    width: 100%;
+    margin: 5px 0;
+  }
+  button {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: auto !important;
+  }
+}
+
+/*# sourceMappingURL=App.css.map */
+
