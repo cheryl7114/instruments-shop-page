@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
-
+import { FaShoppingCart } from "react-icons/fa";
 import { ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN, SERVER_HOST } from "../config/global_constants"
 
 export default class ProductDetails extends Component {
@@ -105,20 +105,22 @@ export default class ProductDetails extends Component {
                         <div className="product-info">
                             <h2>{product.name}</h2>
                             <p className="details">{product.category}</p>
-                            {/*<p>{product.brand}</p>*/}
                             <p className="details"><strong>Colour:</strong> {product.colour}</p>
                             <p className="details"><i>{product.stock} units left</i></p>
-                            <h3><span id="price-text"><b>Price: </b></span>€{product.price}</h3>
+                            <h3><span id="price-text"><b> </b></span>€{product.price}</h3>
 
-                            {localStorage.accessLevel > ACCESS_LEVEL_GUEST ? <Link className="green-button" to={"/EditProduct/" + product._id}>Edit</Link> : null}
+                            {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ? <Link className="green-button" to={"/EditProduct/" + product._id}>Edit</Link> : null}
                             {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ? <Link className="red-button" to={"/DeleteProduct/" + product._id}>Delete</Link> : null}
                             <button
-                                className="green-button"
+                                className="add-to-cart-button"
                                 onClick={this.handleAddToCart}
                             >
-                                Add to Cart
-                            </button>                            
-                            <Link className="red-button" to={"/DisplayAllProducts"}>Back</Link>
+                                {product.stock <= 0 ? 'Out of Stock' : (
+                                    <>
+                                        Add to Cart <FaShoppingCart className="add-cart-icon" />
+                                    </>
+                                )}
+                            </button>
                         </div>
 
                     </div>

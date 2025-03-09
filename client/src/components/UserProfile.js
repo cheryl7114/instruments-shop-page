@@ -98,7 +98,6 @@ export default class UserProfile extends Component {
                                     </>
                                 )}
                             </Switch>
-                            <Logout />
                         </div>
                     </div>
                 </div>

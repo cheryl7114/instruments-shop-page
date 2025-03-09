@@ -88,6 +88,11 @@ export default class Login extends Component {
                     <div>
                         <p>Don't have an account? <Link className="create-account-link" to={"/Register"}>Register</Link></p>
                     </div>
+                    <div>
+                        <p>admin@admin.com</p>
+                        <p>123!"£qweQWE</p>
+                    </div>
+
                 </form>
             </div>
         )
