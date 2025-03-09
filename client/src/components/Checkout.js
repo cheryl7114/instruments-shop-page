@@ -86,7 +86,6 @@ export default class Checkout extends Component {
         return true
     }
 
-
     handleProceedToPayment = (e) => {
         e.preventDefault()
         if (this.validateForm()) {
@@ -138,24 +137,48 @@ export default class Checkout extends Component {
 
                 console.log("Sending Order to Backend:", order)
 
-                axios.post(`${SERVER_HOST}/orders`, order, { headers: { authorization: localStorage.token } })
-                    .then(res => {
-                        console.log("Order Response:", res.data)
-                        if (res.data?._id) {
-                            this.props.clearCart()
-                            this.setState({ orderComplete: true, orderID: res.data._id })
-                        } else {
-                            this.setState({ error: res.data?.errorMessage || "Error processing order" })
-                        }
-                    })
-                    .catch(err => {
-                        console.error("Error submitting order:", err)
-                        this.setState({ error: 'Error submitting order: ' + err.message })
-                    })
+                // Check if the user is logged in and doesn't have an address saved
+                if (this.state.isLoggedIn && !this.state.userHasAddress) {
+                    axios.post(`${SERVER_HOST}/users/update/${localStorage.email}`, {
+                        address: this.state.deliveryAddress.address,
+                        city: this.state.deliveryAddress.city,
+                        postcode: this.state.deliveryAddress.postcode,
+                        phoneNumber: this.state.deliveryAddress.phone
+                    }, { headers: { authorization: localStorage.token } })
+                        .then(res => {
+                            console.log("Address saved:", res.data)
+                            // After saving address, send the order
+                            this.sendOrderToBackend(order)
+                        })
+                        .catch(err => {
+                            console.error("Error saving address:", err)
+                            this.setState({ error: 'Error saving address. Please try again.' })
+                        })
+                } else {
+                    // Directly send the order if no address update needed
+                    this.sendOrderToBackend(order)
+                }
             })
             .catch(error => {
                 console.error("Error Capturing Payment:", error)
                 this.setState({ error: "Error capturing payment. Please try again." })
+            })
+    }
+
+    sendOrderToBackend = (order) => {
+        axios.post(`${SERVER_HOST}/orders`, order, { headers: { authorization: localStorage.token } })
+            .then(res => {
+                console.log("Order Response:", res.data)
+                if (res.data?._id) {
+                    this.props.clearCart()
+                    this.setState({ orderComplete: true, orderID: res.data._id })
+                } else {
+                    this.setState({ error: res.data?.errorMessage || "Error processing order" })
+                }
+            })
+            .catch(err => {
+                console.error("Error submitting order:", err)
+                this.setState({ error: 'Error submitting order: ' + err.message })
             })
     }
 
