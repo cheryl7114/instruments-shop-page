@@ -96,8 +96,6 @@ export default class Login extends Component {
                     <div>
                         <p>Don't have an account? <Link className="create-account-link" to={"/Register"}>Register</Link></p>
                     </div>
-                    <div>
-                    </div>
                     {this.state.showModal && (
                         <div className="modal-overlay">
                             <div className="modal-content">
