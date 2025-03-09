@@ -252,6 +252,11 @@ body {
   text-align: center;
   text-decoration: none;
 }
+.product-info .add-to-cart-button:disabled {
+  background-color: #8a8989;
+  cursor: not-allowed;
+  pointer-events: none;
+}
 .product-info .add-to-cart-button:hover {
   opacity: 0.8;
 }

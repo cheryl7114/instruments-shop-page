@@ -303,6 +303,12 @@ body {
     text-align: center;
     text-decoration: none;
 
+    &:disabled {
+      background-color: $product-details-colour;
+      cursor: not-allowed;
+      pointer-events: none;  // disable pointer events (clicks) for the button
+    }
+
     &:hover {
       opacity: 0.8;
     }
