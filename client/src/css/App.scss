@@ -13,6 +13,7 @@ $orange: #ea954f;
 html,
 body {
   background: $light-gray;
+  overflow-x: hidden;
 }
 
 .underline {
@@ -365,7 +366,7 @@ body {
   border-radius: 30px;
 
   img {
-    width: 320px;
+    width: 310px;
     height: 350px;
     display: flex;
     object-fit: contain;
@@ -1814,19 +1815,54 @@ select {
   .navbar {
     flex-direction: column;
     align-items: center;
+    padding: 10px;
+    position: relative;
 
     .nav-links {
       flex-direction: column;
       gap: 10px;
+      margin-left: 0;
+      text-align: center;
+      width: 100%;
     }
 
     .icons {
       margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      width: 100%;
     }
 
     .logo {
       display: none;
     }
+
+    .cart-badge {
+      top: -5px;
+      right: -5px;
+    }
+
+    // Add button container styling
+    .nav-buttons {
+      flex-direction: column;
+      width: 100%;
+      gap: 8px;
+      margin-top: 10px;
+
+      button {
+        width: 100%;
+        padding: 10px 0;
+      }
+    }
+  }
+
+  // Add button specific styles
+  .orange-button,
+  .blue-button,
+  .red-button {
+    width: 100% !important;
+    margin: 5px 0 !important;
+    padding: 12px !important;
   }
 
   .products-page-layout {
@@ -1836,16 +1872,42 @@ select {
   .filter-container {
     flex-basis: 100%;
     position: static;
+    padding: 15px;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .product-card {
+    width: 100%;
+    position: relative; // For button positioning
+
+    button {
+      position: static !important;
+      margin-top: 10px !important;
+      width: 100% !important;
+    }
+
+    img {
+      width: 100%;
+      height: 300px;
+    }
   }
 
   .cart-items {
     flex-direction: column;
-  }
 
-  .item-actions {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    .item-actions {
+      flex-direction: column;
+      align-items: stretch !important;
+      gap: 10px;
+
+      button {
+        width: 100%;
+        margin: 5px 0;
+      }
+    }
   }
 
   .quantity-selector {
@@ -1857,8 +1919,181 @@ select {
   .remove-item-icon {
     align-self: flex-end;
   }
+
+  .product-details {
+    flex-direction: column;
+
+    .product-info {
+      width: 100%;
+      padding: 20px 0;
+
+      .add-to-cart-button {
+        width: 100% !important;
+        margin-top: 15px;
+      }
+    }
+  }
+
+  .newsletter {
+    padding: 50px 20px;
+
+    button {
+      width: 100%;
+    }
+  }
 }
 
-@media (max-width: 992px) {}
+@media (max-width: 992px) {
+  .content-overlay h2 {
+    font-size: 2rem;
+  }
 
-@media (max-width: 480px) {}
+  .main-image {
+    max-height: 400px;
+  }
+
+  .sidebar-with-content {
+    flex-direction: column;
+
+    .sidebar {
+      width: 100%;
+      max-width: none;
+
+      .sidebar-choices {
+        text-align: center;
+        padding: 12px;
+      }
+    }
+  }
+
+  .checkout-container {
+    max-width: 90%;
+    padding: 20px;
+
+    button {
+      width: 100%;
+      margin: 10px 0 !important;
+    }
+  }
+
+  .table-container table {
+    th, td {
+      padding: 8px 10px;
+    }
+  }
+
+  .blue-button {
+    width: 50px;
+    height: 50px;
+
+    svg {
+      font-size: 24px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .content-overlay h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr;
+
+    .product-card {
+      padding: 10px;
+
+      button {
+        padding: 10px !important;
+        font-size: 0.9rem;
+      }
+
+      img {
+        height: 250px;
+      }
+    }
+  }
+
+  .newsletter {
+    padding: 30px 15px;
+
+    form {
+      flex-direction: column;
+
+      input {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+      }
+    }
+  }
+
+  .thumbnail-image {
+    width: 50px;
+    height: 50px;
+  }
+
+  .login-page {
+    padding: 30px;
+    width: 90%;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .register-page {
+    padding: 20px;
+    width: 90%;
+
+    button {
+      width: 100%;
+      margin-top: 15px;
+    }
+  }
+
+  .orange-button {
+    width: 100%;
+  }
+
+  .cart-summary {
+    padding: 15px;
+
+    .cart-actions {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+        margin: 5px 0;
+      }
+    }
+  }
+
+  .image-preview-wrapper {
+    width: 100%;
+    height: 250px;
+  }
+
+  .modal-content {
+    margin: 20px;
+    padding: 20px;
+
+    button {
+      width: 100%;
+      margin: 5px 0;
+    }
+  }
+
+  // Universal button fixes
+  button {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: auto !important;
+  }
+}
