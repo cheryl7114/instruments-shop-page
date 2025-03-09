@@ -199,6 +199,9 @@ export default class Checkout extends Component {
                     </div>
                     <h2>Thank You For Your Order!</h2>
                     <p>Your order has been placed successfully.</p>
+                    {isLoggedIn && needsAddress ? (
+                        <p>Delivery address has been saved to user profile.</p>
+                    ) : null}
                     <p>Order ID: {orderID}</p>
                     <button
                         className="continue-shopping"

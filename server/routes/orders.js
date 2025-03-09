@@ -51,11 +51,17 @@ const createNewOrder = (req, res) => {
     }
 }
 
-// get orders for a user
 const getOrdersForUser = (req, res) => {
-    ordersModel.find({ userId: req.decodedToken.userId })
+    const { userId } = req.body
+    if (!userId) {
+        return res.json({ errorMessage: "User ID is required" })
+    }
+
+    ordersModel.find({ userId: req.body.userId })
+        .populate("products.productID", "name")
+        .sort({ orderDate: -1 })
         .then(data => res.json(data))
-        .catch(error => res.json({ errorMessage: `Error getting orders`, error }))
+        .catch(error => res.json({ errorMessage: "Error getting orders", error }))
 }
 
 const getAllOrders = (req, res) => {
@@ -64,8 +70,8 @@ const getAllOrders = (req, res) => {
         .catch(error => res.json({ errorMessage: `Error getting all orders`, error }))
 }
 
-router.get('/orders', getAllOrders)
+router.post('/orders/history', getOrdersForUser)
 router.post('/orders', createNewOrder)
-router.get('/orders/user', verifyUsersJWTPassword, getOrdersForUser)
+router.get('/orders/history', verifyUsersJWTPassword, getOrdersForUser)
 
 module.exports = router
