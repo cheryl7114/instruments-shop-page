@@ -71,7 +71,7 @@ export default class PurchaseRecords extends Component {
                                                 </div>
 
                                                 <div className="product-details">
-                                                    <strong>Products Bought:</strong>
+                                                    <strong>Product(s) Bought:</strong>
                                                     <ul>
                                                         {order.products.map((product, idx) => (
                                                             <li key={idx} className="product-item">

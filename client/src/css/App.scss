@@ -304,6 +304,12 @@ body {
     text-align: center;
     text-decoration: none;
 
+    &:disabled {
+      background-color: $product-details-colour;
+      cursor: not-allowed;
+      pointer-events: none;  // disable pointer events (clicks) for the button
+    }
+
     &:hover {
       opacity: 0.8;
     }
@@ -1238,59 +1244,36 @@ select {
   cursor: pointer;
 }
 
+
 // Admin View Panel
 .table-container {
+  margin: 20px;
 
   table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
-    border-radius: 20px;
-    overflow: hidden;
 
     th, td {
-      padding: 15px;
-      border-bottom: 1px solid #ddd;
-      border-right: 1px solid #ddd;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
       text-align: left;
-
-      :last-child {
-        border-right: none;
-      }
     }
 
     th {
-      padding: 12px 15px;
       background-color: #f2f2f2;
       color: #333;
     }
 
-    tr {
-      border-bottom: 1px solid #ddd;
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
 
-      &:last-child {
-        border-bottom: none;
-      }
-
-      td:last-child {
-        border-right: none;
-      }
-
-      th:last-child {
-        border-right: none;
-      }
-
-      :hover {
-        background-color: #f1f1f1;
-      }
-
-      td img.profile-photo {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-right: 10px;
-      }
+    td img.profile-photo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
     }
 
     ul {
@@ -1298,10 +1281,6 @@ select {
     }
   }
 }
-
-tbody tr:last-child td {
-    border-bottom: white;
-  }
 
 .clickable-row {
   cursor: pointer;

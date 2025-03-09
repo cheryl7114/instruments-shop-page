@@ -47,6 +47,7 @@ export default class Cart extends Component {
             this.setState({ stockWarnings: [] })
         }
     }
+
     calculateCartSubtotal() {
         const { cartItems } = this.props
         return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0)
