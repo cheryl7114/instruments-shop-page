@@ -5,9 +5,8 @@ import {CiCirclePlus} from "react-icons/ci"
 import axios from "axios"
 
 import ProductGrid from "./ProductGrid"
-import Logout from "./Logout"
 
-import { ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN, SERVER_HOST } from "../config/global_constants"
+import {ACCESS_LEVEL_ADMIN, SERVER_HOST } from "../config/global_constants"
 
 import { FaSortAmountDown } from "react-icons/fa"
 import { FaSortAmountUp } from "react-icons/fa"
@@ -24,7 +23,6 @@ export default class DisplayAllProducts extends Component {
     }
 
     componentDidMount() {
-        // console.log("Component Mounted. Initial State:", this.state)
         axios.get(`${SERVER_HOST}/products`)
             .then(res => {
                 if (res.data) {
@@ -155,18 +153,6 @@ export default class DisplayAllProducts extends Component {
                                 </div>
                             )}
                         </button>
-
-
-                        {/*{localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?*/}
-                        {/*    <div className="add-new-product">*/}
-                        {/*        <title>Add new product</title>*/}
-                        {/*        <Link to={"/AddProduct"}>*/}
-                        {/*            <CiCirclePlus size={30} />*/}
-                        {/*        </Link>*/}
-                        {/*    </div>*/}
-                        {/*    :*/}
-                        {/*    null*/}
-                        {/*}*/}
 
                         <div className="products-container">
                             <div className="products-header">
