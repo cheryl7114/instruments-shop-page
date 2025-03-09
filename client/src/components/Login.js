@@ -27,7 +27,7 @@ export default class Login extends Component {
             .then(res => {
                 if (res.data) {
                     if (res.data.errorMessage) {
-                        this.setState({ showModal: true, modalMessage: res.data.errorMessage })
+                        this.setState({ showModal: true, modalMessage: "Incorrect details entered!" })
                         console.log(res.data.errorMessage)
                     } else {
                         localStorage.name = res.data.name
