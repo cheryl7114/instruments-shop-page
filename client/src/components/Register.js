@@ -131,7 +131,7 @@ export default class Register extends Component {
     }
 
     validateName() {
-        const pattern = /^[A-Za-zÀ-ž'-]([A-Za-zÀ-ž'-]+)*$/ // Letters, hyphen, apostrophe, min 2 characters
+        const pattern = /^[A-Za-zÀ-ž'-]+(?: [A-Za-zÀ-ž'-]+)*$/ // Letters, hyphen, apostrophe, min 2 characters
         return pattern.test(String(this.state.name).trim())
     }
 

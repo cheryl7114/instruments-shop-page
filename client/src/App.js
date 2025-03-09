@@ -17,6 +17,7 @@ import DisplayAllProducts from "./components/DisplayAllProducts"
 import ProductDetails from "./components/ProductDetails"
 import UserProfile from "./components/UserProfile"
 import ViewCustomers from "./components/ViewCustomers"
+import ReturnForm from "./components/ReturnForm"
 import LoggedInRoute from "./components/LoggedInRoute"
 import Checkout from "./components/Checkout"
 
@@ -256,6 +257,7 @@ export default class App extends Component {
                         } />
                         <LoggedInRoute path="/UserProfile/:id" component={UserProfile} />
                         <LoggedInRoute path="/ViewCustomers/" component={ViewCustomers} />
+                        <LoggedInRoute path="/ReturnForm/:id" component={ReturnForm} />
                         {/* passing filtered and sortedproducts to DisplayAllProducts */}
                         <Route exact path="/DisplayAllProducts" render={(props) =>
                             <DisplayAllProducts

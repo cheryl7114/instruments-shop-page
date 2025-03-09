@@ -78,8 +78,6 @@ const createNewOrder = (req, res) => {
                 })
                 .catch(updateError => {
                     console.error("Error updating product stocks:", updateError)
-                    // We still return the order since it was created
-                    // but log the error for investigation
                     res.json(savedOrder)
                 })
         })
@@ -104,12 +102,29 @@ const getOrdersForUser = (req, res) => {
 
 const getAllOrders = (req, res) => {
     ordersModel.find({})
+        .populate("products.productID", "name")
+        .sort({ orderDate: -1 })
         .then(data => res.json(data))
         .catch(error => res.json({ errorMessage: `Error getting all orders`, error }))
 }
 
-router.post('/orders/history', getOrdersForUser)
+const getOrderByID = (req, res) => {
+    const { orderId } = req.params
+    ordersModel.findById(orderId)
+        .populate('products.productID', "name")
+        .then(order => {
+            if (!order) {
+                return res.status(404).json({ errorMessage: 'Order not found' })
+            }
+            res.json(order)
+        })
+        .catch(error => res.json({ errorMessage: `Error fetching order by ID`, error }))
+
+}
+
+router.get('/orders', verifyUsersJWTPassword, getAllOrders)
 router.post('/orders', createNewOrder)
-router.get('/orders/history', verifyUsersJWTPassword, getOrdersForUser)
+router.post('/orders/history', getOrdersForUser)
+router.get('/orders/:orderId', getOrderByID)
 
 module.exports = router
