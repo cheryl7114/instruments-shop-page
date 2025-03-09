@@ -82,6 +82,9 @@ export default class PurchaseRecords extends Component {
             } else if (key === 'total') {
                 valueA = a.total
                 valueB = b.total
+            }  else if (key === 'email') {
+                valueA = a[key].toLowerCase()
+                valueB = b[key].toLowerCase()
             } else {
                 valueA = a[key]
                 valueB = b[key]
@@ -140,7 +143,7 @@ export default class PurchaseRecords extends Component {
                         <thead>
                             <tr>
                                 <th>Order ID</th>
-                                <th>Email</th>
+                                <th className="sort-pointer" onClick={() => this.handleSortIndicator('email')}>Email{getSortIndicator("email")}</th>
                                 <th className="sort-pointer" onClick={() => this.handleSortIndicator('total')}>Total{getSortIndicator('total')}</th>
                                 <th className="sort-pointer" onClick={() => this.handleSortIndicator('orderDate')}>Order Date{getSortIndicator('orderDate')}</th>
                             </tr>
