@@ -321,7 +321,7 @@ body {
   }
 }
 
-//User Profile
+// User Profile
 .sidebar-container {
   padding-left: 5%;
   padding-right: 5%;
@@ -332,8 +332,8 @@ body {
   margin-top: 40px;
   overflow: hidden;
   border-radius: 20px;
-  border:none;
-  box-shadow: 2px 6px 24px rgba(0, 0, 0, 0.5)
+  border: none;
+  box-shadow: 1px 3px 12px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar {
@@ -360,7 +360,7 @@ body {
     border-radius: 20px;
     transition: background 0.3s ease, color 0.3s ease;
     text-decoration: none;
-    color: white;
+    color: black;
     font-size: 16px;
 
     &:hover {

@@ -277,7 +277,7 @@ body {
   overflow: hidden;
   border-radius: 20px;
   border: none;
-  box-shadow: 2px 6px 24px rgba(0, 0, 0, 0.5);
+  box-shadow: 1px 3px 12px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar {
@@ -301,7 +301,7 @@ body {
   border-radius: 20px;
   transition: background 0.3s ease, color 0.3s ease;
   text-decoration: none;
-  color: white;
+  color: black;
   font-size: 16px;
 }
 .sidebar .sidebar-choices:hover {
@@ -1095,43 +1095,31 @@ select {
   cursor: pointer;
 }
 
+.table-container {
+  margin: 20px;
+}
 .table-container table {
   width: 100%;
   border-collapse: collapse;
-  margin: 20px 0;
-  border-radius: 20px;
-  overflow: hidden;
 }
-
-.table-container table th {
+.table-container table th, .table-container table td {
   padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+.table-container table th {
   background-color: #f2f2f2;
   color: #333;
 }
-.table-container table tr {
-  border-bottom: 1px solid #ddd;
+.table-container table tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
-.table-container table tr:last-child {
-  border-bottom: none;
-}
-.table-container table tr td:last-child {
-  border-right: none;
-}
-.table-container table tr th:last-child {
-  border-right: none;
-}
-.table-container table tr :hover {
-  background-color: #f1f1f1;
-}
-.table-container table tr td img.profile-photo {
+.table-container table td img.profile-photo {
   width: 100px;
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
   margin-right: 10px;
-}
-.table-container tbody tr:last-child td {
-  border-bottom: white;
 }
 .table-container table ul {
   padding-left: 20px;
@@ -1172,7 +1160,8 @@ select {
 .product-item strong {
   font-weight: 600;
 }
-.table-container .no-customers {
+
+.no-customers {
   font-size: 18px;
   color: #666;
   text-align: center;

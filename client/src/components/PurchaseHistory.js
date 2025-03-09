@@ -49,6 +49,7 @@ export default class PurchaseHistory extends Component {
                             <th>Order ID</th>
                             <th>Order Date</th>
                             <th>Total (€)</th>
+                            <th>Order Date</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -58,6 +59,7 @@ export default class PurchaseHistory extends Component {
                                     <td>{order._id}</td>
                                     <td>{new Date(order.orderDate).toLocaleDateString()}</td>
                                     <td>€{order.total.toFixed(2)}</td>
+                                    <td>{order.orderDate}</td>
                                 </tr>
 
                                 {expandedRow === index && (
