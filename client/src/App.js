@@ -20,6 +20,8 @@ import ViewCustomers from "./components/ViewCustomers"
 import ReturnForm from "./components/ReturnForm"
 import LoggedInRoute from "./components/LoggedInRoute"
 import Checkout from "./components/Checkout"
+import Home from "./components/Home"
+import ErrorPage from "./components/ErrorPage"
 
 import { SERVER_HOST, ACCESS_LEVEL_GUEST } from "./config/global_constants"
 
@@ -214,6 +216,10 @@ export default class App extends Component {
                         cartItemCount={this.state.cartItems.reduce((total, item) => total + item.quantity, 0)}
                     />
                     <Switch>
+                        {/* Home route */}
+                        <Route exact path="/" component={Home}/>
+                        <Route exact path="/Home" component={Home}/>
+                        {/* Error page that catches undefined routes */}
                         <Route exact path="/ProductDetails/:id" render={(props) =>
                             <ProductDetails
                                 {...props}
@@ -222,18 +228,6 @@ export default class App extends Component {
                         } />
                         <Route exact path="/Register" component={Register} />
                         <Route exact path="/ResetDatabase" component={ResetDatabase} />
-                        {/* Home route */}
-                        <Route exact path="/" render={(props) =>
-                            <DisplayAllProducts
-                                {...props}
-                                products={filteredProducts}
-                                sortType={this.state.sortType}
-                                handleSortChange={this.handleSortChange}
-                                handleCategoryFilter={this.handleCategoryFilter}
-                                handleBrandFilter={this.handleBrandFilter}
-                                selectedCategories={this.state.selectedCategories}
-                                selectedBrands={this.state.selectedBrands}
-                            />} />
                         <Route exact path="/Login" component={Login} />
                         <LoggedInRoute exact path="/Logout" component={Logout} />
                         <LoggedInRoute exact path="/AddProduct" component={AddProduct} />
@@ -270,17 +264,7 @@ export default class App extends Component {
                                 selectedCategories={this.state.selectedCategories}
                                 selectedBrands={this.state.selectedBrands}
                             />} />
-                        <Route path="*" render={(props) =>
-                            <DisplayAllProducts
-                                {...props}
-                                products={filteredProducts}
-                                sortType={this.state.sortType}
-                                handleSortChange={this.handleSortChange}
-                                handleCategoryFilter={this.handleCategoryFilter}
-                                handleBrandFilter={this.handleBrandFilter}
-                                selectedCategories={this.state.selectedCategories}
-                                selectedBrands={this.state.selectedBrands}
-                            />} />
+                        <Route exact path="*" component={ErrorPage} />
                     </Switch>
                 </div>
             </BrowserRouter>
