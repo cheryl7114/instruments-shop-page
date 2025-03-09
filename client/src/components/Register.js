@@ -1,11 +1,11 @@
 import React, { Component } from "react"
-import { Redirect, Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import axios from "axios"
 
 import LinkInClass from "../components/LinkInClass"
 
 import { SERVER_HOST } from "../config/global_constants"
-import {CiCircleRemove} from "react-icons/ci";
+import {CiCircleRemove} from "react-icons/ci"
 
 export default class Register extends Component {
     constructor(props) {
@@ -35,15 +35,20 @@ export default class Register extends Component {
     }
 
     handleFileChange = (e) => {
-        const selectedFiles = Array.from(e.target.files)
+        const selectedFiles = []
+        const newPreviews = []
 
-        const updatedFiles = [...this.state.selectedFiles, ...selectedFiles].filter(file => file instanceof File)
-        const newPreviews = selectedFiles.map(file => URL.createObjectURL(file))
+        for (let i = 0; i < e.target.files.length; i++) {
+            const file = e.target.files[i]
+            if (file instanceof File) {
+                selectedFiles.push(file)
+                newPreviews.push(URL.createObjectURL(file))
+            }
+        }
 
         this.setState(prevState => ({
-            selectedFiles: updatedFiles,
+            selectedFiles: [...prevState.selectedFiles, ...selectedFiles],
             previewImages: [...prevState.previewImages, ...newPreviews]
-            //errors: { ...prevState.errors, images: updatedFiles.length > 0 ? undefined : "* Must upload at least one photo." }
         }))
     }
 
@@ -68,15 +73,15 @@ export default class Register extends Component {
 
         const formInputsState = this.validate()
         if (Object.keys(formInputsState).every(key => formInputsState[key])) {
-            let formData = new FormData();
-            formData.append("profilePhoto", this.state.selectedFiles[0]);
-            formData.append("name", this.state.name);
-            formData.append("email", this.state.email);
-            formData.append("password", this.state.password);
-            formData.append("address", this.state.address);
-            formData.append("city", this.state.city);
-            formData.append("postcode", this.state.postcode);
-            formData.append("phoneNumber", this.state.phoneNumber);
+            let formData = new FormData()
+            formData.append("profilePhoto", this.state.selectedFiles[0])
+            formData.append("name", this.state.name)
+            formData.append("email", this.state.email)
+            formData.append("password", this.state.password)
+            formData.append("address", this.state.address)
+            formData.append("city", this.state.city)
+            formData.append("postcode", this.state.postcode)
+            formData.append("phoneNumber", this.state.phoneNumber)
 
             axios.post(`${SERVER_HOST}/users/register`, formData, { headers: { "Content-type": "multipart/form-data" } })
                 .then(res => {
@@ -90,7 +95,7 @@ export default class Register extends Component {
                         } else {
                             this.setState({
                                 showModal: true,
-                                modalMessage:"Successfully registered and logged in.",
+                                modalMessage:"Successfully registered and logged in",
                                 isRegistered: true
                             })
                             console.log("User registered and logged in")
@@ -126,7 +131,7 @@ export default class Register extends Component {
         })
 
         if (this.state.isRegistered) {
-            this.setState({ redirectToProducts: true })
+            window.location.href = "/LoggedinRoute"
         }
     }
 
@@ -176,8 +181,6 @@ export default class Register extends Component {
         return (
             <div className="register-container">
                 <form className="register-page" noValidate={true} id="loginOrRegistrationForm">
-
-                    {this.state.isRegistered ? <Redirect to="/DisplayAllProducts" /> : null}
 
                     <h1>Create account</h1>
 

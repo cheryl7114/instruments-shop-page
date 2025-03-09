@@ -205,6 +205,7 @@ export default class App extends Component {
             return result
         }
     }
+
     render() {
         const filteredProducts = this.getFilteredAndSortedProducts()
         return (
@@ -221,10 +222,7 @@ export default class App extends Component {
                         <Route exact path="/Home" component={Home}/>
                         {/* Error page that catches undefined routes */}
                         <Route exact path="/ProductDetails/:id" render={(props) =>
-                            <ProductDetails
-                                {...props}
-                                addToCart={this.addToCart}
-                            />
+                            <ProductDetails {...props} cart={this.state.cartItems} addToCart={this.addToCart} />
                         } />
                         <Route exact path="/Register" component={Register} />
                         <Route exact path="/ResetDatabase" component={ResetDatabase} />
