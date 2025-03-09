@@ -202,6 +202,7 @@ export default class App extends Component {
             return result
         }
     }
+
     render() {
         const filteredProducts = this.getFilteredAndSortedProducts()
         return (

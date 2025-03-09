@@ -32,6 +32,9 @@ export default class Checkout extends Component {
             return
         }
 
+        const total = this.calculateTotal()
+        this.setState({ total })
+
         const isLoggedIn = Boolean(localStorage.token && localStorage.token !== "null" && localStorage.userId)
         if (isLoggedIn) {
             axios.get(`${SERVER_HOST}/users/${localStorage.userId}`, {

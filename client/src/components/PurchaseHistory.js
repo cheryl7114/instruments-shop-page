@@ -8,7 +8,9 @@ export default class PurchaseHistory extends Component {
         this.state = {
             orders: [],
             expandedRow: null,
-            error: ""
+            error: "",
+            sortKey: "orderDate",
+            sortOrder: "desc"
         }
     }
 
@@ -30,8 +32,43 @@ export default class PurchaseHistory extends Component {
         }))
     }
 
+    handleSortIndicator = (currentKey) => {
+        this.setState(prevState => {
+            const newSortOrder = prevState.sortKey === currentKey && prevState.sortOrder === 'asc' ? 'desc' : 'asc'
+
+            const sortedOrders = [...prevState.orders].sort((a, b) => {
+                let valueA, valueB
+
+                if (currentKey === 'orderDate') {
+                    valueA = new Date(a[currentKey])
+                    valueB = new Date(b[currentKey])
+                } else if (currentKey === 'total') {
+                    valueA = a.total
+                    valueB = b.total
+                }
+
+                // sort based on direction
+                if (newSortOrder === 'asc') {
+                    return valueA > valueB ? 1 : -1
+                } else {
+                    return valueB > valueA ? 1 : -1
+                }
+            })
+            return {
+                orders: sortedOrders,
+                sortKey: currentKey,
+                sortOrder: newSortOrder
+            }
+        })
+    }
+
     render() {
-        const { orders, expandedRow, error } = this.state
+        const { orders, expandedRow, error, sortKey, sortOrder } = this.state
+        const getSortIndicator = (currentKey) => {
+            if (sortKey === currentKey) {
+                return sortOrder === 'asc' ? '▲' : '▼'
+            }
+        }
 
         return (
             <div className="table-container">
@@ -47,14 +84,14 @@ export default class PurchaseHistory extends Component {
                         <thead>
                         <tr>
                             <th>Order ID</th>
-                            <th>Order Date</th>
-                            <th>Total (€)</th>
+                            <th className="sort-pointer" onClick={() => this.handleSortIndicator('orderDate')}>Order Date{getSortIndicator('orderDate')}</th>
+                            <th className="sort-pointer" onClick={() => this.handleSortIndicator('total')}>Total (€){getSortIndicator('total')}</th>
                         </tr>
                         </thead>
                         <tbody>
                         {orders.map((order, index) => (
                             <>
-                                <tr className="clickable-row" onClick={() => this.toggleRow(index)} key={index}>
+                                <tr className="clickable-row" onClick={() => this.toggleRow(index)} currentKey={index}>
                                     <td>{order._id}</td>
                                     <td>{new Date(order.orderDate).toLocaleDateString()}</td>
                                     <td>€{order.total.toFixed(2)}</td>
@@ -72,7 +109,7 @@ export default class PurchaseHistory extends Component {
                                                 <p><strong>Products:</strong></p>
                                                 <ul>
                                                     {order.products.map((product, i) => (
-                                                        <li key={i}>
+                                                        <li currentKey={i}>
                                                             {product.productID?.name || "Unknown Product"} - {product.quantity} × €{product.price.toFixed(2)}
                                                         </li>
                                                     ))}
