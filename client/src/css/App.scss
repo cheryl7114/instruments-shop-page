@@ -687,6 +687,32 @@ body {
   }
 }
 
+// admin panel filter buttons
+.order-filter-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+
+  button {
+    padding: 8px 16px;
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #e9ecef;
+    }
+
+    &.active {
+      background-color: $orange;
+      color: white;
+      border: 1px solid $orange;
+    }
+  }
+}
+
 // Login & Register pages
 .login-container {
   display: flex;
@@ -1568,10 +1594,6 @@ select {
       padding-left: 20px;
     }
 
-    .sort-pointer {
-      cursor: pointer;
-    }
-
     .return-link {
       color: $orange;
       text-decoration: none;
@@ -1581,6 +1603,10 @@ select {
       }
     }
   }
+}
+
+.sort-pointer {
+  cursor: pointer;
 }
 
 //purchase history

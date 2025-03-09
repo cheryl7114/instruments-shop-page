@@ -71,7 +71,8 @@ body {
 .video-wrapper video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .content-overlay {
@@ -324,7 +325,8 @@ body {
   width: 310px;
   height: 350px;
   display: flex;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
   border-radius: 10px;
 }
 .product-card h4 {
@@ -484,7 +486,8 @@ body {
   height: 150px;
   display: block;
   margin-bottom: 50px;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   border: 2px solid #ccc;
 }
 
@@ -566,7 +569,8 @@ body {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   border: 2px solid #ccc;
 }
 
@@ -583,10 +587,7 @@ body {
 .customer-search-bar input {
   border: none;
   outline: none;
-  padding: 4px;
-  border-radius: 30px;
-}
-.search-bar input::placeholder,
+laceholder,
 .customer-search-bar input::placeholder {
   color: #888;
 }
@@ -602,6 +603,28 @@ body {
 }
 .customer-search-bar input {
   width: 100%;
+}
+
+.order-filter-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.order-filter-buttons button {
+  padding: 8px 16px;
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.order-filter-buttons button:hover {
+  background-color: #e9ecef;
+}
+.order-filter-buttons button.active {
+  background-color: #ea954f;
+  color: white;
+  border: 1px solid #ea954f;
 }
 
 .login-container {
@@ -784,7 +807,9 @@ body {
   padding: 10px 15px;
   border: 1px solid #ccc;
   border-radius: 30px;
-  appearance: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
 .add-product-container label {
   width: 100%;
@@ -803,7 +828,9 @@ select {
   padding: 10px 15px;
   border: 1px solid #ccc;
   border-radius: 30px;
-  appearance: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
   font-size: 14px;
   color: #222;
 }
@@ -890,7 +917,8 @@ select {
 .image-preview {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
   border-radius: 14px;
   border: 1px;
   padding: 15px;
@@ -959,6 +987,7 @@ select {
   margin-bottom: 20px;
   position: sticky;
   top: 20px;
+  height: -moz-fit-content;
   height: fit-content;
 }
 
@@ -1074,6 +1103,7 @@ select {
   border: 1px solid #e0e0e0;
   border-radius: 30px;
   padding: 20px;
+  height: -moz-fit-content;
   height: fit-content;
   position: sticky;
   top: 20px;
@@ -1195,7 +1225,9 @@ select {
   padding: 10px 15px;
   border: 1px solid #ccc;
   border-radius: 30px;
-  appearance: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
 .checkout-container label {
   width: 100%;
@@ -1213,13 +1245,17 @@ select {
   margin: 0;
   cursor: pointer;
   accent-color: #222;
-  appearance: auto;
+  -webkit-appearance: auto;
+     -moz-appearance: auto;
+          appearance: auto;
 }
 .checkout-container .checkbox-group label {
   padding: 0;
   color: #222;
   cursor: pointer;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .checkout-container .continue-button {
   width: 100%;
@@ -1239,7 +1275,7 @@ select {
   text-align: center;
 }
 .checkout-container .continue-button:hover {
-  background: rgb(8.5, 8.5, 8.5);
+  background: #090909;
 }
 .checkout-container .paypal-container {
   margin-top: 20px;
@@ -1332,7 +1368,8 @@ select {
 .item-image img {
   width: 180px;
   height: 180px;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .item-details a {
@@ -1381,7 +1418,8 @@ select {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   margin-right: 10px;
 }
 .table-container table ul {
@@ -1508,7 +1546,9 @@ select {
   padding: 8px 15px;
   border: 1px solid #ccc;
   border-radius: 30px;
-  appearance: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
 .return-form-container .select-wrapper {
   position: relative;
@@ -1519,7 +1559,9 @@ select {
   padding: 8px 40px 8px 15px;
   border: 1px solid #ccc;
   border-radius: 30px;
-  appearance: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
   font-size: 14px;
   color: #222;
 }
@@ -1804,3 +1846,4 @@ select {
 }
 
 /*# sourceMappingURL=App.css.map */
+

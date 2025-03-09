@@ -1,9 +1,9 @@
 import React, { Component } from "react"
-import { Link } from "react-router-dom"
+import {Link, Redirect} from "react-router-dom"
 import axios from "axios"
 import { FaShoppingCart } from "react-icons/fa"
 import { CiEdit, CiTrash } from "react-icons/ci"
-import { ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN, SERVER_HOST } from "../config/global_constants"
+import { ACCESS_LEVEL_ADMIN, SERVER_HOST } from "../config/global_constants"
 
 export default class ProductDetails extends Component {
     constructor(props) {
@@ -14,7 +14,7 @@ export default class ProductDetails extends Component {
             mainImage: "",
             showModal:false,
             modalMessage:"",
-            redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_GUEST
+            redirectToDisplayAllProducts: false
         }
     }
 
@@ -105,6 +105,7 @@ export default class ProductDetails extends Component {
 
         return (
             <div className="body-container">
+                {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts" /> : null}
                 <div className="product-details-container">
                     <div className="product-details">
                         <div className="product-image">
@@ -161,7 +162,7 @@ export default class ProductDetails extends Component {
                                     </>
                                 )}
                             </button>
-
+                            <button className="add-to-cart-button" onClick={() => this.setState({ redirectToDisplayAllProducts: true })}>Back</button>
                         </div>
 
                     </div>

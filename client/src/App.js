@@ -262,7 +262,7 @@ export default class App extends Component {
                                 selectedCategories={this.state.selectedCategories}
                                 selectedBrands={this.state.selectedBrands}
                             />} />
-                        {/*<Route exact path="*" component={ErrorPage} />*/}
+                        <Route exact path="*" component={ErrorPage} />
                     </Switch>
                 </div>
             </BrowserRouter>
