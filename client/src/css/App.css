@@ -353,8 +353,7 @@ body {
 .main-image {
   width: 100%;
   max-height: 450px;
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
