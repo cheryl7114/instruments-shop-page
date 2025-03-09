@@ -12,7 +12,8 @@ export default class PurchaseRecords extends Component {
             expandedRow: null,
             searchQuery: "",
             sortKey: "orderDate",
-            sortOrder: "desc"
+            sortOrder: "desc",
+            userTypeFilter: "all"
         }
     }
 
@@ -41,27 +42,41 @@ export default class PurchaseRecords extends Component {
         })
     }
 
-    filterOrders = () => {
-        const { orders, searchQuery } = this.state
+    handleUserTypeFilterChange = (filterType) => {
+        this.setState({ userTypeFilter: filterType }, () => {
+            this.filterOrders()
+        })
+    }
 
+    filterOrders = () => {
+        const { orders, searchQuery, userTypeFilter, sortKey, sortOrder } = this.state
+
+        // First, filter by user type
+        let filteredByUserType = orders
+
+        if (userTypeFilter === "guest") {
+            filteredByUserType = orders.filter(order => !order.userId) // Guest orders don't have userId
+        } else if (userTypeFilter === "user") {
+            filteredByUserType = orders.filter(order => order.userId) // User orders have userId
+        }
+
+        // Then apply search filter
         if (!searchQuery.trim()) {
-            // If no search query, show all orders
-            this.setState({ filteredOrders: orders })
+            // If no search query, just use the user type filter
+            const sortedOrders = this.sortData(filteredByUserType, sortKey, sortOrder)
+            this.setState({ filteredOrders: sortedOrders })
             return
         }
 
-        const query = searchQuery.toLowerCase();
+        const query = searchQuery.toLowerCase()
 
-        const filteredOrders = orders.filter(order => {
-            const nameMatch = order.name.toLowerCase().includes(query)
-            const emailMatch = order.email.toLowerCase().includes(query)
+        const finalFiltered = filteredByUserType.filter(order => {
+            const nameMatch = order.name && order.name.toLowerCase().includes(query)
+            const emailMatch = order.email && order.email.toLowerCase().includes(query)
             const productMatch = order.products && order.products.some(product => {
-                // Check if product name contains search query
                 return (
-                    // Check for name in productID object (populated case)
                     (product.productID?.name &&
                         product.productID.name.toLowerCase().includes(query)) ||
-                    // Check for direct name property if it exists
                     (product.name &&
                         product.name.toLowerCase().includes(query))
                 )
@@ -69,8 +84,12 @@ export default class PurchaseRecords extends Component {
 
             return nameMatch || emailMatch || productMatch
         })
-        this.setState({ filteredOrders })
+
+        // Sort the results
+        const sortedOrders = this.sortData(finalFiltered, sortKey, sortOrder)
+        this.setState({ filteredOrders: sortedOrders })
     }
+
 
     sortData = (data, key, order) => {
         return [...data].sort((a, b) => {
@@ -82,7 +101,7 @@ export default class PurchaseRecords extends Component {
             } else if (key === 'total') {
                 valueA = a.total
                 valueB = b.total
-            }  else if (key === 'email') {
+            } else if (key === 'email') {
                 valueA = a[key].toLowerCase()
                 valueB = b[key].toLowerCase()
             } else {
@@ -102,7 +121,7 @@ export default class PurchaseRecords extends Component {
     handleSortIndicator = (currentKey) => {
         this.setState(prevState => {
             const newSortOrder = prevState.sortKey === currentKey && prevState.sortOrder === 'asc' ? 'desc' : 'asc'
-            
+
             const sortedOrders = this.sortData(prevState.orders, currentKey, newSortOrder)
             const sortedFilteredOrders = this.sortData(prevState.filteredOrders, currentKey, newSortOrder)
 
@@ -116,7 +135,7 @@ export default class PurchaseRecords extends Component {
     }
 
     render() {
-        const { filteredOrders, expandedRow, searchQuery, sortKey, sortOrder } = this.state
+        const { filteredOrders, expandedRow, searchQuery, sortKey, sortOrder, userTypeFilter } = this.state
         const getSortIndicator = (currentKey) => {
             if (sortKey === currentKey) {
                 return sortOrder === 'asc' ? '▲' : '▼'
@@ -135,6 +154,27 @@ export default class PurchaseRecords extends Component {
                         onChange={this.handleSearchChange}
                     />
                 </div><br />
+
+                <div className="order-filter-buttons">
+                    <button
+                        className={`filter-button ${userTypeFilter === 'all' ? 'active' : ''}`}
+                        onClick={() => this.handleUserTypeFilterChange('all')}
+                    >
+                        All Orders
+                    </button>
+                    <button
+                        className={`filter-button ${userTypeFilter === 'user' ? 'active' : ''}`}
+                        onClick={() => this.handleUserTypeFilterChange('user')}
+                    >
+                        Registered Users
+                    </button>
+                    <button
+                        className={`filter-button ${userTypeFilter === 'guest' ? 'active' : ''}`}
+                        onClick={() => this.handleUserTypeFilterChange('guest')}
+                    >
+                        Guest Orders
+                    </button>
+                </div>
                 <i><p>Click on rows to view full details.</p></i>
                 {filteredOrders.length === 0 ? (
                     <p className="no-customers">No purchase records available.</p>
