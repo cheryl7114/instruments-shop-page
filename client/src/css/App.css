@@ -1024,7 +1024,6 @@ select {
 .table-container table {
   width: 100%;
   border-collapse: collapse;
-  margin: 20px;
 }
 .table-container table th,
 .table-container table td {

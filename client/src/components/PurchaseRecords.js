@@ -35,7 +35,7 @@ export default class PurchaseRecords extends Component {
         return (
             <div className="table-container">
                 <h2>Purchase Records</h2><br />
-                <i><p>Click on rows to expand for full details.</p></i>
+                <i><p>Click on rows to view full details.</p></i>
                 {orders.length === 0 ? (
                     <p className="no-customers">No purchase records available.</p>
                 ) : (
@@ -65,7 +65,7 @@ export default class PurchaseRecords extends Component {
                                             <div className="expanded-row-details">
                                                 <div className="address-details">
                                                     <strong>Address:</strong> {order.deliveryAddress?.address || "Not available"}, {order.deliveryAddress?.city || "Not available"}, {order.deliveryAddress?.postcode || "Not available"}<br />
-                                                    <strong>Phone:</strong> {order.deliveryAddress?.phone || "Not available"}<br />
+                                                    <strong>Phone:</strong> {order.phoneNumber || "Not available"}<br />
                                                     <strong>Payment ID: </strong> {order.paypalPaymentID || "Not available"}<br/>
                                                     <strong>Order Date: </strong> {order.orderDate}
                                                 </div>

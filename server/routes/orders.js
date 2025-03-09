@@ -20,13 +20,13 @@ const verifyUsersJWTPassword = (req, res, next) => {
 // create a new order
 const createNewOrder = (req, res) => {
     try {
-        const { userId, name, email, deliveryAddress, products, total, paypalPaymentID } = req.body
+        const { userId, name, email, deliveryAddress, phoneNumber, products, total, paypalPaymentID } = req.body
 
-        if (!name || !email || !deliveryAddress || !products || !total || !paypalPaymentID) {
+        if (!name || !email || !deliveryAddress || !phoneNumber || !products || !total || !paypalPaymentID) {
             return res.json({ errorMessage: `All fields are required` })
         }
 
-        if (!deliveryAddress.address || !deliveryAddress.city || !deliveryAddress.postcode || !deliveryAddress.phone) {
+        if (!deliveryAddress.address || !deliveryAddress.city || !deliveryAddress.postcode) {
             return res.json({ errorMessage: `Complete delivery address required` })
         }
 
@@ -35,6 +35,7 @@ const createNewOrder = (req, res) => {
             name,
             email,
             deliveryAddress,
+            phoneNumber,
             products,
             total,
             paypalPaymentID
@@ -88,11 +89,17 @@ const createNewOrder = (req, res) => {
     }
 }
 
-// get orders for a user
 const getOrdersForUser = (req, res) => {
-    ordersModel.find({ userId: req.decodedToken.userId })
+    const { userId } = req.body
+    if (!userId) {
+        return res.json({ errorMessage: "User ID is required" })
+    }
+
+    ordersModel.find({ userId: req.body.userId })
+        .populate("products.productID", "name")
+        .sort({ orderDate: -1 })
         .then(data => res.json(data))
-        .catch(error => res.json({ errorMessage: `Error getting orders`, error }))
+        .catch(error => res.json({ errorMessage: "Error getting orders", error }))
 }
 
 const getAllOrders = (req, res) => {
@@ -101,8 +108,8 @@ const getAllOrders = (req, res) => {
         .catch(error => res.json({ errorMessage: `Error getting all orders`, error }))
 }
 
-router.get('/orders', getAllOrders)
+router.post('/orders/history', getOrdersForUser)
 router.post('/orders', createNewOrder)
-router.get('/orders/user', verifyUsersJWTPassword, getOrdersForUser)
+router.get('/orders/history', verifyUsersJWTPassword, getOrdersForUser)
 
 module.exports = router
