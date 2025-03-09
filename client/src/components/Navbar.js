@@ -18,17 +18,12 @@ export default class Navbar extends React.Component {
         <nav className="navbar">
           <div className="most-left-side">
             <div className="logo">
-              <Link to="/DisplayAllProducts">
+              <Link to="/">
                 <img src="/logo.png" alt="Logo" width="50" height="60"/>
               </Link>
             </div>
             <ul className="nav-links">
-              <li><Link to="#">Guitar</Link></li>
-              <li><Link to="#">Piano</Link></li>
-              <li><Link to="#">Drums</Link></li>
-              <li><Link to="#">Violin</Link></li>
-              <li><Link to="#">Saxophone</Link></li>
-              <li><Link to="#">Trumpet</Link></li>
+              <li><Link to="/">Home</Link></li>
               <li><Link to="/DisplayAllProducts">Shop All</Link></li>
             </ul>
           </div>
