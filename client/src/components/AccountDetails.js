@@ -1,6 +1,5 @@
 import React, { Component } from "react"
-import {ACCESS_LEVEL_ADMIN, ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../config/global_constants"
-import {Link} from "react-router-dom";
+import {ACCESS_LEVEL_ADMIN} from "../config/global_constants"
 
 export default class AccountDetails extends Component {
     render() {

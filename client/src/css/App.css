@@ -971,7 +971,7 @@ select {
 .table-container table {
   width: 100%;
   border-collapse: collapse;
-  margin: 20px 0;
+  margin: 20px;
 }
 .table-container table th, .table-container table td {
   padding: 12px 15px;
@@ -994,6 +994,16 @@ select {
   border-radius: 50%;
   object-fit: cover;
   margin-right: 10px;
+}
+.table-container .clickable-row {
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.table-container .clickable-row:hover {
+  background: #f0f0f0;
+}
+.table-container .expanded-row {
+  background: #fafafa;
 }
 .table-container .no-customers {
   font-size: 18px;

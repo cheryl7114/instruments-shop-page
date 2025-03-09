@@ -58,6 +58,13 @@ const getOrdersForUser = (req, res) => {
         .catch(error => res.json({ errorMessage: `Error getting orders`, error }))
 }
 
+const getAllOrders = (req, res) => {
+    ordersModel.find({})
+        .then(data => res.json(data))
+        .catch(error => res.json({ errorMessage: `Error getting all orders`, error }))
+}
+
+router.get('/orders', getAllOrders)
 router.post('/orders', createNewOrder)
 router.get('/orders/user', verifyUsersJWTPassword, getOrdersForUser)
 

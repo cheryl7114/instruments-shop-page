@@ -1094,7 +1094,7 @@ select {
   table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
+    margin: 20px;
 
     th, td {
       padding: 12px 15px;
@@ -1122,6 +1122,19 @@ select {
       object-fit: cover;
       margin-right: 10px;
     }
+  }
+
+  .clickable-row {
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .clickable-row:hover {
+    background: #f0f0f0;
+  }
+
+  .expanded-row {
+    background: #fafafa;
   }
 
   .no-customers {
