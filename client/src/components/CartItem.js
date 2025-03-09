@@ -9,7 +9,9 @@ export default class CartItem extends Component {
         super(props)
 
         this.state = {
-            imageSrc: null
+            imageSrc: null,
+            showModal: false,
+            modalMessage:""
         }
     }
 
@@ -17,12 +19,10 @@ export default class CartItem extends Component {
         this.loadItemImage()
     }
 
-    componentDidUpdate(prevProps) {
-        // If item or item images change, reload the image
+    componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.item !== this.props.item ||
-            (prevProps.item.images && this.props.item.images &&
-                prevProps.item.images[0] !== this.props.item.images[0])) {
-            this.loadItemImage()
+            (prevProps.item?.images?.[0] !== this.props.item?.images?.[0])) {
+            this.loadItemImage();
         }
     }
 
@@ -55,19 +55,26 @@ export default class CartItem extends Component {
     }
 
     incrementQuantity = () => {
-        const { item, updateQuantity } = this.props
+        const { item, updateQuantity } = this.props;
+
+        console.log("Item stock:", item.stock, "Current quantity:", item.quantity);
+
         if (item.quantity < item.stock) {
-            updateQuantity(item._id, item.quantity + 1)
+            updateQuantity(item._id, item.quantity + 1);
         } else {
-            alert(`Sorry, only ${item.stock} ${item.name}(s) available in stock`)
+            console.log("Stock limit reached, but no modal will be shown here.");
         }
-    }
+    };
 
     decrementQuantity = () => {
         const { item, updateQuantity } = this.props
         if (item.quantity > 1) {
             updateQuantity(item._id, item.quantity - 1)
         }
+    }
+
+    handleCloseModal = () => {
+        this.setState({showModal: false, modalMessage: ""})
     }
 
     render() {
@@ -120,6 +127,14 @@ export default class CartItem extends Component {
                     />
                 </div>
                 <div className="underline"></div>
+                {this.state.showModal && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <p>{this.state.modalMessage}</p>
+                            <button className="modal-close-btn" onClick={this.handleCloseModal}>OK</button>
+                        </div>
+                    </div>
+                )}
             </div>
         )
     }
