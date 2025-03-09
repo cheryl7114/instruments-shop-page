@@ -259,7 +259,7 @@ export default class Checkout extends Component {
             })
     }
 
-    onError = (err) => this.setState({ error: "Payment error. Please try again." })
+    onError = () => this.setState({ error: "Payment error. Please try again." })
 
     onCancel = () => this.setState({ error: "Payment was cancelled." })
 
@@ -368,8 +368,8 @@ export default class Checkout extends Component {
                     {!proceedPayment && <p className="payment-message">* Please complete and confirm the details in the form above before proceeding</p>}
                     {proceedPayment && (
                         <PayPalScriptProvider options={{
-                            currency: "EUR",
                             "client-id": SANDBOX_CLIENT_ID,
+                            currency: "EUR",
                             components: "buttons"
                         }}>
                             <PayPalButtons

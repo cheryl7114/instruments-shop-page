@@ -63,7 +63,6 @@ body {
   line-height: normal;
   border-radius: 20px;
   color: white;
-  background-color: #222;
   margin-right: 10px;
   position: relative;
   top: 5px;
@@ -85,7 +84,7 @@ body {
   border: none;
 }
 .orange-button:hover {
-  opacity: 0.8;
+  background-color: #222;
 }
 
 .red-button {
@@ -899,9 +898,8 @@ select {
   display: flex;
   gap: 20px;
   max-width: 1100px;
-  margin: 0 auto;
   padding: 20px;
-  margin-top: 30px;
+  margin: 30px auto 0;
 }
 
 .cart-content {
@@ -1243,6 +1241,28 @@ select {
 .clickable-row:hover {
   background: #f0f0f0;
 }
+.clickable-row .return-button {
+  padding: 10px;
+  font-size: 0.875rem;
+  line-height: normal;
+  border-radius: 20px;
+  position: relative;
+  top: 5px;
+  cursor: pointer;
+  text-align: center;
+  background-color: #ea954f;
+  width: 100%;
+  display: block;
+  margin: 1px auto;
+  border: none;
+}
+.clickable-row .return-button a {
+  text-decoration: none;
+  color: white;
+}
+.clickable-row .return-button:hover {
+  background-color: #222;
+}
 
 .expanded-row {
   background: #f9f9f9;
@@ -1285,6 +1305,91 @@ select {
   justify-content: center;
   height: 80vh;
   color: #333;
+}
+
+.return-form-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 25px;
+  position: relative;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.return-form-container h2 {
+  text-align: center;
+  color: #222;
+}
+.return-form-container label {
+  width: 100%;
+  padding-left: 10px;
+  color: #222;
+}
+.return-form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 20px;
+}
+.return-form-container form div {
+  display: flex;
+  flex-direction: column;
+}
+.return-form-container input,
+.return-form-container select,
+.return-form-container textarea {
+  width: 100%;
+  margin-top: 8px;
+  margin-bottom: 10px;
+  padding: 8px 15px;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+  appearance: none;
+}
+.return-form-container .select-wrapper {
+  position: relative;
+  width: 100%;
+}
+.return-form-container .select-wrapper select {
+  width: 100%;
+  padding: 8px 40px 8px 15px;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+  appearance: none;
+  font-size: 14px;
+  color: #222;
+}
+.return-form-container .select-wrapper .select-icon {
+  position: absolute;
+  right: 12px;
+  top: 62.75%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #8a8989;
+  font-size: 22px;
+}
+.return-form-container textarea {
+  border-radius: 10px;
+  resize: vertical;
+  min-height: 80px;
+}
+.return-form-container button {
+  background: #ea954f;
+  color: white;
+  font-size: 0.875rem;
+  border: none;
+  padding: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  text-align: center;
+  line-height: normal;
+  position: relative;
+  top: 5px;
+  text-decoration: none;
+}
+.return-form-container button:hover {
+  background: #222;
 }
 
 .fa-check-wrapper {
