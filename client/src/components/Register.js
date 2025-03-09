@@ -24,16 +24,18 @@ export default class Register extends Component {
             previewImages: [],
             isRegistered: false,
             wasSubmittedAtLeastOnce: false,
-            //errors:{}
+            showModal:false,
+            modalMessage:""
         }
     }
 
     handleChange = (e) => {
-        this.setState({ [e.target.name]: e.target.value })
+        this.setState({ [e.target.name]: e.target.value,
+            wasSubmittedAtLeastOnce: false })
     }
 
     handleFileChange = (e) => {
-        const selectedFiles = [...e.target.files]
+        const selectedFiles = Array.from(e.target.files)
 
         const updatedFiles = [...this.state.selectedFiles, ...selectedFiles].filter(file => file instanceof File)
         const newPreviews = selectedFiles.map(file => URL.createObjectURL(file))
@@ -41,8 +43,7 @@ export default class Register extends Component {
         this.setState(prevState => ({
             selectedFiles: updatedFiles,
             previewImages: [...prevState.previewImages, ...newPreviews]
-
-            // errors: { ...prevState.errors, images: updatedFiles.length > 0 ? undefined : "* Must upload at least one photo." }
+            //errors: { ...prevState.errors, images: updatedFiles.length > 0 ? undefined : "* Must upload at least one photo." }
         }))
     }
 
@@ -81,8 +82,17 @@ export default class Register extends Component {
                 .then(res => {
                     if (res.data) {
                         if (res.data.errorMessage) {
-                            console.log(res.data.errorMessage)
+                            this.setState({
+                                showModal: true,
+                                modalMessage: res.data.errorMessage,
+                                isRegistered:false
+                            })
                         } else {
+                            this.setState({
+                                showModal: true,
+                                modalMessage:"Successfully registered and logged in.",
+                                isRegistered: true
+                            })
                             console.log("User registered and logged in")
 
                             localStorage.name = res.data.name
@@ -97,11 +107,7 @@ export default class Register extends Component {
                                 localStorage.removeItem("profilePhoto")
                             }
 
-                            this.setState({ isRegistered: true }, () => {
-                                setTimeout(() => {
-                                    window.location.href = "/DisplayAllProducts"
-                                }, 100)
-                            })
+                            this.setState({ isRegistered: true})
                         }
                     } else {
                         console.log("Registration failed")
@@ -109,6 +115,18 @@ export default class Register extends Component {
                 })
         } else {
             console.log("Form validation failed")
+        }
+    }
+
+    handleCloseModal = () => {
+        this.setState({
+            showModal: false,
+            modalMessage: "",
+            wasSubmittedAtLeastOnce: false
+        })
+
+        if (this.state.isRegistered) {
+            this.setState({ redirectToProducts: true })
         }
     }
 
@@ -313,6 +331,14 @@ export default class Register extends Component {
                         </Link>
                     </div>
                 </form>
+                {this.state.showModal && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h4>{this.state.modalMessage}</h4>
+                            <button className="orange-button" onClick={this.handleCloseModal}>OK</button>
+                        </div>
+                    </div>
+                )}
             </div>
         )
     }
