@@ -9,7 +9,8 @@ export default class DeleteUser extends Component {
         super(props)
 
         this.state = {
-            redirectToDisplayAllUsers: false
+            redirectToUserProfile: false,
+            userId: localStorage.getItem("userId")
         }
     }
 
@@ -45,7 +46,7 @@ export default class DeleteUser extends Component {
                                         console.log(deleteRes.data.errorMessage)
                                     } else {
                                         console.log("User deleted")
-                                        this.setState({ redirectToDisplayAllUsers: true })
+                                        this.setState({ redirectToUserProfile: true })
                                     }
                                 } else {
                                     console.log("User not deleted")
@@ -67,7 +68,7 @@ export default class DeleteUser extends Component {
     render() {
         return (
             <div>
-                {this.state.redirectToDisplayAllUsers ? <Redirect to="/ViewCustomers" /> : null}
+                {this.state.redirectToUserProfile ? <Redirect to={`/UserProfile/${this.state.userId}/view-customers`} /> : null}
             </div>
         )
     }
