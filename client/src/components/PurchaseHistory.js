@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import axios from "axios"
 import { SERVER_HOST } from "../config/global_constants"
+import {Link} from "react-router-dom"
 
 export default class PurchaseHistory extends Component {
     constructor(props) {
@@ -30,6 +31,14 @@ export default class PurchaseHistory extends Component {
         }))
     }
 
+    isReturnEligible(orderDate) {
+        const currentDate = new Date()
+        const orderDateObj = new Date(orderDate)
+        const twoWeeksAgo = new Date(currentDate.setDate(currentDate.getDate() - 14))
+
+        return orderDateObj >= twoWeeksAgo
+    }
+
     render() {
         const { orders, expandedRow, error } = this.state
 
@@ -49,6 +58,7 @@ export default class PurchaseHistory extends Component {
                             <th>Order ID</th>
                             <th>Order Date</th>
                             <th>Total (€)</th>
+                            <th>Return?</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -58,11 +68,20 @@ export default class PurchaseHistory extends Component {
                                     <td>{order._id}</td>
                                     <td>{new Date(order.orderDate).toLocaleString()}</td>
                                     <td>€{order.total.toFixed(2)}</td>
+                                    <td>
+                                        {this.isReturnEligible(order.orderDate) ? (
+                                            <Link to={`/ReturnForm/${order._id}`}>
+                                                Return
+                                            </Link>
+                                        ) : (
+                                            <span>Not Eligible</span>
+                                        )}
+                                    </td>
                                 </tr>
 
                                 {expandedRow === index && (
                                     <tr className="expanded-row">
-                                        <td colSpan="3">
+                                        <td colSpan="4">
                                             <div className="expanded-row-details">
                                                 <div className="address-details">
                                                     <strong>Delivery Address:</strong> {order.deliveryAddress.address}, {order.deliveryAddress.city}, {order.deliveryAddress.postcode}<br />
