@@ -944,23 +944,12 @@ select {
   border: 1px solid #ddd;
   border-radius: 4px;
 }
-.bottom-item-container button {
+.bottom-item-container .quantity-btn {
   background: none;
   border: none;
-  padding: 2px 6px;
+  padding: 2px 10px;
   cursor: pointer;
   font-size: 16px;
-}
-.bottom-item-container input {
-  width: 40px;
-  text-align: center;
-  border: none;
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
-  padding: 5px;
-}
-.bottom-item-container input:focus {
-  outline: none;
 }
 .bottom-item-container .remove-item-icon {
   cursor: pointer;

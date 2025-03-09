@@ -61,27 +61,44 @@ export default class App extends Component {
 
     // cart management
     addToCart = (product) => {
-        this.setState(prevState => {
-            const existingItem = prevState.cartItems.find(item => item._id === product._id)
-
-            let updatedCart
-            if (existingItem) {
-                // Update quantity if product already in cart
-                updatedCart = prevState.cartItems.map(item =>
-                    item._id === product._id
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item
-                )
-            } else {
-                // Add new item with quantity 1
-                updatedCart = [...prevState.cartItems, { ...product, quantity: 1 }]
+        // Check if product is out of stock
+        if (!product.stock || product.stock <= 0) {
+            alert("Sorry, this product is out of stock")
+            return false
+        }
+        
+        // Create a new cartItems array to avoid direct state mutation
+        let cartItems = [...this.state.cartItems]
+        
+        // Check if item already exists in cart
+        const existingItemIndex = cartItems.findIndex(item => item._id === product._id)
+        
+        if (existingItemIndex >= 0) {
+            // Item exists in cart, check if we can add more
+            const updatedQuantity = cartItems[existingItemIndex].quantity + 1
+            
+            // Check against available stock
+            if (updatedQuantity > product.stock) {
+                alert(`Sorry, you can't add more of this item. Only ${product.stock} available in stock.`)
+                return false
             }
-
-            // Save to localStorage
-            localStorage.setItem('cartItems', JSON.stringify(updatedCart))
-
-            return { cartItems: updatedCart }
+            
+            // Update quantity
+            cartItems[existingItemIndex].quantity = updatedQuantity
+        } else {
+            // Item doesn't exist in cart, add it with quantity 1
+            cartItems.push({
+                ...product,
+                quantity: 1
+            })
+        }
+        
+        // Update state and localStorage
+        this.setState({ cartItems }, () => {
+            localStorage.setItem('cartItems', JSON.stringify(cartItems))
         })
+        
+        return true
     }
 
     removeFromCart = (productId) => {
@@ -141,7 +158,7 @@ export default class App extends Component {
     }
 
     getFilteredAndSortedProducts = () => {
-        const { searchQuery, products, sortType, selectedCategories, selectedBrands } = this.state;
+        const { searchQuery, products, sortType, selectedCategories, selectedBrands } = this.state
 
         let result = products
 
@@ -186,7 +203,7 @@ export default class App extends Component {
         }
     }
     render() {
-        const filteredProducts = this.getFilteredAndSortedProducts();
+        const filteredProducts = this.getFilteredAndSortedProducts()
         return (
             <BrowserRouter>
                 <div>
@@ -201,7 +218,7 @@ export default class App extends Component {
                                 {...props}
                                 addToCart={this.addToCart}
                             />
-                        } />                        
+                        } />
                         <Route exact path="/Register" component={Register} />
                         <Route exact path="/ResetDatabase" component={ResetDatabase} />
                         {/* Home route */}

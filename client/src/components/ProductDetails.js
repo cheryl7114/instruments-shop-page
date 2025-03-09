@@ -1,7 +1,8 @@
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa"
+import { CiEdit, CiTrash } from "react-icons/ci"
 import { ACCESS_LEVEL_GUEST, ACCESS_LEVEL_ADMIN, SERVER_HOST } from "../config/global_constants"
 
 export default class ProductDetails extends Component {
@@ -27,8 +28,22 @@ export default class ProductDetails extends Component {
     }
 
     handleAddToCart = () => {
-        this.props.addToCart(this.state.product);
-        alert(`${this.state.product.name} added to cart!`);
+        const { product } = this.state
+
+        // Check if product is out of stock
+        if (product.stock <= 0) {
+            alert("Sorry, this product is out of stock")
+            return
+        }
+
+        // Call addToCart and get success status back
+        const success = this.props.addToCart(product)
+
+        // Only show success message if adding to cart was successful
+        if (success) {
+            alert(`${product.name} added to cart!`)
+        }
+        // No need for an else statement since addToCart should show its own error message
     }
 
     componentDidMount() {
@@ -109,8 +124,19 @@ export default class ProductDetails extends Component {
                             <p className="details"><i>{product.stock} units left</i></p>
                             <h3><span id="price-text"><b> </b></span>€{product.price}</h3>
 
-                            {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ? <Link className="green-button" to={"/EditProduct/" + product._id}>Edit</Link> : null}
-                            {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ? <Link className="red-button" to={"/DeleteProduct/" + product._id}>Delete</Link> : null}
+                            {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?
+                                <Link className="edit-button" to={"/EditProduct/" + product._id}>
+                                    <CiEdit size={25} />
+                                </Link>
+                                :
+                                null}
+                            {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?
+                                <Link className="delete-button" to={"/DeleteProduct/" + product._id}>
+                                    <CiTrash size={25} />
+                                </Link>
+                                :
+                                null
+                            }
                             <button
                                 className="add-to-cart-button"
                                 onClick={this.handleAddToCart}

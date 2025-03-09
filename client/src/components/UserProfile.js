@@ -3,8 +3,6 @@ import {Link, Route, Switch} from "react-router-dom"
 
 import axios from "axios"
 
-import Logout from "./Logout"
-
 import {ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../config/global_constants"
 import AccountDetails from "./AccountDetails"
 import MyOrders from "./MyOrders"
@@ -25,26 +23,26 @@ export default class UserProfile extends Component {
     componentDidMount() {    
         axios.get(`${SERVER_HOST}/users/${this.props.match.params.id}`, { headers: { "authorization": localStorage.token } })
             .then(res => {
-                console.log("User API response:", res.data);
+                console.log("User API response:", res.data)
                 if (res.data) {
                     if (res.data.errorMessage) {
-                        console.log("Error message:", res.data.errorMessage);
+                        console.log("Error message:", res.data.errorMessage)
                     } else {
-                        this.setState({ user: res.data });
-                        console.log("User details retrieved:", res.data);
+                        this.setState({ user: res.data })
+                        console.log("User details retrieved:", res.data)
                     }
                 } else {
-                    console.log("User not found");
+                    console.log("User not found")
                 }
             })
             .catch(err => {
-                console.error("Error fetching user:", err);
+                console.error("Error fetching user:", err)
                 // Try to get response details if available
                 if (err.response) {
-                    console.error("Response data:", err.response.data);
-                    console.error("Response status:", err.response.status);
+                    console.error("Response data:", err.response.data)
+                    console.error("Response status:", err.response.status)
                 }
-            });
+            })
     }
 
     render() {
