@@ -586,10 +586,7 @@ body {
 .customer-search-bar input {
   border: none;
   outline: none;
-  padding: 4px;
-  border-radius: 30px;
-}
-.search-bar input::placeholder,
+laceholder,
 .customer-search-bar input::placeholder {
   color: #888;
 }
@@ -1423,21 +1420,6 @@ select {
   -o-object-fit: cover;
      object-fit: cover;
   margin-right: 10px;
-}
-.table-container table ul {
-  padding-left: 20px;
-}
-.table-container table .return-link {
-  color: #ea954f;
-  text-decoration: none;
-}
-.table-container table .return-link:hover {
-  text-decoration: underline;
-}
-
-.sort-pointer {
-  cursor: pointer;
-}
 
 .clickable-row {
   cursor: pointer;
