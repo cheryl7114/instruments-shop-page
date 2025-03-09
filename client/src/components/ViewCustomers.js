@@ -79,7 +79,7 @@ export default class ViewCustomers extends Component {
                 </div>
                 {filteredUsers.length > 0 ? (
                     <table>
-                        <thead>
+                        <thead> 
                             <tr>
                                 <th>Profile Pic</th>
                                 <th>Name</th>

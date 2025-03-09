@@ -1,8 +1,9 @@
 import React, { Component } from "react"
-import { Redirect } from "react-router-dom"
+import {Link} from "react-router-dom"
 import axios from "axios"
 
 import { SERVER_HOST } from "../config/global_constants"
+import {CiCircleRemove} from "react-icons/ci";
 
 
 export default class DeleteProduct extends Component {
@@ -11,57 +12,94 @@ export default class DeleteProduct extends Component {
 
         this.state = {
             images: [],
-            redirectToDisplayAllProducts: false
+            showConfirmModal: false,
+            showSuccessModal:false
         }
     }
 
     componentDidMount() {
-        axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, { headers: { "authorization": localStorage.token } })
+        axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, {
+            headers: { "authorization": localStorage.token }
+        })
             .then(res => {
-                if (res.data) {
-                    if (res.data.errorMessage) {
-                        console.log(res.data.errorMessage)
-                    } else {
-                        const imageDeletePromises = (res.data.images || []).map(image =>
-                            axios.delete(`${SERVER_HOST}/products/image/${image.filename}`, { headers: { "authorization": localStorage.token } })
-                                .then(res => console.log("Image deleted successfully:", res.data.message))
-                                .catch(err => console.error("Failed to delete image:", err))
-                        )
-
-                        // Promise.all() waits for all of them to complete
-                        // Ensure all images are deleted before deleting the product
-                        Promise.all(imageDeletePromises)
-                            .then(() => {
-                                return axios.delete(`${SERVER_HOST}/products/${this.props.match.params.id}`, { headers: { "authorization": localStorage.token } })
-                            })
-                            .then(res => {
-                                if (res.data) {
-                                    if (res.data.errorMessage) {
-                                        console.log(res.data.errorMessage)
-                                    } else {
-                                        // Set state for redirection and refresh the page after a short delay
-                                        this.setState({ redirectToDisplayAllProducts: true }, () => {
-                                            setTimeout(() => {
-                                                window.location.reload()
-                                            }, 100)
-                                        })
-                                        console.log("Record deleted")
-                                    }
-                                } else {
-                                    console.log("Record not deleted")
-                                }
-                            })
-                    }
+                if (res.data && !res.data.errorMessage) {
+                    this.setState({ product: res.data, showConfirmModal: true })
                 } else {
-                    console.log(`Record not found`)
+                    throw new Error("Product not found.")
                 }
+            })
+            .catch(err => {
+                console.error("Error:", err)
+                this.setState({ errorMessage: err.message || "An error occurred while fetching the product." })
+                window.location.href = "/DisplayAllProducts"
             })
     }
 
+    handleConfirmDelete = () => {
+        const { product } = this.state
+        if (!product) return
+
+        // 删除产品图片
+        const imageDeletePromises = (product.images || []).map(image =>
+            axios.delete(`${SERVER_HOST}/products/image/${image.filename}`, {
+                headers: { "authorization": localStorage.token }
+            })
+        )
+
+        // Promise.all() waits for all of them to complete
+        // Ensure all images are deleted before deleting the product
+        Promise.all(imageDeletePromises)
+            .then(() => axios.delete(`${SERVER_HOST}/products/${this.props.match.params.id}`, {
+                headers: { "authorization": localStorage.token }
+            }))
+            .then(res => {
+                if (res.data && !res.data.errorMessage) {
+                    console.log("Product successfully deleted.")
+                    this.setState({ showConfirmModal: false, showSuccessModal: true })
+                } else {
+                    throw new Error("Failed to delete product.")
+                }
+            })
+            .catch(err => {
+                console.error("Error:", err)
+                this.setState({ errorMessage: err.message || "An error occurred while deleting the product." })
+                window.location.href = "/DisplayAllProducts"
+            })
+    }
+
+    handleCloseModal = () => {
+        this.setState({ showConfirmModal: false, showSuccessModal: false })
+        window.location.href = "/DisplayAllProducts"
+    }
+
     render() {
+        const { product, showConfirmModal, showSuccessModal } = this.state
+
         return (
             <div>
-                {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts" /> : null}
+                {showConfirmModal && product && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h4>Are you sure to delete {product.name}?</h4>
+                            <p>This action cannot be undone.</p>
+                            <button className="orange-button" onClick={this.handleConfirmDelete}>Yes</button>
+                            <div className="cancel-button">
+                                <Link to={"/DisplayAllProducts"}>
+                                    <CiCircleRemove size={30} color="red" />
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {showSuccessModal && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h4>Product Deleted Successfully!</h4>
+                            <button className="orange-button" onClick={this.handleCloseModal}>OK</button>
+                        </div>
+                    </div>
+                )}
             </div>
         )
     }

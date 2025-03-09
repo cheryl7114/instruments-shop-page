@@ -77,9 +77,10 @@ body {
 
 .orange-button {
   background-color: #ea954f;
-  width: 200px;
+  width: 250px;
   display: block;
   margin: 1px auto;
+  border: none;
 }
 .orange-button:hover {
   opacity: 0.8;
@@ -269,6 +270,10 @@ body {
 .sidebar-with-content {
   display: flex;
   margin-top: 40px;
+  overflow: hidden;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 2px 6px 24px rgba(0, 0, 0, 0.5);
 }
 
 .sidebar {
@@ -276,7 +281,6 @@ body {
   max-width: 200px;
   background: #ea954f;
   padding: 15px;
-  border-radius: 8px;
 }
 .sidebar h2 {
   padding: 10px;
@@ -290,24 +294,25 @@ body {
   display: block;
   margin: 10px 0;
   padding: 8px 12px;
-  border-radius: 5px;
+  border-radius: 20px;
   transition: background 0.3s ease, color 0.3s ease;
   text-decoration: none;
-  color: black;
+  color: white;
   font-size: 16px;
 }
 .sidebar .sidebar-choices:hover {
-  background: #ddd;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
 }
 .sidebar .sidebar-choices:active {
-  background: #ccc;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 20px;
 }
 
 .content {
   flex-grow: 1;
   padding: 50px;
   border: 1px solid #ddd;
-  border-radius: 8px;
   background: #fff;
 }
 .content p {
@@ -463,93 +468,157 @@ body {
   width: 100%;
 }
 
-.login-container,
-.register-container {
+.login-container {
   display: flex;
   height: 800px;
 }
-.login-container h1,
-.register-container h1 {
+.login-container h1 {
   font-weight: 600;
   color: #222;
   margin-bottom: 24px;
   letter-spacing: 0.1rem;
 }
-.login-container input,
-.register-container input {
+.login-container input {
   width: 100%;
-  padding: 8px 54px 8px 18px;
+  padding: 8px 100px 8px 18px;
   margin-bottom: 14px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 20px;
   font-size: 1rem;
 }
-.login-container input:focus,
-.register-container input:focus {
+.login-container input:focus {
   border-color: #ea954f;
   outline: none;
 }
-.login-container .create-account-link,
-.login-container .cancel-link,
-.register-container .create-account-link,
-.register-container .cancel-link {
+.login-container .create-account-link {
   display: compact;
   color: #ea954f;
   text-decoration: underline;
   text-align: center;
 }
-.login-container .create-account-link:hover,
-.login-container .cancel-link:hover,
-.register-container .create-account-link:hover,
-.register-container .cancel-link:hover {
+.login-container .create-account-link:hover {
   text-decoration: underline;
 }
-.login-container .sign-in-button,
-.login-container .register-button,
-.register-container .sign-in-button,
-.register-container .register-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #ea954f;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  margin-bottom: 20px;
-}
-.login-container .sign-in-button:hover,
-.login-container .register-button:hover,
-.register-container .sign-in-button:hover,
-.register-container .register-button:hover {
-  opacity: 0.8;
-}
 
-.login-page,
-.register-page {
+.login-page {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: white;
   padding: 64px;
-  border: thin solid rgb(147, 145, 145);
   border-radius: 20px;
   max-width: 400px;
   margin: auto;
   box-shadow: 2px 6px 24px rgba(0, 0, 0, 0.5);
+  position: relative;
 }
-.login-page p,
-.register-page p {
+.login-page p {
   color: #222;
+}
+
+.sign-in-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #ea954f;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  margin-bottom: 20px;
+}
+.sign-in-button:hover {
+  opacity: 0.8;
+}
+
+.register-container .register-page {
+  margin: 50px auto;
+  padding: 20px;
+  position: relative;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  max-width: 400px;
+  box-shadow: 2px 6px 24px rgba(0, 0, 0, 0.5);
+}
+.register-container .register-page h1 {
+  font-weight: 600;
+  color: #222;
+  margin-top: 18px;
+  margin-bottom: 0;
+}
+.register-container input {
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px 200px 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+  appearance: none;
+}
+.register-container .profile-upload-label {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  padding: 8px 100px 8px 18px;
+  font-size: 14px;
+  background-color: white;
+  border: 2px dashed #ea954f;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #888888;
+}
+.register-container .profile-upload-label:hover {
+  background-color: #ea954f;
+  color: white;
+}
+.register-container .profile-upload-label input[type=file] {
+  display: none;
+}
+.register-container .profile-upload-label .profile-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 15px;
+  justify-content: start;
+}
+.register-container .profile-upload-label .profile-preview-container .profile-preview-wrapper {
+  width: 300px;
+  height: 300px;
+  position: relative;
+  display: inline-block;
+  margin: 10px;
+  justify-content: start;
+}
+.register-container .profile-upload-label .profile-preview-container .profile-preview-wrapper .profile-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 14px;
+  border: 1px;
+  padding: 15px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.input-container span {
+  margin-left: 10px;
+  font-size: 12px;
 }
 
 .error {
   color: red;
   font-size: 0.8rem;
-  margin-top: 5px;
+  margin-top: 0;
+  z-index: 1000;
 }
 .error ul {
   margin: 0;
@@ -585,11 +654,6 @@ body {
   width: 100%;
   padding: 10px;
   color: #222;
-}
-.add-product-container .error {
-  color: red;
-  font-size: 0.9em;
-  margin-top: 0;
 }
 
 .select-wrapper {
@@ -671,6 +735,13 @@ select {
   color: #222;
 }
 
+.image-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 15px;
+  justify-content: start;
+}
+
 .image-preview-wrapper {
   width: 45%;
   height: 300px;
@@ -733,13 +804,6 @@ select {
   width: 100%;
   padding: 8px;
   color: #222;
-}
-
-.image-preview-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px 15px;
-  justify-content: start;
 }
 
 .products-page-layout {
@@ -971,6 +1035,39 @@ select {
   opacity: 0.7;
 }
 
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: start;
+}
+
+.modal-content {
+  background: white;
+  margin: 50px;
+  padding: 35px;
+  border-radius: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.modal-content h4 {
+  font-size: 16px;
+  padding-top: 0;
+  padding-bottom: 10px;
+}
+
+.modal-content p {
+  font-size: 12px;
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+
 /* Cart summary section */
 .cart-summary {
   background-color: #f9f9f9;
@@ -1018,32 +1115,53 @@ select {
   cursor: pointer;
 }
 
-.table-container {
-  margin: 20px;
-}
 .table-container table {
   width: 100%;
   border-collapse: collapse;
+  margin: 20px 0;
+  border-radius: 20px;
+  overflow: hidden;
 }
-.table-container table th,
+.table-container table th, 
 .table-container table td {
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  text-align: center;
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  text-align: left;
+
+}
+.table-container table th :last-child, .table-container table td :last-child {
+  border-right: none;
 }
 .table-container table th {
+  padding: 12px 15px;
   background-color: #f2f2f2;
   color: #333;
 }
-.table-container table tr:nth-child(even) {
-  background-color: #f9f9f9;
+.table-container table tr {
+  border-bottom: 1px solid #ddd;
 }
-.table-container table td img.profile-photo {
+.table-container table tr:last-child {
+  border-bottom: none;
+}
+.table-container table tr td:last-child {
+  border-right: none;
+}
+.table-container table tr th:last-child {
+  border-right: none;
+}
+.table-container table tr :hover {
+  background-color: #f1f1f1;
+}
+.table-container table tr td img.profile-photo {
   width: 100px;
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
   margin-right: 10px;
+}
+.table-container tbody tr:last-child td {
+  border-bottom: white;
 }
 .table-container table ul {
   padding-left: 20px;
@@ -1084,8 +1202,7 @@ select {
 .product-item strong {
   font-weight: 600;
 }
-
-.no-customers {
+.table-container .no-customers {
   font-size: 18px;
   color: #666;
   text-align: center;

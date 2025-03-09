@@ -6,7 +6,7 @@ import axios from "axios"
 
 import LinkInClass from "../components/LinkInClass"
 
-import { ACCESS_LEVEL_NORMAL_USER, SERVER_HOST } from "../config/global_constants"
+import { ACCESS_LEVEL_ADMIN, SERVER_HOST } from "../config/global_constants"
 
 export default class EditProduct extends Component {
     constructor(props) {
@@ -24,7 +24,8 @@ export default class EditProduct extends Component {
             selectedFiles: [],
             previewImages: [],
             errors:{},
-            redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_NORMAL_USER
+            showModal:false,
+            redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_ADMIN
         }
     }
 
@@ -278,15 +279,15 @@ export default class EditProduct extends Component {
                         if (res.data.errorMessage) {
                             console.log(res.data.errorMessage)
                         } else {
-                            console.log(`Record updated`)
-                            this.setState({ redirectToDisplayAllProducts: true }, () => {
-                                setTimeout(() => {
-                                    window.location.reload()
-                                }, 100)
-                            })
+                            console.log(`Product data updated.`)
+                            this.setState({ showModal: true })
+
+                            setTimeout(() => {
+                                this.setState({ redirectToDisplayAllProducts: true })
+                            }, 10000)
                         }
                     } else {
-                        console.log(`Record not updated`)
+                        console.log(`Product record not updated.`)
                     }
                 })
         //}
@@ -315,6 +316,11 @@ export default class EditProduct extends Component {
     validatePrice() {
         const price = parseFloat(this.state.price)
         return !isNaN(price) && price >= 0 // no negative values
+    }
+
+    handleCloseModal = () => {
+        this.setState({ showModal: false })
+        window.location.href = "/DisplayAllProducts" // ✅ 关闭 modal 后跳转回产品列表
     }
 
     render() {
@@ -467,6 +473,14 @@ export default class EditProduct extends Component {
                         </Link>
                     </div>
                 </form>
+                {this.state.showModal && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h4>Product Edited Successfully!</h4>
+                            <button className="orange-button" onClick={this.handleCloseModal}>OK</button>
+                        </div>
+                    </div>
+                )}
             </div>
         )
     }

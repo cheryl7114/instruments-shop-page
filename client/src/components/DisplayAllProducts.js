@@ -24,28 +24,30 @@ export default class DisplayAllProducts extends Component {
     }
 
     componentDidMount() {
-        // console.log("Component Mounted. Initial State:", this.state)
+        this.fetchProducts()
+    }
+
+    // ✅ 重新获取产品列表
+    fetchProducts = () => {
         axios.get(`${SERVER_HOST}/products`)
             .then(res => {
-                if (res.data) {
-                    if (res.data.errorMessage) {
-                        console.log(res.data.errorMessage)
-                    } else {
-                        console.log("Products fetched:", res.data)
-
-                        const brandsObject = {}
-                        res.data.forEach(product => {
-                            brandsObject[product.brand] = true
-                        })
-                        this.setState({
-                            products: res.data,
-                            brands: brandsObject
-                        })}
-                } else {
-                    console.log("No products found")
+                if (res.data && !res.data.errorMessage) {
+                    const brandsObject = {}
+                    res.data.forEach(product => {
+                        brandsObject[product.brand] = true
+                    })
+                    this.setState({
+                        products: res.data,
+                        brands: brandsObject
+                    })
                 }
             })
             .catch(err => console.log("Error fetching products", err))
+    }
+
+    // ✅ 处理产品删除事件
+    handleProductDeleted = () => {
+        this.fetchProducts()  // 重新获取产品列表
     }
 
     toggleDropdown = () => {
@@ -183,8 +185,9 @@ export default class DisplayAllProducts extends Component {
                                 {productsToDisplay.length === 0 ? (
                                     <div className="no-products">No products available</div>
                                 ) : (
-                                    < div className="product-grid">
-                                        <ProductGrid products={productsToDisplay} />
+                                    <div className="product-grid">
+                                        {/* ✅ 传递 onProductDeleted 让子组件更新状态 */}
+                                        <ProductGrid products={productsToDisplay} onProductDeleted={this.handleProductDeleted} />
                                     </div>
                                 )}
                             </div>
