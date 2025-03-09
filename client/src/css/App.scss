@@ -13,6 +13,7 @@ $orange: #ea954f;
 html,
 body {
   background: $light-gray;
+  overflow-x: hidden;
 }
 
 .underline {
@@ -1789,16 +1790,21 @@ select {
     flex-direction: column;
     align-items: center;
     padding: 10px;
+    position: relative; // Add this for proper positioning
 
     .nav-links {
       flex-direction: column;
       gap: 10px;
       margin-left: 0;
       text-align: center;
+      width: 100%; // Ensure full width
     }
 
     .icons {
       margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      width: 100%;
     }
 
     .logo {
@@ -1809,6 +1815,28 @@ select {
       top: -5px;
       right: -5px;
     }
+
+    // Add button container styling
+    .nav-buttons {
+      flex-direction: column;
+      width: 100%;
+      gap: 8px;
+      margin-top: 10px;
+
+      button {
+        width: 100%;
+        padding: 10px 0;
+      }
+    }
+  }
+
+  // Add button specific styles
+  .orange-button,
+  .blue-button,
+  .red-button {
+    width: 100% !important;
+    margin: 5px 0 !important;
+    padding: 12px !important;
   }
 
   .products-page-layout {
@@ -1827,6 +1855,13 @@ select {
 
   .product-card {
     width: 100%;
+    position: relative; // For button positioning
+
+    button {
+      position: static !important;
+      margin-top: 10px !important;
+      width: 100% !important;
+    }
 
     img {
       width: 100%;
@@ -1836,12 +1871,17 @@ select {
 
   .cart-items {
     flex-direction: column;
-  }
 
-  .item-actions {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    .item-actions {
+      flex-direction: column;
+      align-items: stretch !important; // Force full width
+      gap: 10px;
+
+      button {
+        width: 100%;
+        margin: 5px 0;
+      }
+    }
   }
 
   .quantity-selector {
@@ -1860,11 +1900,20 @@ select {
     .product-info {
       width: 100%;
       padding: 20px 0;
+
+      .add-to-cart-button {
+        width: 100% !important;
+        margin-top: 15px;
+      }
     }
   }
 
   .newsletter {
     padding: 50px 20px;
+
+    button {
+      width: 100%;
+    }
   }
 }
 
@@ -1883,12 +1932,22 @@ select {
     .sidebar {
       width: 100%;
       max-width: none;
+
+      .sidebar-choices {
+        text-align: center;
+        padding: 12px;
+      }
     }
   }
 
   .checkout-container {
     max-width: 90%;
     padding: 20px;
+
+    button {
+      width: 100%;
+      margin: 10px 0 !important;
+    }
   }
 
   .table-container table {
@@ -1915,13 +1974,18 @@ select {
 
   .product-grid {
     grid-template-columns: 1fr;
-  }
 
-  .product-card {
-    padding: 10px;
+    .product-card {
+      padding: 10px;
 
-    img {
-      height: 250px;
+      button {
+        padding: 10px !important;
+        font-size: 0.9rem;
+      }
+
+      img {
+        height: 250px;
+      }
     }
   }
 
@@ -1935,6 +1999,11 @@ select {
         width: 100%;
         margin-bottom: 10px;
       }
+
+      button {
+        width: 100%;
+        padding: 12px;
+      }
     }
   }
 
@@ -1946,11 +2015,20 @@ select {
   .login-page {
     padding: 30px;
     width: 90%;
+
+    button {
+      width: 100%;
+    }
   }
 
   .register-page {
     padding: 20px;
     width: 90%;
+
+    button {
+      width: 100%;
+      margin-top: 15px;
+    }
   }
 
   .orange-button {
@@ -1959,6 +2037,15 @@ select {
 
   .cart-summary {
     padding: 15px;
+
+    .cart-actions {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+        margin: 5px 0;
+      }
+    }
   }
 
   .image-preview-wrapper {
@@ -1969,5 +2056,18 @@ select {
   .modal-content {
     margin: 20px;
     padding: 20px;
+
+    button {
+      width: 100%;
+      margin: 5px 0;
+    }
+  }
+
+  // Universal button fixes
+  button {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: auto !important;
   }
 }
