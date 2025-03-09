@@ -131,7 +131,7 @@ export default class Register extends Component {
         })
 
         if (this.state.isRegistered) {
-            window.location.href = "/LoggedinRoute"
+            window.location.href = "/"
         }
     }
 
