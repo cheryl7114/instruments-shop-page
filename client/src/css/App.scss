@@ -1247,7 +1247,7 @@ select {
 }
 
 
-// Admin View Panel
+// Admin View Panel and Customer View Panel
 .table-container {
   margin: 20px;
 
@@ -1298,6 +1298,18 @@ select {
       padding-left: 20px;
     }
 
+    .sort-pointer {
+      cursor: pointer;
+    }
+
+    .return-link {
+      color: $orange;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }
 

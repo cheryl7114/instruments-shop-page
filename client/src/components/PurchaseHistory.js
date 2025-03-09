@@ -11,7 +11,8 @@ export default class PurchaseHistory extends Component {
             expandedRow: null,
             error: "",
             sortKey: "orderDate",
-            sortOrder: "desc"
+            sortOrder: "desc",
+            filteredOrders: []
         }
     }
 
@@ -21,7 +22,7 @@ export default class PurchaseHistory extends Component {
                 if (res.data.errorMessage) {
                     this.setState({ error: res.data.errorMessage })
                 } else {
-                    this.setState({ orders: res.data })
+                    this.setState({ orders: res.data, filteredOrders: res.data })
                 }
             })
             .catch(() => this.setState({ error: "Error fetching purchase history" }))
@@ -41,30 +42,39 @@ export default class PurchaseHistory extends Component {
         return orderDateObj >= twoWeeksAgo
     }
 
+    sortData = (data, key, order) => {
+        return [...data].sort((a, b) => {
+            let valueA, valueB
+
+            if (key === 'orderDate') {
+                valueA = new Date(a[key])
+                valueB = new Date(b[key])
+            } else if (key === 'total') {
+                valueA = a.total
+                valueB = b.total
+            } else {
+                valueA = a[key]
+                valueB = b[key]
+            }
+
+            // sort based on direction
+            if (order === 'asc') {
+                return valueA > valueB ? 1 : -1
+            } else {
+                return valueB > valueA ? 1 : -1
+            }
+        })
+    }
+
     handleSortIndicator = (currentKey) => {
         this.setState(prevState => {
             const newSortOrder = prevState.sortKey === currentKey && prevState.sortOrder === 'asc' ? 'desc' : 'asc'
+            const sortedOrders = this.sortData(prevState.orders, currentKey, newSortOrder)
+            const sortedFilteredOrders = this.sortData(prevState.filteredOrders, currentKey, newSortOrder)
 
-            const sortedOrders = [...prevState.orders].sort((a, b) => {
-                let valueA, valueB
-
-                if (currentKey === 'orderDate') {
-                    valueA = new Date(a[currentKey])
-                    valueB = new Date(b[currentKey])
-                } else if (currentKey === 'total') {
-                    valueA = a.total
-                    valueB = b.total
-                }
-
-                // sort based on direction
-                if (newSortOrder === 'asc') {
-                    return valueA > valueB ? 1 : -1
-                } else {
-                    return valueB > valueA ? 1 : -1
-                }
-            })
             return {
                 orders: sortedOrders,
+                filteredOrders: sortedFilteredOrders,
                 sortKey: currentKey,
                 sortOrder: newSortOrder
             }
@@ -72,7 +82,7 @@ export default class PurchaseHistory extends Component {
     }
 
     render() {
-        const { orders, expandedRow, error, sortKey, sortOrder } = this.state
+        const { filteredOrders, expandedRow, error, sortKey, sortOrder } = this.state
         const getSortIndicator = (currentKey) => {
             if (sortKey === currentKey) {
                 return sortOrder === 'asc' ? '▲' : '▼'
@@ -86,7 +96,7 @@ export default class PurchaseHistory extends Component {
 
                 {error && <p className="error">{error}</p>}
 
-                {orders.length === 0 ? (
+                {filteredOrders.length === 0 ? (
                     <p className="no-orders">No purchase history available.</p>
                 ) : (
                     <table>
@@ -99,7 +109,7 @@ export default class PurchaseHistory extends Component {
                         </tr>
                         </thead>
                         <tbody>
-                        {orders.map((order, index) => (
+                        {filteredOrders.map((order, index) => (
                             <>
                                 <tr key={order._id} className="clickable-row" onClick={() => this.toggleRow(index)}>
                                     <td>{order._id}</td>
@@ -107,7 +117,7 @@ export default class PurchaseHistory extends Component {
                                     <td>€{order.total.toFixed(2)}</td>
                                     <td>
                                         {this.isReturnEligible(order.orderDate) ? (
-                                            <Link to={`/ReturnForm/${order._id}`}>
+                                            <Link className="return-link" to={`/ReturnForm/${order._id}`}>
                                                 Return
                                             </Link>
                                         ) : (
