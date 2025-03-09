@@ -1,0 +1,80 @@
+[{
+  "_id": {
+    "$oid": "67ce185270c9f3589c40ff46"
+  },
+  "profilePhotoFilename": "",
+  "phoneNumber": "",
+  "accessLevel": 2,
+  "name": "Administrator",
+  "email": "admin@admin.com",
+  "password": "$2a$04$qV1o6dHSttBVW8PmcSorbudmZVfx76EqeJVPjKtzQEpJbh.GWmme6",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ce191970c9f3589c40ff4f"
+  },
+  "profilePhotoFilename": "a68b84c3f1be543afc43f851097c320c",
+  "phoneNumber": "0876669568",
+  "accessLevel": 1,
+  "name": "Cheryl ",
+  "email": "cherylkong50@gmail.com",
+  "password": "$2a$04$.2WYUQYd99z.ZX/95LUwieIdKYCG/YCzP2tpnKaczQTFIbbYgk2w6",
+  "deliveryAddress": {
+    "address": "128 RC",
+    "city": "Dundalk",
+    "postcode": "A91"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ce199370c9f3589c40ff57"
+  },
+  "profilePhotoFilename": "6d02bca1e12aefa9edad26f119ad61d5",
+  "phoneNumber": "",
+  "accessLevel": 1,
+  "name": "No Address Sample",
+  "email": "noaddress@gmail.com",
+  "password": "$2a$04$nx5fqR.v6tWCAg8kqis7ZeJrXIX2qvl741nt31fHtN3VnNGXK3gBm",
+  "deliveryAddress": {
+    "address": "",
+    "city": "",
+    "postcode": ""
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ce1aba70c9f3589c40ff5f"
+  },
+  "profilePhotoFilename": "e18155249bcce10c636aa80b49daf2fa",
+  "phoneNumber": "0876669568",
+  "accessLevel": 1,
+  "name": "Lisa Vermont",
+  "email": "lv@gmail.com",
+  "password": "$2a$04$JZdRlXSQTcvu45vSXkTE/uU5TbNyQnzUNbjmkO3gWhhlNcMSLwVYy",
+  "deliveryAddress": {
+    "address": "128 RC",
+    "city": "Dublin",
+    "postcode": "A23D33"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ce1c0970c9f3589c40ff70"
+  },
+  "profilePhotoFilename": "37d46346c05010af1ec455b4dae1e0bb",
+  "phoneNumber": "0876669568",
+  "accessLevel": 1,
+  "name": "Justin Bieber",
+  "email": "jb@gmail.com",
+  "password": "$2a$04$PLTqzKIPCMUgQYB3o9xXqOBF482ogtQAs3c4tn16y1vJlFk8O7jYO",
+  "deliveryAddress": {
+    "address": "Somewhere in America",
+    "city": "LA",
+    "postcode": "A900"
+  },
+  "__v": 0
+}]

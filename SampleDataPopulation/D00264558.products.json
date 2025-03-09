@@ -1,0 +1,256 @@
+[{
+  "_id": {
+    "$oid": "67ce1df2c90701b4ac3a2536"
+  },
+  "name": "Faith Naked Mercury",
+  "brand": "Faith",
+  "colour": "Brown",
+  "category": "Guitar",
+  "stock": 10,
+  "price": 299.99,
+  "images": [
+    {
+      "_id": {
+        "$oid": "67ce1e6bc90701b4ac3a254c"
+      },
+      "filename": "9b4371ca4449370e9309ee01614bc96b"
+    },
+    {
+      "_id": {
+        "$oid": "67ce1e6bc90701b4ac3a254d"
+      },
+      "filename": "c5a87fa5b74a58fd84eeb10902988391"
+    },
+    {
+      "_id": {
+        "$oid": "67ce1e6bc90701b4ac3a254e"
+      },
+      "filename": "70f09fd402d2155372f8a7de1bea9844"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ce1e5bc90701b4ac3a253d"
+  },
+  "name": "Casio Grand Hybrid",
+  "brand": "Casio",
+  "colour": "Black",
+  "category": "Piano",
+  "stock": 1,
+  "price": 4199,
+  "images": [
+    {
+      "_id": {
+        "$oid": "67ce1e5bc90701b4ac3a253e"
+      },
+      "filename": "f074f0c53eca7e85702cd1e432e23baa"
+    },
+    {
+      "_id": {
+        "$oid": "67ce1e5bc90701b4ac3a253f"
+      },
+      "filename": "ee7c1d6392fcf0070cb3529b86f3c060"
+    },
+    {
+      "_id": {
+        "$oid": "67ce1e5bc90701b4ac3a2540"
+      },
+      "filename": "e94e1b0fbe77e2cbb575c8a1337589bc"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ce1ea0c90701b4ac3a2552"
+  },
+  "name": "Hofner Ignition Violin",
+  "brand": "Hofner",
+  "colour": "Brown",
+  "category": "Violin",
+  "stock": 29,
+  "price": 389.5,
+  "images": [
+    {
+      "_id": {
+        "$oid": "67ce1ea0c90701b4ac3a2553"
+      },
+      "filename": "5bc87636dd67006e0cf9233380778056"
+    },
+    {
+      "_id": {
+        "$oid": "67ce1ea0c90701b4ac3a2554"
+      },
+      "filename": "cee100f648d03d1559ca37c88da15324"
+    },
+    {
+      "_id": {
+        "$oid": "67ce1ea0c90701b4ac3a2555"
+      },
+      "filename": "0bfe4b3f527a617c64e5c2a37f0759cb"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ce2056c90701b4ac3a255c"
+  },
+  "name": "Gretsch Catalina Club Jazz 18 Shell Pack",
+  "brand": "Gretsch",
+  "colour": "Orange",
+  "category": "Drums",
+  "stock": 97,
+  "price": 899,
+  "images": [
+    {
+      "_id": {
+        "$oid": "67ce2056c90701b4ac3a255d"
+      },
+      "filename": "9109d3fae74a7b993f3e3bc071c37879"
+    },
+    {
+      "_id": {
+        "$oid": "67ce2056c90701b4ac3a255e"
+      },
+      "filename": "20a1922182c6723871904de6815058e4"
+    },
+    {
+      "_id": {
+        "$oid": "67ce2056c90701b4ac3a255f"
+      },
+      "filename": "1d253cd19476374e572c7ff46d2c1538"
+    },
+    {
+      "_id": {
+        "$oid": "67ce2056c90701b4ac3a2560"
+      },
+      "filename": "fc87f5b37884f2eb1ee27029f2cca644"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ce2195c90701b4ac3a256a"
+  },
+  "name": "Gretsch Catalina Club Jazz Shell Pack",
+  "brand": "Gretsch",
+  "colour": "Satin",
+  "category": "Drums",
+  "stock": 1,
+  "price": 899,
+  "images": [
+    {
+      "_id": {
+        "$oid": "67ce2195c90701b4ac3a256b"
+      },
+      "filename": "a8e33fe58c03b66e51567b51080dff04"
+    },
+    {
+      "_id": {
+        "$oid": "67ce2195c90701b4ac3a256c"
+      },
+      "filename": "408eb2d4cf5cb198956f4373c36222e3"
+    },
+    {
+      "_id": {
+        "$oid": "67ce2195c90701b4ac3a256d"
+      },
+      "filename": "8208c17ee61a4df0697e362385e99814"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ce2241c90701b4ac3a2571"
+  },
+  "name": "Epiphone Power Players Les Paul",
+  "brand": "Epiphone",
+  "colour": "Ice Blue",
+  "category": "Guitar",
+  "stock": 27,
+  "price": 310,
+  "images": [
+    {
+      "_id": {
+        "$oid": "67ce224dc90701b4ac3a2579"
+      },
+      "filename": "e095237ea2f5423e712531cf692e9f5d"
+    },
+    {
+      "_id": {
+        "$oid": "67ce224dc90701b4ac3a257a"
+      },
+      "filename": "54f2ef235daf7532e16fa46063f63ff4"
+    },
+    {
+      "_id": {
+        "$oid": "67ce224dc90701b4ac3a257b"
+      },
+      "filename": "e772a726177d2a19a795ead7bf671023"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ce22dec90701b4ac3a257f"
+  },
+  "name": "Faith Naked Neptune",
+  "brand": "Faith",
+  "colour": "Gray",
+  "category": "Guitar",
+  "stock": 8,
+  "price": 749,
+  "images": [
+    {
+      "_id": {
+        "$oid": "67ce22dec90701b4ac3a2580"
+      },
+      "filename": "a3e91bc0a56b512658b8c2ba55645fb7"
+    },
+    {
+      "_id": {
+        "$oid": "67ce22dec90701b4ac3a2581"
+      },
+      "filename": "7dc939af923ad72f7ab3d48926353c85"
+    },
+    {
+      "_id": {
+        "$oid": "67ce22dec90701b4ac3a2582"
+      },
+      "filename": "63bc11850f19f9d82d8b503f7a6bfa65"
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ce2348c90701b4ac3a2586"
+  },
+  "name": "Faith Blue Moon Venus",
+  "brand": "Faith",
+  "colour": "Dark Blue",
+  "category": "Guitar",
+  "stock": 0,
+  "price": 1149,
+  "images": [
+    {
+      "_id": {
+        "$oid": "67ce2362c90701b4ac3a258d"
+      },
+      "filename": "802612781713e8e3571dd20e82264870"
+    },
+    {
+      "_id": {
+        "$oid": "67ce2362c90701b4ac3a258e"
+      },
+      "filename": "98f8f9d6c132edd11a2d3de15eab5064"
+    }
+  ],
+  "__v": 0
+}]
