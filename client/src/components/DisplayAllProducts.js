@@ -23,27 +23,28 @@ export default class DisplayAllProducts extends Component {
     }
 
     componentDidMount() {
+        this.fetchProducts()
+    }
+
+    fetchProducts = () => {
         axios.get(`${SERVER_HOST}/products`)
             .then(res => {
-                if (res.data) {
-                    if (res.data.errorMessage) {
-                        console.log(res.data.errorMessage)
-                    } else {
-                        console.log("Products fetched:", res.data)
-
-                        const brandsObject = {}
-                        res.data.forEach(product => {
-                            brandsObject[product.brand] = true
-                        })
-                        this.setState({
-                            products: res.data,
-                            brands: brandsObject
-                        })}
-                } else {
-                    console.log("No products found")
+                if (res.data && !res.data.errorMessage) {
+                    const brandsObject = {}
+                    res.data.forEach(product => {
+                        brandsObject[product.brand] = true
+                    })
+                    this.setState({
+                        products: res.data,
+                        brands: brandsObject
+                    })
                 }
             })
             .catch(err => console.log("Error fetching products", err))
+    }
+
+    handleProductDeleted = () => {
+        this.fetchProducts()  
     }
 
     toggleDropdown = () => {
@@ -169,8 +170,8 @@ export default class DisplayAllProducts extends Component {
                                 {productsToDisplay.length === 0 ? (
                                     <div className="no-products">No products available</div>
                                 ) : (
-                                    < div className="product-grid">
-                                        <ProductGrid products={productsToDisplay} />
+                                    <div className="product-grid">
+                                        <ProductGrid products={productsToDisplay} onProductDeleted={this.handleProductDeleted} />
                                     </div>
                                 )}
                             </div>

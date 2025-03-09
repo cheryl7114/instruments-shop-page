@@ -23,7 +23,8 @@ export default class AddProduct extends Component {
             selectedFiles: [],
             previewImages: [],
             errors: {},
-            redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_ADMIN
+            showModal: false,
+            redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_ADMIN,
         }
     }
 
@@ -179,17 +180,15 @@ export default class AddProduct extends Component {
 
             axios.post(`${SERVER_HOST}/products`, formData, { headers: { "authorization": localStorage.token, "Content-type": "multipart/form-data" } })
                 .then(res => {
-                    //console.log("Server Response:", res.data)
                     if (res.data) {
                         if (res.data.errorMessage) {
-                            console.log("Error:",res.data.errorMessage)
+                            console.log("Error:", res.data.errorMessage)
                         } else {
-                            //console.log("Product successfully added.")
-                            // Set state for redirection and refresh the page after a short delay
-                            this.setState({ redirectToDisplayAllProducts: true }, () => {
+                            console.log("Product successfully added.")
+                            this.setState({ showModal: true }, () => {
                                 setTimeout(() => {
-                                    window.location.reload()
-                                }, 100)
+                                    this.setState({ redirectToDisplayAllProducts: true })
+                                }, 10000)
                             })
                         }
                     } else {
@@ -222,6 +221,11 @@ export default class AddProduct extends Component {
     validatePrice() {
         const price = parseFloat(this.state.price)
         return !isNaN(price) && price >= 0 // Allows decimals for currency
+    }
+
+    handleCloseModal = () => {
+        this.setState({ showModal:false })
+        window.location.href = "/DisplayAllProducts"
     }
 
     render() {
@@ -369,6 +373,14 @@ export default class AddProduct extends Component {
                         </Link>
                     </div>
                 </form>
+                {this.state.showModal && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h4>Product Added Successfully!</h4>
+                            <button className="orange-button" onClick={this.handleCloseModal}>OK</button>
+                        </div>
+                    </div>
+                )}
             </div>
         )
     }
