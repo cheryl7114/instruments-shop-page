@@ -1386,16 +1386,6 @@ select {
 .table-container table ul {
   padding-left: 20px;
 }
-.table-container table .sort-pointer {
-  cursor: pointer;
-}
-.table-container table .return-link {
-  color: #ea954f;
-  text-decoration: none;
-}
-.table-container table .return-link:hover {
-  text-decoration: underline;
-}
 
 .clickable-row {
   cursor: pointer;
