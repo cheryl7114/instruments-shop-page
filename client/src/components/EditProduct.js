@@ -320,7 +320,7 @@ export default class EditProduct extends Component {
 
     handleCloseModal = () => {
         this.setState({ showModal: false })
-        window.location.href = "/DisplayAllProducts" // ✅ 关闭 modal 后跳转回产品列表
+        window.location.href = "/DisplayAllProducts"
     }
 
     render() {

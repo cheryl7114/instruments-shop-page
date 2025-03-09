@@ -39,7 +39,6 @@ export default class DeleteProduct extends Component {
         const { product } = this.state
         if (!product) return
 
-        // 删除产品图片
         const imageDeletePromises = (product.images || []).map(image =>
             axios.delete(`${SERVER_HOST}/products/image/${image.filename}`, {
                 headers: { "authorization": localStorage.token }
