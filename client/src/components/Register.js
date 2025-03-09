@@ -5,6 +5,7 @@ import axios from "axios"
 import LinkInClass from "../components/LinkInClass"
 
 import { SERVER_HOST } from "../config/global_constants"
+import {CiCircleRemove} from "react-icons/ci";
 
 export default class Register extends Component {
     constructor(props) {
@@ -19,9 +20,11 @@ export default class Register extends Component {
             city: "",
             postcode: "",
             phoneNumber: "",
-            selectedFile: null,
+            selectedFiles: [],
+            previewImages: [],
             isRegistered: false,
-            wasSubmittedAtLeastOnce: false
+            wasSubmittedAtLeastOnce: false,
+            //errors:{}
         }
     }
 
@@ -30,7 +33,32 @@ export default class Register extends Component {
     }
 
     handleFileChange = (e) => {
-        this.setState({ selectedFile: e.target.files[0] })
+        const selectedFiles = [...e.target.files]
+
+        const updatedFiles = [...this.state.selectedFiles, ...selectedFiles].filter(file => file instanceof File)
+        const newPreviews = selectedFiles.map(file => URL.createObjectURL(file))
+
+        this.setState(prevState => ({
+            selectedFiles: updatedFiles,
+            previewImages: [...prevState.previewImages, ...newPreviews]
+
+            // errors: { ...prevState.errors, images: updatedFiles.length > 0 ? undefined : "* Must upload at least one photo." }
+        }))
+    }
+
+    handleRemoveImage = (index) => {
+        // Remove preview image from state
+        const updatedPreviews = [...this.state.previewImages]
+        updatedPreviews.splice(index, 1)
+
+        // Remove filename from images array
+        const updatedFiles = [...this.state.selectedFiles]
+        updatedFiles.splice(index, 1)
+
+        this.setState({
+            previewImages: updatedPreviews,
+            selectedFiles: updatedFiles
+        })
     }
 
     handleSubmit = (e) => {
@@ -40,7 +68,7 @@ export default class Register extends Component {
         const formInputsState = this.validate()
         if (Object.keys(formInputsState).every(key => formInputsState[key])) {
             let formData = new FormData();
-            formData.append("profilePhoto", this.state.selectedFile);
+            formData.append("profilePhoto", this.state.selectedFiles[0]);
             formData.append("name", this.state.name);
             formData.append("email", this.state.email);
             formData.append("password", this.state.password);
@@ -144,7 +172,7 @@ export default class Register extends Component {
                         />
                         {this.state.wasSubmittedAtLeastOnce && !this.validateName() && (
                             <span className="error">
-                                Name must contain only letters, hyphens (-), or apostrophes (').
+                                * Must contain only letters, hyphens (-), or apostrophes (').
                             </span>
                         )}
                     </div>
@@ -159,7 +187,7 @@ export default class Register extends Component {
                         />
                         {this.state.wasSubmittedAtLeastOnce && !this.validateEmail() && (
                             <span className="error">
-                                Enter a valid email address (e.g., example@email.com).
+                                * Invalid email address.
                             </span>
                         )}
                     </div>
@@ -204,7 +232,7 @@ export default class Register extends Component {
                         />
                         {this.state.wasSubmittedAtLeastOnce && !this.validatePhoneNumber() && (
                             <span className="error">
-                                Phone number must be Irish and follow one of these formats:
+                                * Must be an Irish number with one of the formats below:
                                 <ul>
                                     <li>+353XXXXXXXX</li>
                                     <li>087XXXXXXXX</li>
@@ -224,7 +252,7 @@ export default class Register extends Component {
                         />
                         {this.state.wasSubmittedAtLeastOnce && !this.validatePassword() && (
                             <span className="error">
-                                Password must be at least 10 characters long and contain:
+                                * Must be at least 10 characters long and contain:
                                 <ul>
                                     <li>One uppercase letter</li>
                                     <li>One lowercase letter</li>
@@ -245,20 +273,44 @@ export default class Register extends Component {
                         />
                         {this.state.wasSubmittedAtLeastOnce && !this.validateConfirmPassword() && (
                             <span className="error">
-                                Passwords do not match.
+                                * Password does not match.
                             </span>
                         )}
                     </div>
 
-                    <div className="input-container">
+
+                    <div className="profile-upload-label">
                         <input
                             type="file"
+                            id="file-upload"
                             onChange={this.handleFileChange}
                         />
+                        <label htmlFor="file-upload" >
+                            Click to Upload Profile Picture
+                        </label>
+                        {/* Image Previews */}
+                        <div className="profile-preview-container">
+                            {this.state.previewImages.map((img, index) => (
+                                <div key={index} className="profile-preview-wrapper">
+                                    <img src={img||""} alt="Preview" className="profile-preview" />
+                                    <button
+                                        type="button"
+                                        className="remove-image-button"
+                                        onClick={() => this.handleRemoveImage(index)}
+                                    >
+                                        <CiCircleRemove size={24} color="red" />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                     <LinkInClass value="Register" className="sign-in-button" onClick={this.handleSubmit} />
-                    <Link className="cancel-link" to={"/DisplayAllProducts"}>Cancel</Link>
+                    <div className="cancel-button">
+                        <Link to={"/DisplayAllProducts"}>
+                            <CiCircleRemove size={30} color="red" />
+                        </Link>
+                    </div>
                 </form>
             </div>
         )
