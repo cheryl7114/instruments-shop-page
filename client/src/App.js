@@ -215,10 +215,7 @@ export default class App extends Component {
                     />
                     <Switch>
                         <Route exact path="/ProductDetails/:id" render={(props) =>
-                            <ProductDetails
-                                {...props}
-                                addToCart={this.addToCart}
-                            />
+                            <ProductDetails {...props} cart={this.state.cartItems} addToCart={this.addToCart} />
                         } />
                         <Route exact path="/Register" component={Register} />
                         <Route exact path="/ResetDatabase" component={ResetDatabase} />

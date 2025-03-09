@@ -33,9 +33,15 @@ export default class ProductDetails extends Component {
         const { product } = this.state
 
         // Check if product is out of stock
-        if (product.stock <= 0) {
-            this.setState({ showModal: true, modalMessage: "Sorry, this product is out of stock" })
-            return
+        // if (product.stock <= 0) {
+        //     this.setState({ showModal: true, modalMessage: "Sorry, this product is out of stock" })
+        //     return
+        // }
+
+        const cartItem = this.props.cart.find(item => item._id === product._id);
+        if (cartItem && cartItem.quantity >= product.stock) {
+            this.setState({ showModal: true, modalMessage: `Sorry, you can't add more of this item. Only ${product.stock} available in stock.` });
+            return;
         }
 
         // Call addToCart and get success status back
