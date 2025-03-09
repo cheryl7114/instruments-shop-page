@@ -12,7 +12,9 @@ export default class Login extends Component {
         this.state = {
             email: "",
             password: "",
-            isLoggedIn: false
+            isLoggedIn: false,
+            showModal:false,
+            modalMessage:""
         }
     }
 
@@ -25,6 +27,7 @@ export default class Login extends Component {
             .then(res => {
                 if (res.data) {
                     if (res.data.errorMessage) {
+                        this.setState({ showModal: true, modalMessage: res.data.errorMessage })
                         console.log(res.data.errorMessage)
                     } else {
                         localStorage.name = res.data.name
@@ -54,6 +57,10 @@ export default class Login extends Component {
                 }
             })
             .catch(error => console.log("Error logging in:", error))
+    }
+
+    handleCloseModal = () => {
+        this.setState({ showModal: false, modalMessage: "" })
     }
 
     render() {
@@ -93,8 +100,16 @@ export default class Login extends Component {
                         <p>admin@admin.com</p>
                         <p>123!"£qweQWE</p>
                     </div>
-
+                    {this.state.showModal && (
+                        <div className="modal-overlay">
+                            <div className="modal-content">
+                                <h4>{this.state.modalMessage}</h4>
+                                <button className="orange-button" onClick={this.handleCloseModal}>OK</button>
+                            </div>
+                        </div>
+                    )}
                 </form>
+
             </div>
         )
     }
