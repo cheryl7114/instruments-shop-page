@@ -104,11 +104,13 @@ const getOrdersForUser = (req, res) => {
 
 const getAllOrders = (req, res) => {
     ordersModel.find({})
+        .populate("products.productID", "name")
+        .sort({ orderDate: -1 })
         .then(data => res.json(data))
-        .catch(error => res.json({ errorMessage: `Error getting all orders`, error }))
+        .catch(error => res.json({ errorMessage: `Error getting all orders`, error }));
 }
 
-router.post('/orders/history', getOrdersForUser)
+router.get('/orders', verifyUsersJWTPassword, getAllOrders)
 router.post('/orders', createNewOrder)
 router.get('/orders/history', verifyUsersJWTPassword, getOrdersForUser)
 
