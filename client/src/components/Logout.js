@@ -30,8 +30,8 @@ export default class Logout extends Component {
                         localStorage.clear();
 
                         // reload the page to reset Navbar state so user icon is updated
-                        window.location.reload();
                         this.setState({isLoggedIn:false})
+                        window.location.reload();
                     }
                 } else {
                     console.log("Logout failed")
@@ -45,7 +45,7 @@ export default class Logout extends Component {
         return (
             <div>
 
-                {!this.state.isLoggedIn ? <Redirect to="/DisplayAllProducts"/> : null}
+                {!this.state.isLoggedIn ? <Redirect to="/"/> : null}
 
                 <LinkInClass value="Log out" className="red-button" onClick={this.handleSubmit}/>
             </div>
