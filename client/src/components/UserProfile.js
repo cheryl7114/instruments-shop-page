@@ -5,7 +5,6 @@ import axios from "axios"
 
 import {ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../config/global_constants"
 import AccountDetails from "./AccountDetails"
-import MyOrders from "./MyOrders"
 import PurchaseHistory from "./PurchaseHistory"
 import Returns from "./Returns"
 import ViewCustomers from "./ViewCustomers"
@@ -74,7 +73,6 @@ export default class UserProfile extends Component {
                                 // customer view
                                 <>
                                     <Link className="sidebar-choices" to={`${match.url}/purchase-history`}>Purchase History</Link>
-                                    <Link className="sidebar-choices" to={`${match.url}/my-orders`}>My Orders</Link>
                                     <Link className="sidebar-choices" to={`${match.url}/returns`}>Returns</Link>
                                 </>
                             )}
@@ -91,7 +89,6 @@ export default class UserProfile extends Component {
                                 ) : (
                                     <>
                                         <Route path={`${match.url}/purchase-history`} component={PurchaseHistory} />
-                                        <Route path={`${match.url}/my-orders`} component={MyOrders} />
                                         <Route path={`${match.url}/returns`} component={Returns} />
                                     </>
                                 )}

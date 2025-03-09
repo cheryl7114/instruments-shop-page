@@ -12,6 +12,8 @@ export default class ProductDetails extends Component {
         this.state = {
             product: {},
             mainImage: "",
+            showModal:false,
+            modalMessage:"",
             redirectToDisplayAllProducts: localStorage.accessLevel < ACCESS_LEVEL_GUEST
         }
     }
@@ -32,7 +34,7 @@ export default class ProductDetails extends Component {
 
         // Check if product is out of stock
         if (product.stock <= 0) {
-            alert("Sorry, this product is out of stock")
+            this.setState({ showModal: true, modalMessage: "Sorry, this product is out of stock" })
             return
         }
 
@@ -41,9 +43,14 @@ export default class ProductDetails extends Component {
 
         // Only show success message if adding to cart was successful
         if (success) {
-            alert(`${product.name} added to cart!`)
+            this.setState({ showModal: true, modalMessage: `${product.name} added to cart!` })
         }
+
         // No need for an else statement since addToCart should show its own error message
+    }
+
+    handleCloseModal = () => {
+        this.setState({showModal: false, modalMessage: ""})
     }
 
     componentDidMount() {
@@ -140,6 +147,7 @@ export default class ProductDetails extends Component {
                             <button
                                 className="add-to-cart-button"
                                 onClick={this.handleAddToCart}
+                                disabled={product.stock <= 0}
                             >
                                 {product.stock <= 0 ? 'Out of Stock' : (
                                     <>
@@ -147,10 +155,19 @@ export default class ProductDetails extends Component {
                                     </>
                                 )}
                             </button>
+
                         </div>
 
                     </div>
                 </div>
+                {this.state.showModal && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h4>{this.state.modalMessage}</h4>
+                            <button className="orange-button" onClick={this.handleCloseModal}>OK</button>
+                        </div>
+                    </div>
+                )}
             </div>
         )
     }

@@ -1,10 +1,11 @@
 import React, { Component } from "react"
-import { Redirect, Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import axios from "axios"
 
 import LinkInClass from "../components/LinkInClass"
 
 import { SERVER_HOST } from "../config/global_constants"
+import {CiCircleRemove} from "react-icons/ci"
 
 export default class Register extends Component {
     constructor(props) {
@@ -19,18 +20,51 @@ export default class Register extends Component {
             city: "",
             postcode: "",
             phoneNumber: "",
-            selectedFile: null,
+            selectedFiles: [],
+            previewImages: [],
             isRegistered: false,
-            wasSubmittedAtLeastOnce: false
+            wasSubmittedAtLeastOnce: false,
+            showModal:false,
+            modalMessage:""
         }
     }
 
     handleChange = (e) => {
-        this.setState({ [e.target.name]: e.target.value })
+        this.setState({ [e.target.name]: e.target.value,
+            wasSubmittedAtLeastOnce: false })
     }
 
     handleFileChange = (e) => {
-        this.setState({ selectedFile: e.target.files[0] })
+        const selectedFiles = []
+        const newPreviews = []
+
+        for (let i = 0; i < e.target.files.length; i++) {
+            const file = e.target.files[i]
+            if (file instanceof File) {
+                selectedFiles.push(file)
+                newPreviews.push(URL.createObjectURL(file))
+            }
+        }
+
+        this.setState(prevState => ({
+            selectedFiles: [...prevState.selectedFiles, ...selectedFiles],
+            previewImages: [...prevState.previewImages, ...newPreviews]
+        }))
+    }
+
+    handleRemoveImage = (index) => {
+        // Remove preview image from state
+        const updatedPreviews = [...this.state.previewImages]
+        updatedPreviews.splice(index, 1)
+
+        // Remove filename from images array
+        const updatedFiles = [...this.state.selectedFiles]
+        updatedFiles.splice(index, 1)
+
+        this.setState({
+            previewImages: updatedPreviews,
+            selectedFiles: updatedFiles
+        })
     }
 
     handleSubmit = (e) => {
@@ -39,22 +73,31 @@ export default class Register extends Component {
 
         const formInputsState = this.validate()
         if (Object.keys(formInputsState).every(key => formInputsState[key])) {
-            let formData = new FormData();
-            formData.append("profilePhoto", this.state.selectedFile);
-            formData.append("name", this.state.name);
-            formData.append("email", this.state.email);
-            formData.append("password", this.state.password);
-            formData.append("address", this.state.address);
-            formData.append("city", this.state.city);
-            formData.append("postcode", this.state.postcode);
-            formData.append("phoneNumber", this.state.phoneNumber);
+            let formData = new FormData()
+            formData.append("profilePhoto", this.state.selectedFiles[0])
+            formData.append("name", this.state.name)
+            formData.append("email", this.state.email)
+            formData.append("password", this.state.password)
+            formData.append("address", this.state.address)
+            formData.append("city", this.state.city)
+            formData.append("postcode", this.state.postcode)
+            formData.append("phoneNumber", this.state.phoneNumber)
 
             axios.post(`${SERVER_HOST}/users/register`, formData, { headers: { "Content-type": "multipart/form-data" } })
                 .then(res => {
                     if (res.data) {
                         if (res.data.errorMessage) {
-                            console.log(res.data.errorMessage)
+                            this.setState({
+                                showModal: true,
+                                modalMessage: res.data.errorMessage,
+                                isRegistered:false
+                            })
                         } else {
+                            this.setState({
+                                showModal: true,
+                                modalMessage:"Successfully registered and logged in",
+                                isRegistered: true
+                            })
                             console.log("User registered and logged in")
 
                             localStorage.name = res.data.name
@@ -69,11 +112,7 @@ export default class Register extends Component {
                                 localStorage.removeItem("profilePhoto")
                             }
 
-                            this.setState({ isRegistered: true }, () => {
-                                setTimeout(() => {
-                                    window.location.href = "/DisplayAllProducts"
-                                }, 100)
-                            })
+                            this.setState({ isRegistered: true})
                         }
                     } else {
                         console.log("Registration failed")
@@ -84,8 +123,20 @@ export default class Register extends Component {
         }
     }
 
+    handleCloseModal = () => {
+        this.setState({
+            showModal: false,
+            modalMessage: "",
+            wasSubmittedAtLeastOnce: false
+        })
+
+        if (this.state.isRegistered) {
+            window.location.href = "/LoggedinRoute"
+        }
+    }
+
     validateName() {
-        const pattern = /^[A-Za-zÀ-ž'-]([A-Za-zÀ-ž'-]+)*$/ // Letters, hyphen, apostrophe, min 2 characters
+        const pattern = /^[A-Za-zÀ-ž'-]+(?: [A-Za-zÀ-ž'-]+)*$/ // Letters, hyphen, apostrophe, min 2 characters
         return pattern.test(String(this.state.name).trim())
     }
 
@@ -131,21 +182,19 @@ export default class Register extends Component {
             <div className="register-container">
                 <form className="register-page" noValidate={true} id="loginOrRegistrationForm">
 
-                    {this.state.isRegistered ? <Redirect to="/DisplayAllProducts" /> : null}
-
                     <h1>Create account</h1>
 
                     <div className="input-container">
                         <input
                             name="name"
                             type="text"
-                            placeholder="*Name"
+                            placeholder="*Username"
                             value={this.state.name}
                             onChange={this.handleChange}
                         />
                         {this.state.wasSubmittedAtLeastOnce && !this.validateName() && (
                             <span className="error">
-                                Name must contain only letters, hyphens (-), or apostrophes (').
+                                * Must contain only letters, hyphens (-), or apostrophes (').
                             </span>
                         )}
                     </div>
@@ -160,7 +209,7 @@ export default class Register extends Component {
                         />
                         {this.state.wasSubmittedAtLeastOnce && !this.validateEmail() && (
                             <span className="error">
-                                Enter a valid email address (e.g., example@email.com).
+                                * Invalid email address.
                             </span>
                         )}
                     </div>
@@ -205,7 +254,7 @@ export default class Register extends Component {
                         />
                         {this.state.wasSubmittedAtLeastOnce && !this.validatePhoneNumber() && (
                             <span className="error">
-                                Phone number must be Irish and follow one of these formats:
+                                * Must be an Irish number with one of the formats below:
                                 <ul>
                                     <li>+353XXXXXXXX</li>
                                     <li>087XXXXXXXX</li>
@@ -225,7 +274,7 @@ export default class Register extends Component {
                         />
                         {this.state.wasSubmittedAtLeastOnce && !this.validatePassword() && (
                             <span className="error">
-                                Password must be at least 10 characters long and contain:
+                                * Must be at least 10 characters long and contain:
                                 <ul>
                                     <li>One uppercase letter</li>
                                     <li>One lowercase letter</li>
@@ -246,21 +295,53 @@ export default class Register extends Component {
                         />
                         {this.state.wasSubmittedAtLeastOnce && !this.validateConfirmPassword() && (
                             <span className="error">
-                                Passwords do not match.
+                                * Password does not match.
                             </span>
                         )}
                     </div>
 
-                    <div className="input-container">
+
+                    <div className="profile-upload-label">
                         <input
                             type="file"
+                            id="file-upload"
                             onChange={this.handleFileChange}
                         />
+                        <label htmlFor="file-upload" >
+                            Click to Upload Profile Picture
+                        </label>
+                        {/* Image Previews */}
+                        <div className="profile-preview-container">
+                            {this.state.previewImages.map((img, index) => (
+                                <div key={index} className="profile-preview-wrapper">
+                                    <img src={img||""} alt="Preview" className="profile-preview" />
+                                    <button
+                                        type="button"
+                                        className="remove-image-button"
+                                        onClick={() => this.handleRemoveImage(index)}
+                                    >
+                                        <CiCircleRemove size={24} color="red" />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                     <LinkInClass value="Register" className="sign-in-button" onClick={this.handleSubmit} />
-                    <Link className="cancel-link" to={"/DisplayAllProducts"}>Cancel</Link>
+                    <div className="cancel-button">
+                        <Link to={"/DisplayAllProducts"}>
+                            <CiCircleRemove size={30} color="red" />
+                        </Link>
+                    </div>
                 </form>
+                {this.state.showModal && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h4>{this.state.modalMessage}</h4>
+                            <button className="orange-button" onClick={this.handleCloseModal}>OK</button>
+                        </div>
+                    </div>
+                )}
             </div>
         )
     }

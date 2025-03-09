@@ -43,9 +43,9 @@ export default class PurchaseRecords extends Component {
                         <thead>
                         <tr>
                             <th>Order ID</th>
-                            <th>Customer Name</th>
                             <th>Email</th>
                             <th>Total</th>
+                            <th>Order Date</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -53,9 +53,9 @@ export default class PurchaseRecords extends Component {
                             <>
                                 <tr key={index} className="clickable-row" onClick={() => this.toggleRow(index)}>
                                     <td>{order._id}</td>
-                                    <td>{order.name}</td>
                                     <td>{order.email}</td>
                                     <td>€{order.total.toFixed(2)}</td>
+                                    <td>{new Date(order.orderDate).toLocaleString()}</td>
                                 </tr>
 
                                 {/* Expanded Row (only visible if expandedRow === index) */}
@@ -64,20 +64,23 @@ export default class PurchaseRecords extends Component {
                                         <td colSpan="4">
                                             <div className="expanded-row-details">
                                                 <div className="address-details">
+                                                    <strong>Name:</strong> {order.name}<br/>
                                                     <strong>Address:</strong> {order.deliveryAddress?.address || "Not available"}, {order.deliveryAddress?.city || "Not available"}, {order.deliveryAddress?.postcode || "Not available"}<br />
                                                     <strong>Phone:</strong> {order.phoneNumber || "Not available"}<br />
                                                     <strong>Payment ID: </strong> {order.paypalPaymentID || "Not available"}<br/>
-                                                    <strong>Order Date: </strong> {order.orderDate}
                                                 </div>
 
                                                 <div className="product-details">
-                                                    <strong>Products Bought:</strong>
+                                                    <strong>Product(s) Bought:</strong>
                                                     <ul>
-                                                        {order.products.map((product, idx) => (
-                                                            <li key={idx} className="product-item">
-                                                                <strong>Product ID:</strong> {product.productID} |
-                                                                <strong> Quantity:</strong> {product.quantity} |
-                                                                <strong> Price:</strong> €{product.price.toFixed(2)}
+                                                        {order.products.map((product, i) => (
+                                                            <li key={i} className="product-item">
+                                                                <li key={i} className="product-item">
+                                                                    {product.productID?.name || "Removed Product"} - {product.quantity} × €{product.price.toFixed(2)}
+                                                                </li>
+                                                                {/*<strong>Product ID:</strong> {product.productID} |*/}
+                                                                {/*<strong> Quantity:</strong> {product.quantity} |*/}
+                                                                {/*<strong> Price:</strong> €{product.price.toFixed(2)}*/}
                                                            </li>
                                                         ))}
                                                     </ul>

@@ -59,8 +59,8 @@ export default class Checkout extends Component {
 
     validateCartStock = () => {
         // Get the latest cart items
-        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-        const stockIssues = [];
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || []
+        const stockIssues = []
 
         // Check each item's stock against the database
         const stockCheckPromises = cartItems.map(item => {
@@ -72,20 +72,20 @@ export default class Checkout extends Component {
                             name: item.name,
                             requestedQty: item.quantity,
                             availableQty: res.data.stock
-                        });
+                        })
                     }
-                    return res.data;
+                    return res.data
                 })
                 .catch(err => {
-                    console.error("Error checking stock for product:", err);
-                    return null;
-                });
-        });
+                    console.error("Error checking stock for product:", err)
+                    return null
+                })
+        })
 
         return Promise.all(stockCheckPromises)
             .then(() => {
-                return stockIssues;
-            });
+                return stockIssues
+            })
     }
 
     handleChange = (e) => {
@@ -109,13 +109,13 @@ export default class Checkout extends Component {
         }
 
         const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0)
-        const shippingCost = subtotal > 0 ? 5 : 0;
+        const shippingCost = subtotal > 0 ? 5 : 0
 
         return subtotal + shippingCost
     }
 
     handleProceedToPayment = (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
         // First validate the form
         if (this.validateForm()) {
@@ -126,20 +126,20 @@ export default class Checkout extends Component {
                         // There are stock issues
                         const message = stockIssues.map(issue =>
                             `${issue.name}: Only ${issue.availableQty} available (you requested ${issue.requestedQty})`
-                        ).join('\n');
+                        ).join('\n')
 
-                        alert(`Some items in your cart are no longer available in the requested quantity:\n\n${message}\n\nPlease update your cart before proceeding.`);
+                        alert(`Some items in your cart are no longer available in the requested quantity:\n\n${message}\n\nPlease update your cart before proceeding.`)
 
                         // Redirect back to cart
-                        window.location.href = '/Cart';
+                        window.location.href = '/Cart'
                     } else {
                         // Stock is okay, proceed to payment
                         this.setState({
                             proceedPayment: true,
                             error: ''
-                        });
+                        })
                     }
-                });
+                })
         }
     }
 
@@ -159,13 +159,6 @@ export default class Checkout extends Component {
         }
 
         return true
-    }
-
-    handleProceedToPayment = (e) => {
-        e.preventDefault()
-        if (this.validateForm()) {
-            this.setState({ proceedPayment: true, error: '' })
-        }
     }
 
     createOrder = (data, actions) => {
@@ -212,7 +205,7 @@ export default class Checkout extends Component {
                 }
 
                 console.log("Sending Order to Backend:", order)
-                console.log("Save Address checked:", this.state.saveAddress);
+                console.log("Save Address checked:", this.state.saveAddress)
 
                 // Check if the user is logged in and doesn't have an address saved
                 if (this.state.isLoggedIn && this.state.saveAddress) {

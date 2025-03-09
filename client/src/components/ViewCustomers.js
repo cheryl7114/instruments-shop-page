@@ -76,49 +76,49 @@ export default class ViewCustomers extends Component {
                         value={searchQuery}
                         onChange={this.handleSearchChange}
                     />
-                </div>
+                </div><br/>
                 {filteredUsers.length > 0 ? (
                     <table>
                         <thead>
-                            <tr>
-                                <th>Profile Pic</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Actions</th>
-                            </tr>
+                        <tr>
+                            <th>Profile Pic</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {filteredUsers.map((user, index) => (
-                                user.accessLevel === 1 ? (
-                                    <>
-                                        <tr className="clickable-row" onClick={() => this.toggleRow(index)}>
-                                            <td>
-                                                {user.profilePhoto ? (
-                                                    <img src={`data:image/png;base64,${user.profilePhoto}`} alt="Profile" className="profile-photo" />
-                                                ) : "No photo"}
-                                            </td>
-                                            <td>{user.name}</td>
-                                            <td>{user.email}</td>
-                                            <td>
-                                                <Link className="delete-button" to={`/DeleteCustomer/${user._id}`}>
-                                                    <CiTrash size={25} />
-                                                </Link>
+                        {filteredUsers.map((user, index) => (
+                            user.accessLevel === 1 ? (
+                                <>
+                                    <tr className="clickable-row" onClick={() => this.toggleRow(index)}>
+                                        <td>
+                                            {user.profilePhoto ? (
+                                                <img src={`data:image/png;base64,${user.profilePhoto}`} alt="Profile" className="profile-photo" />
+                                            ) : "No photo"}
+                                        </td>
+                                        <td>{user.name}</td>
+                                        <td>{user.email}</td>
+                                        <td>
+                                            <Link className="delete-button" to={`/DeleteCustomer/${user._id}`}>
+                                                <CiTrash size={25} />
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                    {expandedRow === index && (
+                                        <tr className="expanded-row">
+                                            <td colSpan="4">
+                                                <strong>Address:</strong> {user.deliveryAddress?.address || "Not available"},
+                                                {user.deliveryAddress?.city || "Not available"},
+                                                {user.deliveryAddress?.postcode || "Not available"}
+                                                <br />
+                                                <strong>Phone:</strong> {user.phoneNumber || "Not available"}
                                             </td>
                                         </tr>
-                                        {expandedRow === index && (
-                                            <tr className="expanded-row">
-                                                <td colSpan="4">
-                                                    <strong>Address:</strong> {user.deliveryAddress?.address || "Not available"},
-                                                    {user.deliveryAddress?.city || "Not available"},
-                                                    {user.deliveryAddress?.postcode || "Not available"}
-                                                    <br />
-                                                    <strong>Phone:</strong> {user.phoneNumber || "Not available"}
-                                                </td>
-                                            </tr>
-                                        )}
-                                    </>
-                                ) : null
-                            ))}
+                                    )}
+                                </>
+                            ) : null
+                        ))}
                         </tbody>
                     </table>
                 ) : (
