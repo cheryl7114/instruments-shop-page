@@ -64,7 +64,7 @@ export default class PurchaseRecords extends Component {
                                         <td colSpan="4">
                                             <div className="expanded-row-details">
                                                 <div className="address-details">
-                                                    <strong>Name:</strong> {order.name}
+                                                    <strong>Name:</strong> {order.name}<br/>
                                                     <strong>Address:</strong> {order.deliveryAddress?.address || "Not available"}, {order.deliveryAddress?.city || "Not available"}, {order.deliveryAddress?.postcode || "Not available"}<br />
                                                     <strong>Phone:</strong> {order.phoneNumber || "Not available"}<br />
                                                     <strong>Payment ID: </strong> {order.paypalPaymentID || "Not available"}<br/>
@@ -76,7 +76,7 @@ export default class PurchaseRecords extends Component {
                                                         {order.products.map((product, i) => (
                                                             <li key={i} className="product-item">
                                                                 <li key={i} className="product-item">
-                                                                    {product.productID?.name || "Removed Product"} {`(ID: ${product.productID || "Not Available"})`} - {product.quantity} × €{product.price.toFixed(2)}
+                                                                    {product.productID?.name || "Removed Product"} - {product.quantity} × €{product.price.toFixed(2)}
                                                                 </li>
                                                                 {/*<strong>Product ID:</strong> {product.productID} |*/}
                                                                 {/*<strong> Quantity:</strong> {product.quantity} |*/}
