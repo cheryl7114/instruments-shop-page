@@ -246,7 +246,6 @@ body {
   line-height: normal;
   border-radius: 20px;
   color: white;
-  background-color: $navbar-color;
   margin-right: 10px;
   position: relative;
   top: 5px;
@@ -269,7 +268,7 @@ body {
   border: none;
 
   &:hover {
-    opacity: 0.8;
+    background-color: $navbar-color;
   }
 }
 
@@ -1207,9 +1206,8 @@ select {
   display: flex;
   gap: 20px;
   max-width: 1100px;
-  margin: 0 auto;
   padding: 20px;
-  margin-top: 30px;
+  margin: 30px auto 0;
 }
 
 .cart-content {
@@ -1334,6 +1332,121 @@ select {
     &:hover {
       opacity: 0.7;
     }
+  }
+}
+
+//checkout page
+.checkout-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 25px;
+  position: relative;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  h2{
+    text-align: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  input {
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    appearance: none;
+  }
+
+  label {
+    width: 100%;
+    padding: 10px;
+    color: $navbar-color;
+  }
+
+  //.form-group {
+  //  display: flex;
+  //  flex-direction: column;
+  //}
+
+  .checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      cursor: pointer;
+      accent-color: $navbar-color;
+      appearance: auto;
+    }
+
+    label {
+      padding: 0;
+      color: $navbar-color;
+      cursor: pointer;
+      user-select: none; // Prevent accidental text selection
+    }
+  }
+
+  .continue-button {
+    width: 100%;
+    padding: 12px;
+    background: $orange;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-size: 0.875rem;
+    line-height: normal;
+    margin-right: 10px;
+    position: relative;
+    top: 5px;
+    text-decoration: none;
+    text-align: center;
+  }
+
+  .continue-button:hover {
+    background: darken($navbar-color, 10%);
+  }
+
+  .paypal-container {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 14px;
+    text-align: center;
+  }
+
+  .order-summary {
+    margin-bottom: 15px;
+    font-weight: bold;
+
+    h3{
+      font-size: 16px;
+    }
+
+    p{
+      font-size: 24px;
+      margin: 8px;
+    }
+  }
+
+  .payment-message{
+    color: red;
+    text-align: center;
+    font-size:14px;
   }
 }
 
@@ -1486,12 +1599,39 @@ select {
   }
 }
 
+//purchase history
 .clickable-row {
   cursor: pointer;
   transition: background 0.3s ease;
+  //text-decoration:none;
 
   &:hover {
     background: #f0f0f0;
+  }
+
+  .return-button{
+    padding: 10px;
+    font-size: 0.875rem;
+    line-height: normal;
+    border-radius: 20px;
+    position: relative;
+    top: 5px;
+    cursor: pointer;
+    text-align: center;
+    background-color: $orange;
+    width:100%;
+    display:block;
+    margin: 1px auto;
+    border: none;
+
+    a{
+      text-decoration: none;
+      color: white;
+    }
+
+    &:hover{
+      background-color: $navbar-color;
+    }
   }
 }
 
@@ -1540,6 +1680,102 @@ select {
   color: #333;
 }
 
+//return form
+.return-form-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 25px;
+  position: relative;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    text-align: center;
+    color: $navbar-color;
+  }
+
+  label{
+    width: 100%;
+    padding-left: 10px;
+    color: $navbar-color;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+
+    div {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 10px;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    appearance: none;
+  }
+
+  .select-wrapper {
+    position: relative;
+    width: 100%;
+
+    select {
+      width: 100%;
+      padding: 8px 40px 8px 15px;
+      border: 1px solid #ccc;
+      border-radius: 30px;
+      appearance: none;
+      font-size: 14px;
+      color: $navbar-color;
+    }
+
+    .select-icon {
+      position: absolute;
+      right: 12px;
+      top: 62.75%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: #8a8989;
+      font-size: 22px;
+    }
+  }
+
+  textarea {
+    border-radius: 10px;
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  button {
+    background: $orange;
+    color: white;
+    font-size: 0.875rem;
+    border: none;
+    padding: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-align: center;
+    line-height: normal;
+    position: relative;
+    top: 5px;
+    text-decoration: none;
+
+    &:hover {
+      background: $navbar-color;
+    }
+  }
+}
 
 .fa-check-wrapper {
   font-size: 80px;

@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import axios from "axios"
 import { SERVER_HOST } from "../config/global_constants"
 import { Redirect } from "react-router-dom"
+import {CiCircleChevDown} from "react-icons/ci"
 
 export default class ReturnForm extends Component {
     constructor(props) {
@@ -14,7 +15,8 @@ export default class ReturnForm extends Component {
             refundAmount: 0,
             error: "",
             redirectToUserProfile: false,
-            userId: localStorage.getItem("userId")
+            userId: localStorage.getItem("userId"),
+            showModal:false
         }
     }
 
@@ -78,10 +80,14 @@ export default class ReturnForm extends Component {
                 if (res.data.errorMessage) {
                     this.setState({ error: res.data.errorMessage })
                 } else {
-                    this.setState({ redirectToUserProfile: true })
+                    this.setState({ showModal:true })
                 }
             })
             .catch(() => this.setState({ error: "Error submitting the return request" }))
+    }
+
+    handleCloseModal = () => {
+        this.setState({ showModal: false, redirectToUserProfile: true });
     }
 
     render() {
@@ -104,23 +110,28 @@ export default class ReturnForm extends Component {
                     </div>
 
                     {order?.products?.length > 0 ? (
-                        <select onChange={this.handleProductChange}>
-                            <option value="">Select a product</option>
-                            {order.products.map(product =>
-                                product.productID ? (
-                                    <option key={product._id} value={product.productID._id}>
-                                        {product.productID.name} - €{product.price.toFixed(2)}
-                                    </option>
-                                ) : (
-                                    <option key={product._id} disabled>
-                                        Unknown Product - €{product.price.toFixed(2)}
-                                    </option>
-                                )
-                            )}
-                        </select>
+                        <div className="select-wrapper">
+                            <label>Product to Return</label>
+                            <select onChange={this.handleProductChange}>
+                                <option value="">Select a product</option>
+                                {order.products.map(product =>
+                                    product.productID ? (
+                                        <option key={product._id} value={product.productID._id}>
+                                            {product.productID.name} - €{product.price.toFixed(2)}
+                                        </option>
+                                    ) : (
+                                        <option key={product._id} disabled>
+                                            Unknown Product - €{product.price.toFixed(2)}
+                                        </option>
+                                    )
+                                )}
+                            </select>
+                            <CiCircleChevDown className="select-icon" />
+                        </div>
                     ) : (
                         <p>No products available for return.</p>
                     )}
+
 
                     {selectedProduct && (
                         <>
@@ -151,6 +162,15 @@ export default class ReturnForm extends Component {
                         <button type="submit">Submit Return Request</button>
                     </div>
                 </form>
+                {this.state.showModal && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h4>Return Request Submitted Successfully</h4>
+                            <p>Please allow 3-5 working days for review.</p>
+                            <button className="orange-button" onClick={this.handleCloseModal}>OK</button>
+                        </div>
+                    </div>
+                )}
             </div>
         )
     }
