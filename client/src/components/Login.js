@@ -69,7 +69,7 @@ export default class Login extends Component {
                 <form className="login-page" noValidate={true} id="loginOrRegistrationForm">
                     <h1>Login</h1>
 
-                    {this.state.isLoggedIn ? <Redirect to="/DisplayAllProducts" /> : null}
+                    {this.state.isLoggedIn ? <Redirect to="/" /> : null}
 
                     <div className="input-container">
                         <input
