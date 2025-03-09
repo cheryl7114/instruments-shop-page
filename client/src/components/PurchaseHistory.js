@@ -116,7 +116,7 @@ export default class PurchaseHistory extends Component {
                                     <td>{new Date(order.orderDate).toLocaleString()}</td>
                                     <td>€{order.total.toFixed(2)}</td>
                                     <td>
-                                        <div className="return-button">
+                                        <div>
                                             {this.isReturnEligible(order.orderDate) ? (
                                                 <Link to={`/ReturnForm/${order._id}`}>
                                                     Return

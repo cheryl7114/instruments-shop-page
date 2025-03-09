@@ -41,6 +41,5 @@ coverage/
 *.swp
 client/node_modules/.cache/
 
-server/uploads/
 client/src/css/App.css.map
 client/src/css/App.css
