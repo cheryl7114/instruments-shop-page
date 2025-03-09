@@ -101,7 +101,7 @@ const checkDuplicateUser = (req, res, next) => {
 
 // Add new user
 const addNewUser = (req, res) => {
-    const { name, email, password, address, city, postcode, phoneNumber } = req.body // Adjust the way you're extracting the data
+    const { name, email, password, address, city, postcode, phoneNumber } = req.body
     bcrypt.hash(password, parseInt(process.env.PASSWORD_HASH_SALT_ROUNDS), (err, hash) => {
         usersModel.create({
             name,

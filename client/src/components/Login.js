@@ -28,7 +28,8 @@ export default class Login extends Component {
                         console.log(res.data.errorMessage)
                     } else {
                         localStorage.name = res.data.name
-                        localStorage.userId = res.data.userId;
+                        localStorage.userId = res.data.userId
+                        localStorage.email = res.data.email
                         localStorage.accessLevel = res.data.accessLevel
                         localStorage.token = res.data.token
 
@@ -88,6 +89,11 @@ export default class Login extends Component {
                     <div>
                         <p>Don't have an account? <Link className="create-account-link" to={"/Register"}>Register</Link></p>
                     </div>
+                    <div>
+                        <p>admin@admin.com</p>
+                        <p>123!"£qweQWE</p>
+                    </div>
+
                 </form>
             </div>
         )

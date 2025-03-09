@@ -80,22 +80,11 @@ export default class DisplayAllProducts extends Component {
             } else {
                 return <FaSortAmountDown />
             }
-            // return dropDownOpen ? <CiSquareChevUp /> : <CiSquareChevDown />
         }
         const productsToDisplay = this.props.products || this.state.products
 
         return (
             <div className="body-container">
-                {localStorage.accessLevel > ACCESS_LEVEL_GUEST ?
-                    <div className="logout">
-                        <Logout />
-                    </div>
-                    :
-                    <div>
-                        <Link className="green-button" to={"/Login"}>Login</Link>
-                        <Link className="red-button" to={"/ResetDatabase"}>Reset Database</Link>  <br /><br /><br />
-                    </div>
-                }
                 <div className="products-page-layout">
                     <div className="filter-container">
                         <div className="filter-section">

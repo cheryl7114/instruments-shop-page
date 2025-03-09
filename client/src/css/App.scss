@@ -34,7 +34,7 @@ body {
 
 .logout {
   margin-bottom: 30px;
-  right:20px;
+  right: 20px;
 }
 
 // Link buttons
@@ -44,15 +44,16 @@ body {
   right: 10px;
 }
 
-.edit-button, .delete-button{
+.edit-button,
+.delete-button {
   padding: 7px 10px;
   z-index: 9999;
 }
 
-.edit-button{
+.edit-button {
   color: $navbar-color;
 
-  &:hover{
+  &:hover {
     color: $orange;
   }
 }
@@ -74,7 +75,7 @@ body {
   color: white;
   background-color: $navbar-color;
   margin-right: 10px;
-  position:relative;
+  position: relative;
   top: 5px;
   text-decoration: none;
   cursor: pointer;
@@ -148,6 +149,7 @@ body {
   gap: 15px;
 
   h2 {
+    font-size: 28px;
     margin: 0;
   }
 
@@ -179,7 +181,7 @@ body {
 .product-grid {
   display: flex;
   //grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  flex-wrap:wrap;
+  flex-wrap: wrap;
   gap: 20px;
   padding-top: 15px;
   justify-content: start;
@@ -188,21 +190,20 @@ body {
 
 .product-card {
   background: #fff;
-  border-radius: 10px;
-  padding: 15px;
+  padding: 14px 20px;
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   img {
     width: 320px;
     height: 350px;
-    display:flex;
-    object-fit:contain;
+    display: flex;
+    object-fit: contain;
     border-radius: 10px;
   }
 
   h4 {
-    margin-top:20px;
+    margin-top: 20px;
     margin-bottom: 5px;
   }
 
@@ -216,7 +217,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: thin solid black;
+  // border: thin solid black;
 }
 
 .product-details {
@@ -240,11 +241,11 @@ body {
 
 .main-image {
   width: 100%;
-  max-height: 400px;
+  max-height: 450px;
   object-fit: cover;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
   //border: 2px solid #ccc;
-  border-radius: 10px;
+  // border-radius: 10px;
 }
 
 .thumbnail-container {
@@ -265,7 +266,7 @@ body {
 }
 
 .product-info {
-  padding: 4%;
+  padding: 0 40px;
   flex: 1; // takes up remaining space
   width: 40%;
   height: 100%;
@@ -276,7 +277,7 @@ body {
 
   h3 {
     font-size: x-large;
-    margin-bottom: 40px;
+    margin-bottom: 24px;
     color: $orange;
   }
 
@@ -287,6 +288,30 @@ body {
   #price-text {
     font-size: large;
     color: $product-details-colour;
+  }
+
+  .add-to-cart-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 20px;
+    background-color: $orange;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    .add-cart-icon {
+      vertical-align: middle;
+      margin-left: 5px;
+    }
   }
 }
 
@@ -417,31 +442,6 @@ body {
     gap: 20px;
   }
 
-  .search-bar {
-    display: flex;
-    align-items: center;
-    background-color: white;
-    border-radius: 16px;
-    padding: 5px 10px;
-
-    input {
-      border: none;
-      outline: none;
-      padding: 4px;
-      border-radius: 16px;
-
-      &::placeholder {
-        color: #888;
-      }
-    }
-
-    .search-icon {
-      color: #888;
-      font-size: 1.5rem;
-      margin-right: 5px;
-    }
-  }
-
   .user-icon,
   .cart-icon {
     font-size: 1.5rem;
@@ -484,6 +484,42 @@ body {
     border-radius: 50%;
     object-fit: cover; // ensure image is contained within the circle
     border: 2px solid #ccc;
+  }
+}
+
+// search bar
+.search-bar,
+.customer-search-bar {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 16px;
+  border: 1px solid $navbar-color;
+  padding: 5px 10px;
+
+  input {
+    border: none;
+    outline: none;
+    padding: 4px;
+    border-radius: 16px;
+
+    &::placeholder {
+      color: #888;
+    }
+  }
+
+  .search-icon {
+    color: #888;
+    font-size: 1.5rem;
+    margin-right: 5px;
+  }
+}
+
+.customer-search-bar {
+  max-width: 50%;
+
+  input {
+    width: 100%;
   }
 }
 
@@ -541,7 +577,7 @@ body {
   position: relative;
 
   p {
-    color:$navbar-color;
+    color: $navbar-color;
   }
 }
 
@@ -683,7 +719,8 @@ body {
     margin-top: 20px;
   }
 
-  input, select {
+  input,
+  select {
     width: 100%;
     margin-top: 8px;
     margin-bottom: 10px;
@@ -724,7 +761,7 @@ select {
   top: 20px;
   pointer-events: none;
   color: #8a8989;
-  font-size:20px;
+  font-size: 20px;
 }
 
 //file upload
@@ -801,8 +838,8 @@ select {
 }
 
 .image-preview-wrapper {
-  width:45%;
-  height:300px;
+  width: 45%;
+  height: 300px;
   position: relative;
   display: inline-block;
   margin: 10px;
@@ -815,9 +852,9 @@ select {
   object-fit: contain;
   border-radius: 14px;
   border: 1px;
-  padding:15px;
-  background-color:white;
-  box-shadow:0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .remove-image-button {
@@ -854,7 +891,7 @@ select {
   input {
     width: 100%;
     margin-top: 10px;
-    margin-bottom:10px;
+    margin-bottom: 10px;
     padding: 10px 15px;
     border: 1px solid #ccc;
     border-radius: 30px;
@@ -881,7 +918,7 @@ select {
   flex-basis: 15%;
   padding: 20px;
   background-color: #f8f9fa;
-  border-radius: 20px;
+  border-radius: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   position: sticky;
@@ -894,7 +931,7 @@ select {
 
   h4 {
     margin-bottom: 10px;
-    font-size: 16px;
+    font-size: 22px;
     color: #333;
     border-bottom: 1px solid #ddd;
     padding-bottom: 5px;
@@ -927,11 +964,12 @@ select {
     position: absolute;
     right: 75px;
     display: flex;
-    align-items: center; /* Ensures icon and text are aligned */
+    align-items: center;
+    /* Ensures icon and text are aligned */
     cursor: pointer;
     background-color: #fff;
-    padding: 7px 12px;
-    border-radius: 20px;
+    padding: 8px 16px;
+    border-radius: 18px;
     border: 1px solid #ddd;
     color: #333;
     text-decoration: none;
@@ -958,7 +996,7 @@ select {
   .sort-dropdown-content {
     position: absolute;
     top: 100%;
-    right:0;
+    right: 0;
     z-index: 100;
     background-color: white;
     min-width: 150px;
@@ -1015,7 +1053,9 @@ select {
   position: sticky;
   top: 20px;
 
-  .subtotal, .shipping, .total {
+  .subtotal,
+  .shipping,
+  .total {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
@@ -1044,7 +1084,7 @@ select {
 }
 
 .continue-shopping {
-  margin-top: 4px;
+  margin-top: 8px;
   padding: 10px;
   background-color: $orange;
   color: white;
@@ -1063,7 +1103,9 @@ select {
   display: flex;
   flex-wrap: wrap;
 
-  .item-image, .item-details, .item-actions {
+  .item-image,
+  .item-details,
+  .item-actions {
     flex: 1;
     min-width: 100px;
     // padding: 10px 0px;
@@ -1095,25 +1137,12 @@ select {
     border-radius: 4px;
   }
 
-  button {
+  .quantity-btn {
     background: none;
     border: none;
-    padding: 2px 6px;
+    padding: 2px 10px;
     cursor: pointer;
     font-size: 16px;
-  }
-
-  input {
-    width: 40px;
-    text-align: center;
-    border: none;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-    padding: 5px;
-
-    &:focus {
-      outline: none;
-    }
   }
 
   .remove-item-icon {
@@ -1263,17 +1292,59 @@ select {
         margin-right: 10px;
       }
     }
-  }
 
-  tbody tr:last-child td {
+    ul {
+      padding-left: 20px;
+    }
+  }
+}
+
+tbody tr:last-child td {
     border-bottom: white;
   }
 
-  .no-customers {
-    font-size: 18px;
-    color: #666;
-    text-align: center;
+.clickable-row {
+  cursor: pointer;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: #f0f0f0;
   }
+}
+
+.expanded-row {
+  background: #f9f9f9;
+  padding: 10px 20px;
+  border-top: 2px solid #ddd;
+}
+
+.expanded-row-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.address-details {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.product-details {
+  padding: 10px 0;
+}
+
+.product-item {
+  margin-bottom: 10px;
+  list-style: none;
+
+  strong {
+    font-weight: 600;
+  }
+}
+
+.no-customers {
+  font-size: 18px;
+  color: #666;
+  text-align: center;
 }
 
 // order placed successful page
@@ -1299,9 +1370,11 @@ select {
     transform: scale(0);
     opacity: 0;
   }
+
   50% {
     transform: scale(1.2);
   }
+
   100% {
     transform: scale(1);
     opacity: 1;
