@@ -1,5 +1,7 @@
 import React, { Component } from "react"
-import {ACCESS_LEVEL_ADMIN} from "../config/global_constants"
+import {ACCESS_LEVEL_ADMIN, ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../config/global_constants"
+import {Link} from "react-router-dom";
+import Logout from "./Logout";
 
 export default class AccountDetails extends Component {
     render() {
@@ -24,6 +26,7 @@ export default class AccountDetails extends Component {
                         <p>Phone Number: {user.phoneNumber ? user.phoneNumber : "Not available"}</p>
                     </>
                 )}
+                <Logout />
             </div>
         )
     }

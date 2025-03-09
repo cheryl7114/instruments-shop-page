@@ -1,6 +1,7 @@
 const express = require(`express`)
 const router = express.Router()
 const ordersModel = require(`../models/orders`)
+const productsModel = require(`../models/products`)
 const jwt = require('jsonwebtoken')
 const fs = require('fs')
 const JWT_PRIVATE_KEY = fs.readFileSync(process.env.JWT_PRIVATE_KEY_FILENAME, 'utf8')
@@ -39,15 +40,51 @@ const createNewOrder = (req, res) => {
             paypalPaymentID
         })
 
-        newOrder.save((error, data) => {
+        // First save the order
+        newOrder.save((error, savedOrder) => {
             if (error) {
-                res.json({ errorMessage: `Error creating order`, error })
-            } else {
-                res.json(data)
+                return res.json({ errorMessage: `Error creating order` })
             }
+
+            // After order is saved, update stock for each product
+            const stockUpdatePromises = req.body.products.map(product => {
+                return new Promise((resolve, reject) => {
+                    // Find the product and decrement its stock
+                    productsModel.findByIdAndUpdate(
+                        product.productID,
+                        { $inc: { stock: -product.quantity } }, // Decrease stock by ordered quantity
+                        { new: true },
+                        (err, updatedProduct) => {
+                            if (err) {
+                                console.error(`Error updating stock for product ${product.productID}:`, err)
+                                reject(err)
+                            } else if (!updatedProduct) {
+                                console.error(`Product not found: ${product.productID}`)
+                                resolve(null)
+                            } else {
+                                resolve(updatedProduct)
+                            }
+                        }
+                    )
+                })
+            })
+
+            // Wait for all stock updates to complete
+            Promise.all(stockUpdatePromises)
+                .then(() => {
+                    // All stock updates successful, return the order
+                    res.json(savedOrder)
+                })
+                .catch(updateError => {
+                    console.error("Error updating product stocks:", updateError)
+                    // We still return the order since it was created
+                    // but log the error for investigation
+                    res.json(savedOrder)
+                })
         })
     } catch (error) {
-        res.json({ errorMessage: `Error creating order`, error })
+        console.error("Error in createNewOrder:", error)
+        res.json({ errorMessage: `Error creating order` })
     }
 }
 
