@@ -100,7 +100,7 @@ body {
   background-color: transparent;
   color: white;
   border: thin solid white;
-  border-radius: 4px;
+  border-radius: 30px;
   font-size: 1.2rem;
   font-weight: 600;
   cursor: pointer;
@@ -163,18 +163,18 @@ body {
   gap: 10px;
 }
 .newsletter form input {
-  padding: 10px;
-  width: 250px;
+  padding: 12px;
+  width: 280px;
   border: none;
-  border-radius: 5px;
+  border-radius: 30px;
 }
 .newsletter form button {
   padding: 10px 15px;
-  background: #ff6600;
+  background: #ea954f;
   color: white;
   border: none;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 30px;
 }
 .newsletter form button:hover {
   background: #ea954f;
@@ -252,7 +252,7 @@ body {
   align-items: center;
   width: 60px;
   height: 60px;
-  border-radius: 50%;
+  border-radius: 30px;
   background-color: #f7f7f7;
   color: white;
   text-decoration: none;
@@ -317,7 +317,7 @@ body {
   padding: 14px 20px;
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
+  border-radius: 30px;
 }
 .product-card img {
   width: 320px;
@@ -401,7 +401,7 @@ body {
   padding: 10px;
   font-size: 1rem;
   border: none;
-  border-radius: 20px;
+  border-radius: 30px;
   background-color: #ea954f;
   color: white;
   cursor: pointer;
@@ -430,7 +430,7 @@ body {
   display: flex;
   margin-top: 40px;
   overflow: hidden;
-  border-radius: 20px;
+  border-radius: 30px;
   border: none;
   box-shadow: 1px 3px 12px rgba(0, 0, 0, 0.2);
 }
@@ -453,7 +453,7 @@ body {
   display: block;
   margin: 10px 0;
   padding: 8px 12px;
-  border-radius: 20px;
+  border-radius: 30px;
   transition: background 0.3s ease, color 0.3s ease;
   text-decoration: none;
   color: black;
@@ -461,7 +461,7 @@ body {
 }
 .sidebar .sidebar-choices:hover {
   background: rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
+  border-radius: 30px;
 }
 .sidebar .sidebar-choices:active {
   background: rgba(0, 0, 0, 0.8);
@@ -574,7 +574,7 @@ body {
   display: flex;
   align-items: center;
   background-color: white;
-  border-radius: 16px;
+  border-radius: 30px;
   border: 1px solid #222;
   padding: 5px 10px;
 }
@@ -583,7 +583,7 @@ body {
   border: none;
   outline: none;
   padding: 4px;
-  border-radius: 16px;
+  border-radius: 30px;
 }
 .search-bar input::placeholder,
 .customer-search-bar input::placeholder {
@@ -618,7 +618,7 @@ body {
   padding: 8px 100px 8px 18px;
   margin-bottom: 14px;
   border: 1px solid #ccc;
-  border-radius: 20px;
+  border-radius: 30px;
   font-size: 1rem;
 }
 .login-container input:focus {
@@ -642,7 +642,7 @@ body {
   align-items: center;
   background-color: white;
   padding: 64px;
-  border-radius: 20px;
+  border-radius: 30px;
   max-width: 400px;
   margin: auto;
   box-shadow: 2px 6px 24px rgba(0, 0, 0, 0.5);
@@ -658,7 +658,7 @@ body {
   background-color: #ea954f;
   color: white;
   border: none;
-  border-radius: 20px;
+  border-radius: 30px;
   font-size: 1rem;
   cursor: pointer;
   text-align: center;
@@ -678,7 +678,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 20px;
+  border-radius: 30px;
   max-width: 400px;
   box-shadow: 2px 6px 24px rgba(0, 0, 0, 0.5);
 }
@@ -707,7 +707,7 @@ body {
   font-size: 14px;
   background-color: white;
   border: 2px dashed #ea954f;
-  border-radius: 20px;
+  border-radius: 30px;
   cursor: pointer;
   transition: all 0.3s ease;
   color: #888888;
@@ -766,7 +766,7 @@ body {
   padding: 25px;
   position: relative;
   background: white;
-  border-radius: 14px;
+  border-radius: 30px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 .add-product-container form {
@@ -840,7 +840,7 @@ select {
   font-size: 14px;
   background-color: white;
   border: 2px dashed #ea954f;
-  border-radius: 20px;
+  border-radius: 30px;
   cursor: pointer;
   text-align: center;
   transition: all 0.3s ease;
@@ -1002,7 +1002,7 @@ select {
   cursor: pointer;
   background-color: #fff;
   padding: 8px 16px;
-  border-radius: 18px;
+  border-radius: 30px;
   border: 1px solid #ddd;
   color: #333;
   text-decoration: none;
@@ -1030,7 +1030,7 @@ select {
   background-color: white;
   min-width: 150px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
+  border-radius: 30px;
   overflow: hidden;
   margin-top: 5px;
 }
@@ -1071,7 +1071,7 @@ select {
   flex: 1;
   background-color: #f9f9f9;
   border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 30px;
   padding: 20px;
   height: fit-content;
   position: sticky;
@@ -1111,7 +1111,7 @@ select {
   background-color: #ea954f;
   color: white;
   border: none;
-  border-radius: 20px;
+  border-radius: 30px;
   font-size: 1rem;
   cursor: pointer;
   text-decoration: none;
@@ -1151,7 +1151,7 @@ select {
   display: flex;
   align-items: center;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 30px;
 }
 .bottom-item-container .quantity-btn {
   background: none;
@@ -1175,7 +1175,7 @@ select {
   padding: 25px;
   position: relative;
   background: white;
-  border-radius: 14px;
+  border-radius: 30px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 .checkout-container h2 {
@@ -1226,7 +1226,7 @@ select {
   background: #ea954f;
   color: white;
   border: none;
-  border-radius: 20px;
+  border-radius: 30px;
   cursor: pointer;
   transition: background 0.3s ease;
   font-size: 0.875rem;
@@ -1244,7 +1244,7 @@ select {
   margin-top: 20px;
   padding: 15px;
   background: #f9f9f9;
-  border-radius: 14px;
+  border-radius: 30px;
   text-align: center;
 }
 .checkout-container .order-summary {
@@ -1280,7 +1280,7 @@ select {
   background: white;
   margin: 50px;
   padding: 35px;
-  border-radius: 20px;
+  border-radius: 30px;
   text-align: center;
   position: relative;
 }
@@ -1301,7 +1301,7 @@ select {
 .cart-summary {
   background-color: #f9f9f9;
   padding: 40px;
-  border-radius: 8px;
+  border-radius: 30px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   top: 20px;
 }
@@ -1318,7 +1318,7 @@ select {
   background-color: #ea954f;
   color: white;
   border: none;
-  border-radius: 20px;
+  border-radius: 30px;
   font-size: 1rem;
   cursor: pointer;
   text-align: center;
@@ -1351,7 +1351,7 @@ select {
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
-  border-radius: 20px;
+  border-radius: 30px;
   overflow: hidden;
 }
 .table-container table th, .table-container table td {
@@ -1408,7 +1408,7 @@ select {
   padding: 10px;
   font-size: 0.875rem;
   line-height: normal;
-  border-radius: 20px;
+  border-radius: 30px;
   position: relative;
   top: 5px;
   cursor: pointer;
@@ -1476,7 +1476,7 @@ select {
   padding: 25px;
   position: relative;
   background: white;
-  border-radius: 14px;
+  border-radius: 30px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 .return-form-container h2 {
@@ -1532,7 +1532,7 @@ select {
   font-size: 22px;
 }
 .return-form-container textarea {
-  border-radius: 10px;
+  border-radius: 30px;
   resize: vertical;
   min-height: 80px;
 }
@@ -1542,7 +1542,7 @@ select {
   font-size: 0.875rem;
   border: none;
   padding: 10px;
-  border-radius: 20px;
+  border-radius: 30px;
   cursor: pointer;
   transition: background 0.3s ease;
   text-align: center;
