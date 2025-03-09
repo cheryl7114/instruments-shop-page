@@ -344,13 +344,14 @@ export default class Checkout extends Component {
                     </div>
 
                     {isLoggedIn && (
-                        <div className="form-group">
+                        <div className="checkbox-group">
                             <input
                                 type="checkbox"
+                                id="saveAddress"
                                 checked={this.state.saveAddress}
-                                onChange={(e) => {this.setState({ saveAddress: e.target.checked })}}
+                                onChange={(e) => this.setState({ saveAddress: e.target.checked })}
                             />
-                            <label>Save this address for future orders</label>
+                            <label htmlFor="saveAddress" className="custom-checkbox">Save this address for future orders</label>
                         </div>
                     )}
 
@@ -364,7 +365,7 @@ export default class Checkout extends Component {
                         <h3>Order Summary</h3>
                         <p>Total: €{total.toFixed(2)}</p>
                     </div>
-                    {!proceedPayment && <p className="payment-message">Please complete and confirm the details in the form above before proceeding</p>}
+                    {!proceedPayment && <p className="payment-message">* Please complete and confirm the details in the form above before proceeding</p>}
                     {proceedPayment && (
                         <PayPalScriptProvider options={{
                             currency: "EUR",
