@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import axios from "axios"
 import { SERVER_HOST } from "../config/global_constants"
+import { Redirect } from "react-router-dom"
 
 export default class ReturnForm extends Component {
     constructor(props) {
@@ -12,14 +13,14 @@ export default class ReturnForm extends Component {
             reason: "",
             refundAmount: 0,
             error: "",
-            successMessage: ""
+            redirectToUserProfile: false,
+            userId: localStorage.getItem("userId")
         }
     }
 
     componentDidMount() {
         axios.get(`${SERVER_HOST}/orders/${this.props.match.params.id}`)
             .then(res => {
-                console.log("Response data:", res.data) // Debugging
                 if (res.data.errorMessage) {
                     this.setState({ error: res.data.errorMessage })
                 } else {
@@ -57,9 +58,8 @@ export default class ReturnForm extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault()
-        const { selectedProduct, quantity, reason, refundAmount } = this.state
+        const { selectedProduct, quantity, reason, refundAmount, userId } = this.state
         const orderId = this.state.order ? this.state.order._id : null
-        const userId = localStorage.getItem("userId")
 
         if (!selectedProduct || quantity <= 0 || !reason || refundAmount <= 0) {
             this.setState({ error: "Please fill all the fields correctly." })
@@ -78,14 +78,14 @@ export default class ReturnForm extends Component {
                 if (res.data.errorMessage) {
                     this.setState({ error: res.data.errorMessage })
                 } else {
-                    this.setState({ successMessage: "Your return request has been submitted successfully." })
+                    this.setState({ redirectToUserProfile: true })
                 }
             })
             .catch(() => this.setState({ error: "Error submitting the return request" }))
     }
 
     render() {
-        const { order, selectedProduct, quantity, reason, refundAmount, error, successMessage } = this.state
+        const { order, selectedProduct, quantity, reason, refundAmount, error, redirectToUserProfile, userId } = this.state
 
         if (!order) {
             return <p>Loading order details...</p>
@@ -93,9 +93,9 @@ export default class ReturnForm extends Component {
 
         return (
             <div className="return-form-container">
+                {redirectToUserProfile ? <Redirect to={`/UserProfile/${userId}/returns`} /> : null}
                 <h2>Return Form</h2>
                 {error && <p className="error">{error}</p>}
-                {successMessage && <p className="success">{successMessage}</p>}
 
                 <form onSubmit={this.handleSubmit}>
                     <div>
@@ -107,7 +107,7 @@ export default class ReturnForm extends Component {
                         <select onChange={this.handleProductChange}>
                             <option value="">Select a product</option>
                             {order.products.map(product =>
-                                product.productID ? ( // If productID exists
+                                product.productID ? (
                                     <option key={product._id} value={product.productID._id}>
                                         {product.productID.name} - €{product.price.toFixed(2)}
                                     </option>
