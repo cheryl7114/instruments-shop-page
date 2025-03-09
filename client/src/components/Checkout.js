@@ -46,15 +46,43 @@ export default class Checkout extends Component {
                         })
                     }
                 })
-                .catch(err => console.error("Error fetching user data:", err))
+                .catch(err => {
+                    console.error("Error fetching user data:", err)
+                })
+        } else {
+            console.log("User is a guest, skipping address fetch")
         }
-
-        this.setState({ total: this.calculateTotal(cartItems) })
     }
 
-    calculateTotal(cartItems) {
-        const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0)
-        return subtotal > 0 ? subtotal + 5 : 0
+    validateCartStock = () => {
+        // Get the latest cart items
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const stockIssues = [];
+
+        // Check each item's stock against the database
+        const stockCheckPromises = cartItems.map(item => {
+            return axios.get(`${SERVER_HOST}/products/${item._id}`)
+                .then(res => {
+                    if (res.data && res.data.stock < item.quantity) {
+                        stockIssues.push({
+                            id: item._id,
+                            name: item.name,
+                            requestedQty: item.quantity,
+                            availableQty: res.data.stock
+                        });
+                    }
+                    return res.data;
+                })
+                .catch(err => {
+                    console.error("Error checking stock for product:", err);
+                    return null;
+                });
+        });
+
+        return Promise.all(stockCheckPromises)
+            .then(() => {
+                return stockIssues;
+            });
     }
 
     handleChange = (e) => {
@@ -71,13 +99,52 @@ export default class Checkout extends Component {
         })
     }
 
-    validateForm = () => {
-        const { email, deliveryAddress, name, isLoggedIn } = this.state
-        if (!isLoggedIn && !name) {
-            this.setState({ error: "Please enter your name." })
-            return false
+    calculateTotal() {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || []
+        if (!cartItems.length) {
+            return 0
         }
 
+        const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0)
+        const shippingCost = subtotal > 0 ? 5 : 0;
+
+        return subtotal + shippingCost
+    }
+
+    handleProceedToPayment = (e) => {
+        e.preventDefault();
+
+        // First validate the form
+        if (this.validateForm()) {
+            // Then validate stock levels
+            this.validateCartStock()
+                .then(stockIssues => {
+                    if (stockIssues.length > 0) {
+                        // There are stock issues
+                        const message = stockIssues.map(issue =>
+                            `${issue.name}: Only ${issue.availableQty} available (you requested ${issue.requestedQty})`
+                        ).join('\n');
+
+                        alert(`Some items in your cart are no longer available in the requested quantity:\n\n${message}\n\nPlease update your cart before proceeding.`);
+
+                        // Redirect back to cart
+                        window.location.href = '/Cart';
+                    } else {
+                        // Stock is okay, proceed to payment
+                        this.setState({
+                            proceedPayment: true,
+                            error: ''
+                        });
+                    }
+                });
+        }
+    }
+
+    validateForm = () => {
+        const { email, deliveryAddress } = this.state
+        const isLoggedIn = localStorage.token && localStorage.token !== "null"
+
+        // Check email for guest users
         if (!isLoggedIn && !email) {
             this.setState({ error: "Please enter your email address." })
             return false
