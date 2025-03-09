@@ -25,7 +25,6 @@ export default class PurchaseRecords extends Component {
 
     toggleRow(index) {
         this.setState(prevState => ({
-            // If the clicked row (index) is already expanded (expandedRow === index), set expandedRow to null to close the row
             expandedRow: prevState.expandedRow === index ? null : index
         }))
     }
@@ -35,19 +34,19 @@ export default class PurchaseRecords extends Component {
 
         return (
             <div className="table-container">
-                <h2>Purchase Records</h2><br/>
+                <h2>Purchase Records</h2><br />
                 <i><p>Click on rows to expand for full details.</p></i>
                 {orders.length === 0 ? (
                     <p className="no-customers">No purchase records available.</p>
                 ) : (
                     <table>
                         <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Customer Name</th>
-                                <th>Email</th>
-                                <th>Total</th>
-                            </tr>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer Name</th>
+                            <th>Email</th>
+                            <th>Total</th>
+                        </tr>
                         </thead>
                         <tbody>
                         {orders.map((order, index) => (
@@ -62,10 +61,28 @@ export default class PurchaseRecords extends Component {
                                 {/* Expanded Row (only visible if expandedRow === index) */}
                                 {expandedRow === index && (
                                     <tr className="expanded-row">
-                                        <td colSpan="5">
-                                            <strong>Address:</strong> {order.deliveryAddress?.address || "Not available"}, {order.deliveryAddress?.city || "Not available"}, {order.deliveryAddress?.postcode || "Not available"}<br />
-                                            <strong>Phone:</strong> {order.deliveryAddress?.phone || "Not available"}<br/>
-                                            <strong>Payment ID: </strong> {order.paypalPaymentID || "Not available"}
+                                        <td colSpan="4">
+                                            <div className="expanded-row-details">
+                                                <div className="address-details">
+                                                    <strong>Address:</strong> {order.deliveryAddress?.address || "Not available"}, {order.deliveryAddress?.city || "Not available"}, {order.deliveryAddress?.postcode || "Not available"}<br />
+                                                    <strong>Phone:</strong> {order.deliveryAddress?.phone || "Not available"}<br />
+                                                    <strong>Payment ID: </strong> {order.paypalPaymentID || "Not available"}<br/>
+                                                    <strong>Order Date: </strong> {order.orderDate}
+                                                </div>
+
+                                                <div className="product-details">
+                                                    <strong>Products Bought:</strong>
+                                                    <ul>
+                                                        {order.products.map((product, idx) => (
+                                                            <li key={idx} className="product-item">
+                                                                <strong>Product ID:</strong> {product.productID} |
+                                                                <strong> Quantity:</strong> {product.quantity} |
+                                                                <strong> Price:</strong> €{product.price.toFixed(2)}
+                                                           </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 )}

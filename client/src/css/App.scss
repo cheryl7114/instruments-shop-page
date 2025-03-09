@@ -1111,10 +1111,6 @@ select {
       background-color: #f9f9f9;
     }
 
-    tr:hover {
-      background-color: #f1f1f1;
-    }
-
     td img.profile-photo {
       width: 100px;
       height: 100px;
@@ -1122,26 +1118,55 @@ select {
       object-fit: cover;
       margin-right: 10px;
     }
-  }
 
-  .clickable-row {
-    cursor: pointer;
-    transition: background 0.3s ease;
+    ul {
+      padding-left: 20px;
+    }
   }
+}
 
-  .clickable-row:hover {
+.clickable-row {
+  cursor: pointer;
+  transition: background 0.3s ease;
+
+  &:hover {
     background: #f0f0f0;
   }
+}
 
-  .expanded-row {
-    background: #fafafa;
-  }
+.expanded-row {
+  background: #f9f9f9;
+  padding: 10px 20px;
+  border-top: 2px solid #ddd;
+}
 
-  .no-customers {
-    font-size: 18px;
-    color: #666;
-    text-align: center;
+.expanded-row-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.address-details {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.product-details {
+  padding: 10px 0;
+}
+
+.product-item {
+  margin-bottom: 10px;
+  list-style: none;
+
+  strong {
+    font-weight: 600;
   }
+}
+
+.no-customers {
+  font-size: 18px;
+  color: #666;
+  text-align: center;
 }
 
 // order placed successful page

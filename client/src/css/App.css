@@ -985,9 +985,6 @@ select {
 .table-container table tr:nth-child(even) {
   background-color: #f9f9f9;
 }
-.table-container table tr:hover {
-  background-color: #f1f1f1;
-}
 .table-container table td img.profile-photo {
   width: 100px;
   height: 100px;
@@ -995,17 +992,47 @@ select {
   object-fit: cover;
   margin-right: 10px;
 }
-.table-container .clickable-row {
+.table-container table ul {
+  padding-left: 20px;
+}
+
+.clickable-row {
   cursor: pointer;
   transition: background 0.3s ease;
 }
-.table-container .clickable-row:hover {
+.clickable-row:hover {
   background: #f0f0f0;
 }
-.table-container .expanded-row {
-  background: #fafafa;
+
+.expanded-row {
+  background: #f9f9f9;
+  padding: 10px 20px;
+  border-top: 2px solid #ddd;
 }
-.table-container .no-customers {
+
+.expanded-row-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.address-details {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.product-details {
+  padding: 10px 0;
+}
+
+.product-item {
+  margin-bottom: 10px;
+  list-style: none;
+}
+.product-item strong {
+  font-weight: 600;
+}
+
+.no-customers {
   font-size: 18px;
   color: #666;
   text-align: center;
