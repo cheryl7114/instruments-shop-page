@@ -55,7 +55,7 @@ export default class PurchaseRecords extends Component {
                                     <td>{order._id}</td>
                                     <td>{order.email}</td>
                                     <td>€{order.total.toFixed(2)}</td>
-                                    <td>{order.orderDate}</td>
+                                    <td>{new Date(order.orderDate).toLocaleString()}</td>
                                 </tr>
 
                                 {/* Expanded Row (only visible if expandedRow === index) */}
