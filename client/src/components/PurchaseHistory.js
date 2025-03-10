@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import axios from "axios"
 import { SERVER_HOST } from "../config/global_constants"
 import {Link} from "react-router-dom"
+import { CiSearch } from "react-icons/ci"
 
 export default class PurchaseHistory extends Component {
     constructor(props) {
@@ -12,7 +13,8 @@ export default class PurchaseHistory extends Component {
             error: "",
             sortKey: "orderDate",
             sortOrder: "desc",
-            filteredOrders: []
+            filteredOrders: [],
+            searchQuery: ""
         }
     }
 
@@ -81,12 +83,53 @@ export default class PurchaseHistory extends Component {
         })
     }
 
+    handleSearchChange = (e) => {
+        const query = e.target.value
+        this.setState({ searchQuery: query }, () => {
+            this.filterOrders()
+        })
+    }
+
+    filterOrders = () => {
+        const { orders, searchQuery } = this.state
+
+        // If search query is empty, show all orders
+        if (!searchQuery.trim()) {
+            this.setState({ filteredOrders: orders })
+            return
+        }
+
+        const query = searchQuery.toLowerCase()
+        const filteredOrders = orders.filter(order => {
+            // Search in order ID
+            const orderIdMatch = order._id && order._id.toLowerCase().includes(query)
+
+            // Search in payment ID
+            const paymentIdMatch = order.paypalPaymentID &&
+                order.paypalPaymentID.toLowerCase().includes(query)
+
+            // Search in products (only product names, not prices)
+            let productNameMatch = false
+            if (order.products && order.products.length > 0) {
+                productNameMatch = order.products.some(product =>
+                    product.productID?.name && product.productID.name.toLowerCase().includes(query)
+                )
+            }
+
+            // Return true if any field matches
+            return orderIdMatch || paymentIdMatch || productNameMatch
+        })
+
+        this.setState({ filteredOrders })
+    }
+
     render() {
-        const { filteredOrders, expandedRow, error, sortKey, sortOrder } = this.state
+        const { filteredOrders, expandedRow, error, sortKey, sortOrder, searchQuery } = this.state
         const getSortIndicator = (currentKey) => {
             if (sortKey === currentKey) {
                 return sortOrder === 'asc' ? '▲' : '▼'
             }
+            return ''
         }
 
         return (
@@ -96,8 +139,18 @@ export default class PurchaseHistory extends Component {
 
                 {error && <p className="error">{error}</p>}
 
+                <div className="customer-search-bar">
+                    <CiSearch className="search-icon" />
+                    <input
+                        type="text"
+                        placeholder="Search by order ID, payment ID, or product name..."
+                        value={searchQuery}
+                        onChange={this.handleSearchChange}
+                    />
+                </div><br />
+
                 {filteredOrders.length === 0 ? (
-                    <p className="no-orders">No purchase history available.</p>
+                    <p className="no-orders">No purchase history found.</p>
                 ) : (
                     <table>
                         <thead>
