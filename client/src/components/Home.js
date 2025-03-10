@@ -72,27 +72,27 @@ export default class Home extends Component {
                             <img src="/guitarDemo.jpg" alt="Guitar" />
                             <h3>Faith Naked Mercury</h3>
                             <p>Perfect sound for any music style</p>
-                            {/*<Link to="/product/1">*/}
+                            <Link to="/ProductDetails/67ce1df2c90701b4ac3a2536" className="no-underline">
                                 <button className="orange-button">View Details</button><br/>
-                            {/*</Link>*/}
+                            </Link>
                         </div>
 
                         <div className="product-card">
                             <img src="/pianoDemo.webp" alt="Piano" />
                             <h3>Casio Grand Hybrid</h3>
                             <p>Rich tones with elegant design</p>
-                            {/*<Link to="/product/2">*/}
+                            <Link to="/ProductDetails/67ce1e5bc90701b4ac3a253d" className="no-underline">
                                 <button className="orange-button">View Details</button><br/>
-                            {/*</Link>*/}
+                            </Link>
                         </div>
 
                         <div className="product-card">
                             <img src="/violinDemo.jpg" alt="Violin" />
                             <h3>Hofner Ignition Violin</h3>
                             <p>Premium craftsmanship for every musician</p>
-                            {/*<Link to="/product/3">*/}
+                            <Link to="/ProductDetails/67ce1ea0c90701b4ac3a2552" className="no-underline">
                                 <button className="orange-button">View Details</button><br/>
-                            {/*</Link>*/}
+                            </Link>
                         </div>
                     </div>
                 </div>
