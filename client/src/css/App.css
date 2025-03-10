@@ -356,7 +356,8 @@ body {
 .main-image {
   width: 100%;
   max-height: 450px;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -587,7 +588,13 @@ body {
 .customer-search-bar input {
   border: none;
   outline: none;
-laceholder,
+  padding: 4px;
+  border-radius: 30px;
+}
+.search-bar input::-moz-placeholder, .customer-search-bar input::-moz-placeholder {
+  color: #888;
+}
+.search-bar input::placeholder,
 .customer-search-bar input::placeholder {
   color: #888;
 }
@@ -718,7 +725,9 @@ laceholder,
   padding: 10px 200px 10px 20px;
   border: 1px solid #ccc;
   border-radius: 30px;
-  appearance: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
 .register-container .profile-upload-label {
   width: 100%;
@@ -760,7 +769,8 @@ laceholder,
 .register-container .profile-upload-label .profile-preview-container .profile-preview-wrapper .profile-preview {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
   border-radius: 14px;
   border: 1px;
   padding: 15px;
@@ -1425,15 +1435,16 @@ select {
 .table-container table ul {
   padding-left: 20px;
 }
-.table-container table .sort-pointer {
-  cursor: pointer;
-}
 .table-container table .return-link {
   color: #ea954f;
   text-decoration: none;
 }
 .table-container table .return-link:hover {
   text-decoration: underline;
+}
+
+.sort-pointer {
+  cursor: pointer;
 }
 
 .clickable-row {
@@ -1843,7 +1854,4 @@ select {
     text-overflow: ellipsis;
     min-width: auto !important;
   }
-}
-
-/*# sourceMappingURL=App.css.map */
-
+}/*# sourceMappingURL=App.css.map */
