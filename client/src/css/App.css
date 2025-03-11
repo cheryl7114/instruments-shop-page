@@ -187,6 +187,7 @@ body {
   right: 10px;
   background: transparent;
   border: none;
+  margin: 10px;
 }
 
 .edit-button,
@@ -226,8 +227,7 @@ body {
 }
 .orange-button:hover,
 .red-button:hover {
-  text-decoration: none;
-  color: #fff;
+  opacity: 0.8;
 }
 
 .no-underline {
@@ -238,18 +238,16 @@ body {
   background-color: #ea954f;
   width: 250px;
   display: block;
-  margin: 1px auto;
+  margin: 5px auto;
   border: none;
-}
-.orange-button:hover {
-  background-color: #222;
 }
 
 .red-button {
   background-color: #dc3545;
-}
-.red-button:hover {
-  background-color: #a01020;
+  width: 250px;
+  display: block;
+  margin: 5px auto;
+  border: none;
 }
 
 .blue-button {
@@ -788,7 +786,7 @@ body {
   padding-left: 20px;
 }
 
-.add-product-container {
+.forms {
   max-width: 600px;
   margin: 50px auto;
   padding: 25px;
@@ -797,14 +795,14 @@ body {
   border-radius: 30px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-.add-product-container form {
+.forms form {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-top: 20px;
 }
-.add-product-container input,
-.add-product-container select {
+.forms input,
+.forms select {
   width: 100%;
   margin-top: 8px;
   margin-bottom: 10px;
@@ -813,7 +811,7 @@ body {
   border-radius: 30px;
   appearance: none;
 }
-.add-product-container label {
+.forms label {
   width: 100%;
   padding: 10px;
   color: #222;
@@ -937,36 +935,6 @@ select {
   text-align: center;
   font-size: 16px;
   background-color: transparent;
-}
-
-.edit-product-container {
-  max-width: 600px;
-  margin: 50px auto;
-  position: relative;
-  padding: 25px;
-  background: white;
-  border-radius: 14px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-.edit-product-container form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
-}
-.edit-product-container input {
-  width: 100%;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 10px 15px;
-  border: 1px solid #ccc;
-  border-radius: 30px;
-  background-color: white;
-}
-.edit-product-container label {
-  width: 100%;
-  padding: 8px;
-  color: #222;
 }
 
 .products-page-layout {
@@ -1197,37 +1165,8 @@ select {
   opacity: 0.7;
 }
 
-.checkout-container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 25px;
-  position: relative;
-  background: white;
-  border-radius: 30px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
 .checkout-container h2 {
   text-align: center;
-}
-.checkout-container form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
-}
-.checkout-container input {
-  width: 100%;
-  margin-top: 8px;
-  margin-bottom: 10px;
-  padding: 10px 15px;
-  border: 1px solid #ccc;
-  border-radius: 30px;
-  appearance: none;
-}
-.checkout-container label {
-  width: 100%;
-  padding: 10px;
-  color: #222;
 }
 .checkout-container .checkbox-group {
   display: flex;
@@ -1264,6 +1203,8 @@ select {
   top: 5px;
   text-decoration: none;
   text-align: center;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 .checkout-container .continue-button:hover {
   background: rgb(8.5, 8.5, 8.5);
@@ -1274,6 +1215,7 @@ select {
   background: #f9f9f9;
   border-radius: 30px;
   text-align: center;
+  margin-bottom: 10px;
 }
 .checkout-container .order-summary {
   margin-bottom: 15px;

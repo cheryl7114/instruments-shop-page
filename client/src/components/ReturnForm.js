@@ -1,8 +1,8 @@
 import React, { Component } from "react"
 import axios from "axios"
 import { SERVER_HOST } from "../config/global_constants"
-import { Redirect } from "react-router-dom"
-import {CiCircleChevDown} from "react-icons/ci"
+import {Link, Redirect} from "react-router-dom"
+import {CiCircleChevDown, CiCircleRemove} from "react-icons/ci"
 
 export default class ReturnForm extends Component {
     constructor(props) {
@@ -160,6 +160,11 @@ export default class ReturnForm extends Component {
 
                     <div>
                         <button type="submit">Submit Return Request</button>
+                    </div>
+                    <div className="cancel-button">
+                        <Link to={`/UserProfile/${userId}/returns`}>
+                            <CiCircleRemove size={30} color="red" />
+                        </Link>
                     </div>
                 </form>
                 {this.state.showModal && (

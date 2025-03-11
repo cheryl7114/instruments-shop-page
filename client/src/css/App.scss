@@ -212,6 +212,7 @@ body {
   right: 10px;
   background: transparent;
   border: none;
+  margin: 10px;
 }
 
 .edit-button,
@@ -252,8 +253,7 @@ body {
   text-underline: none;
 
   &:hover {
-    text-decoration: none;
-    color: #fff;
+    opacity: 0.8;
   }
 }
 
@@ -265,20 +265,16 @@ body {
   background-color: $orange;
   width:250px;
   display:block;
-  margin: 1px auto;
+  margin: 5px auto;
   border: none;
-
-  &:hover {
-    background-color: $navbar-color;
-  }
 }
 
 .red-button {
   background-color: #dc3545;
-
-  &:hover {
-    background-color: #a01020;
-  }
+  width:250px;
+  display:block;
+  margin: 5px auto;
+  border: none;
 }
 
 .blue-button {
@@ -889,8 +885,8 @@ body {
   }
 }
 
-//Add Product page
-.add-product-container {
+// Form Design
+.forms {
   max-width: 600px;
   margin: 50px auto;
   padding: 25px;
@@ -1056,40 +1052,6 @@ select {
   text-align: center;
   font-size: 16px;
   background-color: transparent;
-}
-
-//Edit page
-.edit-product-container {
-  max-width: 600px;
-  margin: 50px auto;
-  position: relative;
-  padding: 25px;
-  background: white;
-  border-radius: 14px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
-  }
-
-  input {
-    width: 100%;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 10px 15px;
-    border: 1px solid #ccc;
-    border-radius: 30px;
-    background-color: white;
-  }
-
-  label {
-    width: 100%;
-    padding: 8px;
-    color: $navbar-color;
-  }
 }
 
 // product page layout
@@ -1344,45 +1306,10 @@ select {
 
 //checkout page
 .checkout-container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 25px;
-  position: relative;
-  background: white;
-  border-radius: 30px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
-  h2{
+  h2 {
     text-align: center;
   }
-
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
-  }
-
-  input {
-    width: 100%;
-    margin-top: 8px;
-    margin-bottom: 10px;
-    padding: 10px 15px;
-    border: 1px solid #ccc;
-    border-radius: 30px;
-    appearance: none;
-  }
-
-  label {
-    width: 100%;
-    padding: 10px;
-    color: $navbar-color;
-  }
-
-  //.form-group {
-  //  display: flex;
-  //  flex-direction: column;
-  //}
 
   .checkbox-group {
     display: flex;
@@ -1422,6 +1349,8 @@ select {
     top: 5px;
     text-decoration: none;
     text-align: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
   }
 
   .continue-button:hover {
@@ -1434,6 +1363,7 @@ select {
     background: #f9f9f9;
     border-radius: 30px;
     text-align: center;
+    margin-bottom: 10px;
   }
 
   .order-summary {

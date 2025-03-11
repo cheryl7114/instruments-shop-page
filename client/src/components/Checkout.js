@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { SANDBOX_CLIENT_ID, SERVER_HOST } from "../config/global_constants"
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js"
+import {Link} from "react-router-dom";
+import {CiCircleRemove} from "react-icons/ci";
 
 export default class Checkout extends Component {
     constructor(props) {
@@ -289,7 +291,7 @@ export default class Checkout extends Component {
         }
 
         return (
-            <div className='checkout-container'>
+            <div className='forms checkout-container'>
                 <h2>Checkout</h2>
                 {error && <p className="error">{error}</p>}
 
@@ -358,6 +360,11 @@ export default class Checkout extends Component {
                     <button type="button" className="continue-button" onClick={this.handleProceedToPayment}>
                         Continue to Payment
                     </button>
+                    <div className="cancel-button">
+                        <Link to={"/Cart"}>
+                            <CiCircleRemove size={30} color="red" />
+                        </Link>
+                    </div>
                 </form>
 
                 <div className={`paypal-container ${!proceedPayment ? 'disabled' : ''}`}>
