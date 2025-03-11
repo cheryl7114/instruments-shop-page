@@ -48,6 +48,7 @@ export default class ViewCustomers extends Component {
             this.filterUsers()
         })
     }
+
     filterUsers = () => {
         const { users, searchQuery } = this.state
 

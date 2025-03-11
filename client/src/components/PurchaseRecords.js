@@ -73,6 +73,7 @@ export default class PurchaseRecords extends Component {
         const finalFiltered = filteredByUserType.filter(order => {
             const nameMatch = order.name && order.name.toLowerCase().includes(query)
             const emailMatch = order.email && order.email.toLowerCase().includes(query)
+            const orderIdMatch = order._id && order._id.toLowerCase().includes(query)
             const productMatch = order.products && order.products.some(product => {
                 return (
                     (product.productID?.name &&
@@ -82,7 +83,7 @@ export default class PurchaseRecords extends Component {
                 )
             })
 
-            return nameMatch || emailMatch || productMatch
+            return nameMatch || emailMatch || productMatch || orderIdMatch
         })
 
         // Sort the results
@@ -149,7 +150,7 @@ export default class PurchaseRecords extends Component {
                     <CiSearch className="search-icon" />
                     <input
                         type="text"
-                        placeholder="Search by name, email, or product name..."
+                        placeholder="Search by name, email, order ID, or product name..."
                         value={searchQuery}
                         onChange={this.handleSearchChange}
                     />

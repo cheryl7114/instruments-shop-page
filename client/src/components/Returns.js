@@ -1,15 +1,19 @@
 import React, { Component } from "react"
 import axios from "axios"
 import { SERVER_HOST } from "../config/global_constants"
-import { Link } from "react-router-dom"
+import { CiSearch } from "react-icons/ci"
 
 export default class Returns extends Component {
     constructor(props) {
         super(props)
         this.state = {
             returns: [],
+            filteredReturns: [],
             expandedRow: null,
-            error: ""
+            error: "",
+            searchQuery: "",
+            sortKey: "returnDate",
+            sortOrder: "desc"
         }
     }
 
@@ -19,7 +23,7 @@ export default class Returns extends Component {
                 if (res.data.errorMessage) {
                     this.setState({ error: res.data.errorMessage })
                 } else {
-                    this.setState({ returns: res.data })
+                    this.setState({ returns: res.data, filteredReturns: res.data })
                 }
             })
             .catch(() => this.setState({ error: "Error fetching return history" }))
@@ -31,8 +35,89 @@ export default class Returns extends Component {
         }))
     }
 
+    handleSearchChange = (e) => {
+        const query = e.target.value
+        this.setState({ searchQuery: query }, () => {
+            this.filterReturns()
+        })
+    }
+
+    filterReturns = () => {
+        const { returns, searchQuery } = this.state
+
+        // If search query is empty, show all returns
+        if (!searchQuery.trim()) {
+            this.setState({ filteredReturns: returns })
+            return
+        }
+
+        const query = searchQuery.toLowerCase()
+        const filteredReturns = returns.filter(returnRequest => {
+            // Search in return ID
+            const returnIdMatch = returnRequest._id && returnRequest._id.toLowerCase().includes(query)
+
+            // Search in order ID
+            const orderIdMatch = returnRequest.orderId && returnRequest.orderId.toLowerCase().includes(query)
+
+            // Search in product name
+            const productNameMatch = returnRequest.productId?.name &&
+                returnRequest.productId.name.toLowerCase().includes(query)
+
+            // Return true if any field matches - only including the requested fields
+            return returnIdMatch || orderIdMatch || productNameMatch
+        })
+
+        this.setState({ filteredReturns })
+    }
+
+    sortData = (data, key, order) => {
+        return [...data].sort((a, b) => {
+            let valueA, valueB
+
+            if (key === 'returnDate') {
+                valueA = new Date(a[key])
+                valueB = new Date(b[key])
+            } else if (key === 'refundAmount') {
+                valueA = a[key]
+                valueB = b[key]
+            } else if (key === '_id') {
+                valueA = a[key]
+                valueB = b[key]
+            }
+
+            // sort based on direction
+            if (order === 'asc') {
+                return valueA > valueB ? 1 : -1
+            } else {
+                return valueB > valueA ? 1 : -1
+            }
+        })
+    }
+
+    handleSortIndicator = (currentKey) => {
+        this.setState(prevState => {
+            const newSortOrder = prevState.sortKey === currentKey && prevState.sortOrder === 'asc' ? 'desc' : 'asc'
+            const sortedReturns = this.sortData(prevState.returns, currentKey, newSortOrder)
+            const sortedFilteredReturns = this.sortData(prevState.filteredReturns, currentKey, newSortOrder)
+
+            return {
+                returns: sortedReturns,
+                filteredReturns: sortedFilteredReturns,
+                sortKey: currentKey,
+                sortOrder: newSortOrder
+            }
+        })
+    }
+
     render() {
-        const { returns, expandedRow, error } = this.state
+        const { filteredReturns, expandedRow, error, sortKey, sortOrder, searchQuery } = this.state
+
+        const getSortIndicator = (currentKey) => {
+            if (sortKey === currentKey) {
+                return sortOrder === 'asc' ? '▲' : '▼'
+            }
+            return ''
+        }
 
         return (
             <div className="table-container">
@@ -41,20 +126,30 @@ export default class Returns extends Component {
 
                 {error && <p className="error">{error}</p>}
 
-                {returns.length === 0 ? (
-                    <p className="no-returns">No return history available.</p>
+                <div className="customer-search-bar">
+                    <CiSearch className="search-icon" />
+                    <input
+                        type="text"
+                        placeholder="Search by return ID, order ID, or product name..."
+                        value={searchQuery}
+                        onChange={this.handleSearchChange}
+                    />
+                </div><br />
+
+                {filteredReturns.length === 0 ? (
+                    <p className="no-returns">No return records found.</p>
                 ) : (
                     <table>
                         <thead>
                         <tr>
-                            <th>Return ID</th>
-                            <th>Refund Date</th>
-                            <th>Refund Amount (€)</th>
+                            <th className="sort-pointer" onClick={() => this.handleSortIndicator('_id')}>Return ID{getSortIndicator('_id')}</th>
+                            <th className="sort-pointer" onClick={() => this.handleSortIndicator('returnDate')}>Refund Date{getSortIndicator('returnDate')}</th>
+                            <th className="sort-pointer" onClick={() => this.handleSortIndicator('refundAmount')}>Refund Amount (€){getSortIndicator('refundAmount')}</th>
                             <th>Status</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {returns.map((returnRequest, index) => (
+                        {filteredReturns.map((returnRequest, index) => (
                             <>
                                 <tr key={returnRequest._id} className="clickable-row" onClick={() => this.toggleRow(index)}>
                                     <td>{returnRequest._id}</td>

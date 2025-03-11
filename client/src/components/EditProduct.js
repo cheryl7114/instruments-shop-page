@@ -325,10 +325,8 @@ export default class EditProduct extends Component {
 
     render() {
         return (
-            <div className="edit-product-container">
-
+            <div className="forms">
                 {this.state.redirectToDisplayAllProducts ? <Redirect to="/DisplayAllProducts" /> : null}
-
                 <form>
                     <div>
                         <label htmlFor="name">Name</label>

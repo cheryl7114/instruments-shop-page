@@ -157,7 +157,7 @@ export default class DisplayAllProducts extends Component {
 
                         <div className="products-container">
                             <div className="products-header">
-                                <h2>Available Products</h2>
+                                <h2>Products</h2>
                                 {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN && (
                                     <div className="add-new-product">
                                         <Link to={"/AddProduct"}>
