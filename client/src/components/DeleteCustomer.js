@@ -3,7 +3,6 @@ import {Redirect} from "react-router-dom"
 import axios from "axios"
 
 import { SERVER_HOST } from "../config/global_constants"
-import {CiCircleRemove} from "react-icons/ci"
 
 export default class DeleteUser extends Component {
     constructor(props) {
@@ -94,9 +93,7 @@ export default class DeleteUser extends Component {
                             <h4>Are you sure you want to delete {this.state.user?.name || "this user"}?</h4>
                             <p>This action cannot be undone.</p>
                             <button className="orange-button" onClick={this.handleDeleteUser}>Yes</button>
-                            <button className="cancel-button" onClick={this.handleCloseModal}>
-                                <CiCircleRemove size={30} color="red" />
-                            </button>
+                            <button className="red-button" onClick={this.handleCloseModal}>Cancel</button>
                         </div>
                     </div>
                 )}

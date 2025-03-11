@@ -137,20 +137,6 @@ export default class ProductDetails extends Component {
                             <p className="details"><strong>Colour:</strong> {product.colour}</p>
                             <p className="details"><i>{product.stock} units left</i></p>
                             <h3><span id="price-text"><b> </b></span>€{product.price}</h3>
-
-                            {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?
-                                <Link className="edit-button" to={"/EditProduct/" + product._id}>
-                                    <CiEdit size={25} />
-                                </Link>
-                                :
-                                null}
-                            {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?
-                                <Link className="delete-button" to={"/DeleteProduct/" + product._id}>
-                                    <CiTrash size={25} />
-                                </Link>
-                                :
-                                null
-                            }
                             <button
                                 className="add-to-cart-button"
                                 onClick={this.handleAddToCart}
@@ -164,7 +150,17 @@ export default class ProductDetails extends Component {
                             </button>
                             <button className="add-to-cart-button" onClick={() => this.setState({ redirectToDisplayAllProducts: true })}>Back</button>
                         </div>
-
+                        {localStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?
+                            <div>
+                                <Link className="edit-button" to={"/EditProduct/" + product._id}>
+                                    <CiEdit size={25} />
+                                </Link>
+                                <Link className="delete-button" to={"/DeleteProduct/" + product._id}>
+                                    <CiTrash size={25} />
+                                </Link>
+                            </div>
+                            :
+                            null}
                     </div>
                 </div>
                 {this.state.showModal && (
