@@ -1619,23 +1619,9 @@ select {
 
 //return form
 .return-form-container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 25px;
-  position: relative;
-  background: white;
-  border-radius: 30px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   h2 {
     text-align: center;
-    color: $navbar-color;
-  }
-
-  label{
-    width: 100%;
-    padding-left: 10px;
-    color: $navbar-color;
   }
 
   form {
@@ -1651,7 +1637,6 @@ select {
   }
 
   input,
-  select,
   textarea {
     width: 100%;
     margin-top: 8px;
@@ -1662,55 +1647,10 @@ select {
     appearance: none;
   }
 
-  .select-wrapper {
-    position: relative;
-    width: 100%;
-
-    select {
-      width: 100%;
-      padding: 8px 40px 8px 15px;
-      border: 1px solid #ccc;
-      border-radius: 30px;
-      appearance: none;
-      font-size: 14px;
-      color: $navbar-color;
-    }
-
-    .select-icon {
-      position: absolute;
-      right: 12px;
-      top: 62.75%;
-      transform: translateY(-50%);
-      pointer-events: none;
-      color: #8a8989;
-      font-size: 22px;
-    }
-  }
-
   textarea {
     border-radius: 30px;
     resize: vertical;
     min-height: 80px;
-  }
-
-  button {
-    background: $orange;
-    color: white;
-    font-size: 0.875rem;
-    border: none;
-    padding: 10px;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    text-align: center;
-    line-height: normal;
-    position: relative;
-    top: 5px;
-    text-decoration: none;
-
-    &:hover {
-      background: $navbar-color;
-    }
   }
 }
 

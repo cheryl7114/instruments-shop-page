@@ -98,7 +98,7 @@ export default class ReturnForm extends Component {
         }
 
         return (
-            <div className="return-form-container">
+            <div className="forms return-form-container">
                 {redirectToUserProfile ? <Redirect to={`/UserProfile/${userId}/returns`} /> : null}
                 <h2>Return Form</h2>
                 {error && <p className="error">{error}</p>}
@@ -110,23 +110,25 @@ export default class ReturnForm extends Component {
                     </div>
 
                     {order?.products?.length > 0 ? (
-                        <div className="select-wrapper">
+                        <div>
                             <label>Product to Return</label>
-                            <select onChange={this.handleProductChange}>
-                                <option value="">Select a product</option>
-                                {order.products.map(product =>
-                                    product.productID ? (
-                                        <option key={product._id} value={product.productID._id}>
-                                            {product.productID.name} - €{product.price.toFixed(2)}
-                                        </option>
-                                    ) : (
-                                        <option key={product._id} disabled>
-                                            Unknown Product - €{product.price.toFixed(2)}
-                                        </option>
-                                    )
-                                )}
-                            </select>
-                            <CiCircleChevDown className="select-icon" />
+                            <div className="select-wrapper">
+                                <select onChange={this.handleProductChange}>
+                                    <option value="">Select a product</option>
+                                    {order.products.map(product =>
+                                        product.productID ? (
+                                            <option key={product._id} value={product.productID._id}>
+                                                {product.productID.name} - €{product.price.toFixed(2)}
+                                            </option>
+                                        ) : (
+                                            <option key={product._id} disabled>
+                                                Unknown Product - €{product.price.toFixed(2)}
+                                            </option>
+                                        )
+                                    )}
+                                </select>
+                                <CiCircleChevDown className="select-icon" />
+                            </div>
                         </div>
                     ) : (
                         <p>No products available for return.</p>
@@ -159,10 +161,10 @@ export default class ReturnForm extends Component {
                     </div>
 
                     <div>
-                        <button type="submit">Submit Return Request</button>
+                        <button className="orange-button" type="submit">Submit Return Request</button>
                     </div>
                     <div className="cancel-button">
-                        <Link to={`/UserProfile/${userId}/returns`}>
+                        <Link to={`/UserProfile/${userId}/purchase-history`}>
                             <CiCircleRemove size={30} color="red" />
                         </Link>
                     </div>

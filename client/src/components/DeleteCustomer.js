@@ -3,7 +3,6 @@ import {Redirect} from "react-router-dom"
 import axios from "axios"
 
 import { SERVER_HOST } from "../config/global_constants"
-import {CiCircleRemove} from "react-icons/ci"
 
 export default class DeleteUser extends Component {
     constructor(props) {
