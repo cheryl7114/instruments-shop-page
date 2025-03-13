@@ -1,5 +1,4 @@
 import React, { Component } from "react"
-import {Link} from "react-router-dom"
 import axios from "axios"
 
 import { SERVER_HOST } from "../config/global_constants"
@@ -19,13 +18,13 @@ export default class DeleteProduct extends Component {
         axios.get(`${SERVER_HOST}/products/${this.props.match.params.id}`, {
             headers: { "authorization": localStorage.token }
         })
-            .then(res => {
-                if (res.data && !res.data.errorMessage) {
-                    this.setState({ product: res.data, showConfirmModal: true })
-                } else {
-                    throw new Error("Product not found.")
-                }
-            })
+    .then(res => {
+            if (res.data && !res.data.errorMessage) {
+                this.setState({ product: res.data, showConfirmModal: true })
+            } else {
+                throw new Error("Product not found.")
+            }
+        })
             .catch(err => {
                 console.error("Error:", err)
                 this.setState({ errorMessage: err.message || "An error occurred while fetching the product." })
@@ -39,24 +38,24 @@ export default class DeleteProduct extends Component {
 
         const imageDeletePromises = (product.images || []).map(image =>
             axios.delete(`${SERVER_HOST}/products/image/${image.filename}`, {
-                headers: { "authorization": localStorage.token }
-            })
-        )
+            headers: { "authorization": localStorage.token }
+        })
+    )
 
         // Promise.all() waits for all of them to complete
         // Ensure all images are deleted before deleting the product
         Promise.all(imageDeletePromises)
             .then(() => axios.delete(`${SERVER_HOST}/products/${this.props.match.params.id}`, {
-                headers: { "authorization": localStorage.token }
-            }))
-            .then(res => {
-                if (res.data && !res.data.errorMessage) {
-                    console.log("Product successfully deleted.")
-                    this.setState({ showConfirmModal: false, showSuccessModal: true })
-                } else {
-                    throw new Error("Failed to delete product.")
-                }
-            })
+            headers: { "authorization": localStorage.token }
+        }))
+    .then(res => {
+            if (res.data && !res.data.errorMessage) {
+                console.log("Product successfully deleted.")
+                this.setState({ showConfirmModal: false, showSuccessModal: true })
+            } else {
+                throw new Error("Failed to delete product.")
+            }
+        })
             .catch(err => {
                 console.error("Error:", err)
                 this.setState({ errorMessage: err.message || "An error occurred while deleting the product." })
@@ -80,9 +79,7 @@ export default class DeleteProduct extends Component {
                             <h4>Are you sure to delete {product.name}?</h4>
                             <p>This action cannot be undone.</p>
                             <button className="orange-button" onClick={this.handleConfirmDelete}>Yes</button>
-                            <Link to={"/DisplayAllProducts"} className="no-underline">
-                                <button className="red-button">Cancel</button>
-                            </Link>
+                            <button className="red-button" onClick={this.handleCloseModal}>Cancel</button>
                         </div>
                     </div>
                 )}

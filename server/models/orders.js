@@ -2,14 +2,14 @@ const mongoose = require(`mongoose`)
 
 let ordersSchema = new mongoose.Schema({
     userId: {type: mongoose.Schema.Types.ObjectId, ref: `users`, default: null},
-    email: {type: String},
-    name: { type: String },
+    email: {type: String, required: true},
+    name: { type: String, required: true},
     deliveryAddress: {
-        address: { type: String },
-        city: { type: String },
-        postcode: { type: String },
+        address: { type: String,required: true},
+        city: { type: String, required: true},
+        postcode: { type: String, required: true },
     },
-    phoneNumber: { type: String },
+    phoneNumber: { type: String, required: true },
     orderDate: {type: Date, default: Date.now},
         products: [{
             productID: {type: mongoose.Schema.Types.ObjectId, ref: `products`},

@@ -34,7 +34,7 @@ const getAllProducts = (req, res) => {
     })
 }
 
-router.get(`/products/image/:filename`, (req, res) =>
+const getImage = (req, res) =>
 {
     fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${req.params.filename}`, 'base64', (err, fileData) =>
     {
@@ -47,7 +47,7 @@ router.get(`/products/image/:filename`, (req, res) =>
             res.json({image:null})
         }
     })
-})
+}
 
 // Read one record
 const getProduct = (req, res) => {
@@ -81,17 +81,6 @@ const createProduct =  (req, res) => {
     })
 }
 
-
-
-// Add new record
-// const createProduct = (req, res) => {
-//     // Use the new product details to create a new product document
-//     productsModel.create(req.body, (error, data) => {
-//         res.json(data)
-//     })
-// }
-
-
 // Update one record
 const updateProduct = (req, res) => {
     const { name, brand, colour, category, stock, price } = req.body
@@ -122,24 +111,6 @@ const updateProduct = (req, res) => {
         })
 }
 
-// // Delete one record
-// router.delete(`/products/:id`, (req, res) =>
-// {
-//     jwt.verify(req.headers.authorization, JWT_PRIVATE_KEY, {algorithm: "HS256"}, (err, decodedToken) => {
-//         if (err) {
-//             res.json({errorMessage: `User is not logged in`})
-//         } else {
-//             if (decodedToken.accessLevel >= process.env.ACCESS_LEVEL_ADMIN) {
-//                 productsModel.findByIdAndRemove(req.params.id, (error, data) => {
-//                     res.json(data)
-//                 })
-//             } else {
-//                 res.json({errorMessage: `User is not an administrator, so they cannot delete records`})
-//             }
-//         }
-//     })
-// })
-
 const deleteProduct = (req, res) => {
     productsModel.findByIdAndRemove(req.params.id, (error, data) => {
         res.json(data)
@@ -147,7 +118,7 @@ const deleteProduct = (req, res) => {
 }
 
 // Delete Image Route
-router.delete(`/products/image/:filename`, verifyUsersJWTPassword, checkAdminAccess, (req, res) => {
+const deleteImageRoute = (req, res) => {
     const filePath = `${process.env.UPLOADED_FILES_FOLDER}/${req.params.filename}`
 
     fs.unlink(filePath, (err) => {
@@ -158,12 +129,14 @@ router.delete(`/products/image/:filename`, verifyUsersJWTPassword, checkAdminAcc
         console.log(`Image deleted: ${req.params.filename}`)
         res.json({ message: `Image deleted successfully` })
     })
-})
+}
 
 router.post("/products", verifyUsersJWTPassword, checkAdminAccess, upload.array("images", parseInt(process.env.MAX_NUMBER_OF_UPLOAD_FILES_ALLOWED)), createProduct)
 router.get(`/products`, getAllProducts)
 router.get(`/products/:id`, getProduct)
 router.put(`/products/:id`, verifyUsersJWTPassword, upload.array("images", parseInt(process.env.MAX_NUMBER_OF_UPLOAD_FILES_ALLOWED)), updateProduct)
 router.delete(`/products/:id`, verifyUsersJWTPassword, checkAdminAccess, deleteProduct)
+router.delete(`/products/image/:filename`, verifyUsersJWTPassword, checkAdminAccess, deleteImageRoute)
+router.get(`/products/image/:filename`, getImage)
 
 module.exports = router

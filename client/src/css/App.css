@@ -322,6 +322,9 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 30px;
   margin-bottom: 10px;
+  width: 350px;
+  height: 520px;
+  max-height: 520px;
 }
 .product-card img {
   width: 310px;
@@ -333,6 +336,9 @@ body {
 .product-card h4 {
   margin-top: 20px;
   margin-bottom: 5px;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .product-card p {
   margin-bottom: 20px;
@@ -955,6 +961,8 @@ select {
   position: sticky;
   top: 20px;
   height: fit-content;
+  width: 220px;
+  max-width: 220px;
 }
 
 .filter-section {
@@ -972,6 +980,8 @@ select {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .filter-checkbox {

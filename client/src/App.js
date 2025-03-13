@@ -44,6 +44,7 @@ export default class App extends Component {
             cartItems: JSON.parse(localStorage.getItem('cartItems') || "[]")
         }
     }
+
     componentDidMount() {
         axios.get(`${SERVER_HOST}/products`)
             .then(res => {

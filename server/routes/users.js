@@ -271,18 +271,18 @@ const deleteUser = (req, res) => {
 }
 
 // Delete Profile Pic Route
-router.delete(`/users/profile-pic/:filename`, verifyUsersJWTPassword, checkAdminAccess, (req, res) => {
+const deleteProfilePic = (req, res) => {
     const filePath = `${process.env.UPLOADED_FILES_FOLDER}/${req.params.filename}`
 
     fs.unlink(filePath, (err) => {
         if (err) {
             console.error(`Failed to delete image: ${req.params.filename}`, err)
-            return res.status(500).json({ errorMessage: `Failed to delete image` })
+            return res.status(500).json({errorMessage: `Failed to delete image`})
         }
         console.log(`Image deleted: ${req.params.filename}`)
-        res.json({ message: `Image deleted successfully` })
+        res.json({message: `Image deleted successfully`})
     })
-})
+}
 
 const userLogout = (req, res) => {
     res.json({})
@@ -295,5 +295,6 @@ router.post(`/users/logout`, userLogout)
 router.get(`/users`, verifyUsersJWTPassword, checkAdminAccess, readAllUsers)
 router.get(`/users/:id`, verifyUsersJWTPassword, findUserByID)
 router.delete(`/users/:id`, verifyUsersJWTPassword, checkAdminAccess, deleteUser)
+router.delete(`/users/profile-pic/:filename`, verifyUsersJWTPassword, checkAdminAccess, deleteProfilePic)
 
 module.exports = router
