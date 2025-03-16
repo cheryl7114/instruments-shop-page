@@ -3,8 +3,6 @@ import {Link} from "react-router-dom"
 import axios from "axios"
 
 import { SERVER_HOST } from "../config/global_constants"
-import {CiCircleRemove} from "react-icons/ci";
-
 
 export default class DeleteProduct extends Component {
     constructor(props) {
@@ -82,11 +80,9 @@ export default class DeleteProduct extends Component {
                             <h4>Are you sure to delete {product.name}?</h4>
                             <p>This action cannot be undone.</p>
                             <button className="orange-button" onClick={this.handleConfirmDelete}>Yes</button>
-                            <div className="cancel-button">
-                                <Link to={"/DisplayAllProducts"}>
-                                    <CiCircleRemove size={30} color="red" />
-                                </Link>
-                            </div>
+                            <Link to={"/DisplayAllProducts"} className="no-underline">
+                                <button className="red-button">Cancel</button>
+                            </Link>
                         </div>
                     </div>
                 )}
